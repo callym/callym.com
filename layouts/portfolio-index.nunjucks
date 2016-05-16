@@ -1,0 +1,12 @@
+{% extends "layouts/page.nunjucks" %}
+
+{% block contents %}
+
+{% for p in portfolio %}
+	<a href="{{ p.path }}">
+		{{ p.title }}
+	</a>
+	<br/>
+{% endfor %}
+
+{% endblock %}

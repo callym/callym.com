@@ -1,0 +1,40 @@
+{
+  "name": "callym.com",
+  "version": "0.0.1",
+  "description": "my portfolio website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/callym/callym.com.git"
+  },
+  "author": "callym",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/callym/callym.com/issues"
+  },
+  "homepage": "https://github.com/callym/callym.com#readme",
+  "devDependencies": {
+    "fs": "0.0.2",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-connect": "^5.0.0",
+    "gulp-front-matter": "^1.3.0",
+    "gulp-less": "^3.1.0",
+    "gulp-sass": "^2.3.2",
+    "gulpsmith": "^0.5.5",
+    "lodash": "^4.15.0",
+    "metalsmith": "^2.2.0",
+    "metalsmith-collections": "^0.7.0",
+    "metalsmith-layouts": "^1.6.5",
+    "metalsmith-markdown": "^0.2.1",
+    "metalsmith-permalinks": "^0.5.0",
+    "metalsmith-rootpath": "^1.0.4",
+    "nunjucks": "^2.4.2",
+    "path": "^0.12.7",
+    "run-sequence": "^1.2.2"
+  }
+}

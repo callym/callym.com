@@ -1,0 +1,13 @@
+{% block header %}
+	{% include "layouts/partials/header.nunjucks" %}
+{% endblock %}
+
+{% block contents %}
+	<div id="content">
+		{{ contents|safe }}
+	</div>
+{% endblock %}
+
+{% block footer %}
+	{% include "layouts/partials/footer.nunjucks" %}
+{% endblock %}

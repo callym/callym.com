@@ -1,0 +1,49 @@
+<header id="header">
+	<a href="{{ rootPath }}">
+		<div id="hc">
+			<h1>
+				<svg xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 1600 500">
+					<defs>
+						{% set size = 160 %}
+						<pattern id="filler"
+							patternUnits="userSpaceOnUse"
+							width="{{ size }}" height="{{ size }}">
+							<image xlink:href="/images/blueglitter.gif"
+								width="{{ size }}" height="{{ size }}"
+								preserveAspectRatio="none">
+							</image>
+						</pattern>
+					</defs>
+					<text x="50%" y="50%" dy="0.2em"
+						text-anchor="middle"
+						font-family =	"Georgia,
+										Times,
+										Times New Roman,
+										serif"
+						font-size="400"
+						fill="url(#filler)"
+						stroke="#000"
+						stroke-width="10"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-antialiasing="true"
+						paint-order="stroke"
+						letter-spacing="10">
+						call<tspan letter-spacing="20">ym</tspan>
+					</text>
+				</svg>
+			</h1>
+		</div>
+	</a>
+	<div id="links">
+		<a href="{{ rootPath }}">
+			home
+		</a>
+		{% for p in page %}
+			<a href="{{ rootPath }}{{ p.path }}">
+				{{ p.title }}
+			</a>
+		{% endfor %}
+	</div>
+</header>
