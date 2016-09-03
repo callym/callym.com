@@ -1,0 +1,38 @@
+{% extends "layouts/about.nunjucks" %}
+
+{% block contents %}
+{{ super() }}
+
+{% for e in exhibitions %}
+<div class="text">
+    <h1>
+        {{ e.title }}
+    </h1>
+
+    {% if e.location %}
+        <div>
+            {{ e.location }}
+        </div>
+    {% endif %}
+
+    {% if e.url %}
+        <a href="{{ e.url }}">
+            <div>
+                {{ e.url }}
+            </div>
+        </a>
+    {% endif %}
+
+    <div class="date">
+        {{ e.date.begin | date("Do MMMM YYYY") }}
+        {% if e.date.end %}
+            &ndash;
+            {{ e.date.end | date("Do MMMM YYYY") }}
+        {% endif %}
+    </div>
+
+    {{ e.description | md(false) | safe }}
+</div>
+{% endfor %}
+
+{% endblock %}

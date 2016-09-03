@@ -45,9 +45,11 @@
 			home
 		</a>
 		{% for p in page %}
+			{% if not p.hide %}
 			<a href="{{ rootPath }}{{ p.path }}" class="{{ class }}">
 				{{ p.title }}
 			</a>
+			{% endif %}
 		{% endfor %}
 	</div>
 </header>

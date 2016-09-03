@@ -14,13 +14,15 @@ var gulpsmith = require('gulpsmith'),
 	collections = require('metalsmith-collections'),
 	root = require('metalsmith-rootpath'),
 	nunjucks = require('nunjucks'),
-	njDate = require('nunjucks-date-filter');
+	njDate = require('nunjucks-date-filter')
+	njMD = require('nunjucks-markdown-filter');
 
 nunjucks.configure('', {
 	watch: true,
 	noCache: true,
 })
-.addFilter('date', njDate);
+.addFilter('date', njDate)
+.addFilter('md', njMD);
 
 var assign_layout = function(options) {
 	return function (files, metalsmith, done) {

@@ -8,9 +8,6 @@ html {
 					sans-serif;
 
 	font-size: 1.5em;
-	@include media("<tablet") {
-		font-size: 2.5em;
-	}
 }
 
 p {
@@ -45,6 +42,13 @@ pre {
 
 	& h1 {
 		margin: inherit;
+	}
+}
+
+#links {
+	margin: 0;
+	@include media("<tablet") {
+		font-size: 2.5em;
 	}
 }
 
@@ -116,8 +120,6 @@ a {
 		flex-flow: row wrap;
 	}
 
-	margin: 0 10vw;
-
 	& > * {
 		@include media("<tablet") {
 			flex-basis: 100%;
@@ -133,13 +135,19 @@ a {
 
 .text, .title {
 	margin-top: 1em;
-	& > * {
-		border: 1px solid black;
-		margin: auto;
-		width: 80vw;
-		max-width: 1200px;
+	border: 1px solid black;
+	margin: auto;
+	width: 80vw;
+	max-width: 1200px;
+	@include media("<tablet") {
+		max-width: 90vw;
+	}
+}
+
+.text {
+	& h1 {
 		@include media("<tablet") {
-			max-width: 90vw;
+			font-size: 100%;
 		}
 	}
 }
@@ -152,4 +160,9 @@ a {
 
 .date {
 	font-style: italic;
+}
+
+.sublinks {
+	margin: 2em auto;
+	width: 50vw;
 }
