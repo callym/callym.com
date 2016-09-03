@@ -13,12 +13,15 @@ var gulpsmith = require('gulpsmith'),
 	permalinks = require('metalsmith-permalinks'),
 	collections = require('metalsmith-collections'),
 	root = require('metalsmith-rootpath'),
-	nunjucks = require('nunjucks');
+	nunjucks = require('nunjucks'),
+	njDate = require('nunjucks-date-filter');
 
 nunjucks.configure('', {
 	watch: true,
 	noCache: true,
-});
+})
+.addFilter('date', njDate);
+
 var assign_layout = function(options) {
 	return function (files, metalsmith, done) {
 		var metadata = metalsmith.metadata();

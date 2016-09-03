@@ -7,8 +7,33 @@ html {
 					AppleGothic,
 					sans-serif;
 
+	font-size: 1.5em;
 	@include media("<tablet") {
 		font-size: 2.5em;
+	}
+}
+
+p {
+	line-height: 1.5em;
+}
+
+pre {
+	overflow: auto;
+	font-family: 	monaco,
+					Consolas,
+					"Lucida Console",
+					monospace;
+	padding: 1em 0;
+
+	&::-webkit-scrollbar {
+		background-color: inherit;
+	}
+	&::-webkit-scrollbar-thumb {
+		background-color: blue;
+		border-radius: 100px;
+	}
+	&::-webkit-scrollbar-track {
+		border: 1px solid red;
 	}
 }
 
@@ -104,4 +129,27 @@ a {
 
 .center {
 	text-align: center;
+}
+
+.text, .title {
+	margin-top: 1em;
+	& > * {
+		border: 1px solid black;
+		margin: auto;
+		width: 80vw;
+		max-width: 1200px;
+		@include media("<tablet") {
+			max-width: 90vw;
+		}
+	}
+}
+
+.title {
+	& > h1 {
+		font-size: 300%;
+	}
+}
+
+.date {
+	font-style: italic;
 }

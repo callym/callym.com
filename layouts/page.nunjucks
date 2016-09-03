@@ -3,7 +3,7 @@
 {% endblock %}
 
 {% block contents %}
-	<div id="content">
+	<div id="content" class="text">
 		{{ contents|safe }}
 	</div>
 {% endblock %}

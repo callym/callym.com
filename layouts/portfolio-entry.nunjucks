@@ -1,0 +1,49 @@
+{% extends "layouts/page.nunjucks" %}
+
+{% block contents %}
+
+<div class="grid">
+{% for i in range(0, 4) %}
+	<a href="">
+		<div class="center">
+			{{ i }}
+		</div>
+	</a>
+{% endfor %}
+</div>
+<div class="title center">
+    <h1>
+        {{ title }}
+    </h1>
+</div>
+<div class="date center">
+{% set dates = [date] %}
+{% if finisheddate %}
+    {% set dates = [date, finisheddate] %}
+{% endif %}
+{% for d in dates %}
+    {% set month = d | date("M") %}
+    {% if month == 1 or month == 2 %}
+        Winter
+        {{ d | date("subtract", 1, "years") | date("YYYY") }}/{{ d | date("YYYY") }}
+    {% elif month <= 5  %}
+        Spring {{ d | date("YYYY") }}
+    {% elif month <= 8 %}
+        Summer {{ d | date("YYYY") }}
+    {% elif month <= 11 %}
+        Autumn {{ d | date("YYYY") }}
+    {% elif month <= 12 %}
+        Winter  
+        {{ d | date("YYYY") }}/{{ d | date("add", 1, "years") | date("YYYY") }}
+    {% endif %}
+
+    {% if loop.first %}
+        &ndash;
+    {% endif %}
+{% endfor %}
+</div>
+<div class="text">
+    {{ contents | safe }}
+</div>
+
+{% endblock %}
