@@ -2,11 +2,21 @@
 
 {% block contents %}
 
+<div class="grid">
 {% for p in portfolio %}
 	<a href="{{ p.path }}">
-		{{ p.title }}
+		<div class="center">
+			{{ p.title }}
+		</div>
 	</a>
-	<br/>
 {% endfor %}
+{% for i in range(0, 15) %}
+	<a href="">
+		<div class="center">
+			{{ i }}
+		</div>
+	</a>
+{% endfor %}
+</div>
 
 {% endblock %}

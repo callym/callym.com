@@ -1,3 +1,107 @@
+@import 'math';
+@import 'include-media';
+
 html {
-	color: red,
+	font-family: 	"Century Gothic",
+					CenturyGothic,
+					AppleGothic,
+					sans-serif;
+
+	@include media("<tablet") {
+		font-size: 2.5em;
+	}
+}
+
+#callym {
+	margin-bottom: -4vw;
+	@include media("<tablet") {
+		margin-bottom: 0;
+	}
+
+	& h1 {
+		margin: inherit;
+	}
+}
+
+a {
+	text-decoration: none;
+	color: black;
+
+	&:hover {
+		color: red;
+	}
+}
+
+.grid {
+	display: flex;
+	flex-flow: row wrap;
+	position: relative;
+
+	margin: 5vw 10vw 0;
+	@include media("<tablet") {
+		margin: 0;
+	}
+
+	& > * {
+		border: 1px solid black;
+		margin: 1vw;
+
+		flex-basis: 30%;
+		@include media("<tablet") {
+			flex-basis: 100%;
+		}
+
+		&:before {
+			content:'';
+			float: left;
+			padding-top: 100%;
+		}
+	}
+}
+
+.hex {
+	$rotate: 60deg;
+	$skew: 30deg;
+	$scale: cos(30deg);
+	
+	overflow: hidden;
+	transform:
+		rotate(-$rotate)
+		skewY($skew)
+		scaleX($scale);
+
+	& > * {
+		background-color: green;
+		display: block;
+		height: 100%;
+		overflow: hidden;
+		transform:
+			scaleX(1 / $scale)
+			skewY(-$skew)
+			rotate($rotate)
+			scaleX(0.9);
+	}
+}
+
+.row-flex {
+	display: flex;
+	justify-content: space-around;
+
+	@include media("<tablet") {
+		flex-flow: row wrap;
+	}
+
+	margin: 0 10vw;
+
+	& > * {
+		@include media("<tablet") {
+			flex-basis: 100%;
+			margin-bottom: 10vw;
+		}
+		flex: 1;
+	}
+}
+
+.center {
+	text-align: center;
 }
