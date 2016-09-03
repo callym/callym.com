@@ -10,6 +10,32 @@ html {
 	font-size: 1.5em;
 }
 
+body {
+	animation: colorchange 60s infinite;
+}
+
+@keyframes colorchange {
+	$blah: "needed to get colors below to show in vs code?";
+	$colors-list:
+		#ffffb8
+		#fbe4ff;
+	$len: length($colors-list);
+
+	@for $i from 1 through $len {
+		$perc: 100% / ($len - 1);
+		#{$perc * (($i - 1) / 2)} {
+			background: nth($colors-list, $i);
+		}
+	}
+	@for $i from 1 through $len {
+		$half: ($len - 1) / 2;
+		$perc: 100% / ($len - 1);
+		#{$perc * ($half + ($i - 1) / 2)} {
+			background: nth($colors-list, $len - $i + 1);
+		}
+	}
+}
+
 p {
 	line-height: 1.5em;
 }
