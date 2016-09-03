@@ -1,6 +1,6 @@
 <header id="header">
 	<a href="{{ rootPath }}">
-		<div id="hc">
+		<div id="callym">
 			<h1>
 				<svg xmlns="http://www.w3.org/2000/svg"
 					viewBox="0 0 1600 500">
@@ -15,8 +15,9 @@
 							</image>
 						</pattern>
 					</defs>
-					<text x="50%" y="50%" dy="0.2em"
+					<text x="50%" y="50%"
 						text-anchor="middle"
+						dominant-baseline="middle"
 						font-family =	"Georgia,
 										Times,
 										Times New Roman,
@@ -36,12 +37,15 @@
 			</h1>
 		</div>
 	</a>
-	<div id="links">
-		<a href="{{ rootPath }}">
+
+	{% set class = "center" %}
+	
+	<div id="links" class="row-flex">
+		<a href="{{ rootPath }}" class="{{ class }}">
 			home
 		</a>
 		{% for p in page %}
-			<a href="{{ rootPath }}{{ p.path }}">
+			<a href="{{ rootPath }}{{ p.path }}" class="{{ class }}">
 				{{ p.title }}
 			</a>
 		{% endfor %}
