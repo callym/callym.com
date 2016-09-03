@@ -19,6 +19,28 @@ nunjucks.configure('', {
 	watch: true,
 	noCache: true,
 });
+var assign_layout = function(options) {
+	return function (files, metalsmith, done) {
+		var metadata = metalsmith.metadata();
+		Object.keys(files).forEach(function(file) {
+			if (file == null) {
+				return;
+			}
+
+			var data = files[file];
+
+			if (data.layout != null) {
+				return;
+			}
+			
+			if (options.hasOwnProperty(data.collection[0])) {
+				data.layout = options[data.collection[0]];
+			}
+		});
+
+		done();      
+	};
+};
 
 gulp.task('default', function (cb) {
 	runSequence('clean', ['metalsmith', 'sass', 'images'], cb);
@@ -59,6 +81,10 @@ gulp.task('metalsmith', function() {
 						sortBy: 'date',
 						reverse: true
 					}
+				}))
+				.use(assign_layout({
+					page: 'page.nunjucks',
+					portfolio: 'portfolio-entry.nunjucks'
 				}))
 				.use(markdown())
 				.use(permalinks({
