@@ -1,13 +1,15 @@
 {% extends "layouts/page.nunjucks" %}
 
 {% block contents %}
-{% set class = "center" %}
+{% set class = "hover-link center" %}
 <div class="sublinks row-flex">
-    <a href="{{ rootPath }}about" class="{{ class }}">
+    <a href="{{ rootPath }}about"
+        class="{{ class }} {{ "current" if title == "about" }}">
         statement
     </a>
 {% for p in about %}
-    <a href="{{ rootPath }}{{ p.path }}" class="{{ class }}">
+    <a href="{{ rootPath }}{{ p.path }}"
+    class="{{ class }} {{ "current" if title == p.title }}">
         {{ p.title }}
     </a>
 {% endfor %}

@@ -5,11 +5,17 @@ collection: about
 layout: about.nunjucks
 ---
 # contact
-[@callymcallym](http://twitter.com/callymcallym)
+<a href="http://twitter.com/callymcallym" class="hover-link">
+@callymcallym
+</a>
 
-[github](http://github.com/callym)
+<a href="http://github.com/callym" class="hover-link">
+github
+</a>
 
-[email](mailto:hi@callym.com)
+<a href="mailto:hi@callym.com" class="hover-link">
+hi@callym.com
+</a>
 
 # education
 ## BFA (Hons) Fine Art, 2:1
