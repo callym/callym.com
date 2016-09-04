@@ -1,12 +1,11 @@
 @import 'math';
 @import 'include-media';
 
-html {
-	font-family: 	"Century Gothic",
-					CenturyGothic,
-					AppleGothic,
-					sans-serif;
+$serif: Georgia, Times, Times New Roman, serif;
+$sans-serif: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
 
+html {
+	font-family: $sans-serif;
 	font-size: 1.5em;
 }
 
@@ -101,6 +100,9 @@ a {
 		border: 1px solid black;
 		margin: 1vw;
 
+		overflow: hidden;
+		position: relative;
+
 		flex-basis: 30%;
 		@include media("<tablet") {
 			flex-basis: 100%;
@@ -191,4 +193,39 @@ a {
 .sublinks {
 	margin: 2em auto;
 	width: 50vw;
+}
+
+.piece-name {
+	position: absolute;
+	font-size: 9vw;
+	height: 100%;
+	width: 80%;
+
+	background-color: rgba(#6bafff, 0.5);
+	color: #fff;
+	font-family: $serif;
+	padding: 0 10%;
+	
+	transition: all 500ms ease-in-out;
+	opacity: 0;
+	transform:
+		translateY(15vw);
+
+	/*
+	* as hover doesn't exist on mobile,
+	* set it so the name is shown as a thin banner
+	* at the bottom of the square
+	*/
+	@include media("<tablet") {
+		opacity: 1;
+		height: auto;
+		bottom: 0;
+		transform: 
+			translateY(0);
+	}
+}
+
+.grid > *:hover > * {
+	transform: none;
+	opacity: 1;
 }

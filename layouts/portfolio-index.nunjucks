@@ -4,15 +4,17 @@
 
 <div class="grid">
 {% for p in portfolio %}
+<!-- TODO: images, if doesn't have image, make
+			svg from description!!! -->
 	<a href="{{ p.path }}">
-		<div class="center">
+		<div class="center piece-name">
 			{{ p.title }}
 		</div>
 	</a>
 {% endfor %}
 {% for i in range(0, 15) %}
 	<a href="">
-		<div class="center">
+		<div class="center piece-name">
 			{{ i }}
 		</div>
 	</a>
