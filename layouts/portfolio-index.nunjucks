@@ -4,12 +4,51 @@
 
 <div class="grid">
 {% for p in portfolio %}
-<!-- TODO: images, if doesn't have image, make
-			svg from description!!! -->
 	<a href="{{ p.path }}">
-		<div class="center piece-name">
-			{{ p.title }}
-		</div>
+	{% if not p.images %}
+		<svg xmlns="http://www.w3.org/2000/svg"
+			viewBox="0 0 500 500"
+			class="piece-description-background">
+			<defs>
+				{% set size = 160 %}
+				<pattern id="filler"
+					patternUnits="userSpaceOnUse"
+					width="{{ size }}" height="{{ size }}">
+					<image xlink:href="/images/blueglitter.gif"
+						width="{{ size }}" height="{{ size }}"
+						preserveAspectRatio="none">
+					</image>
+				</pattern>
+			</defs>
+			<foreignObject width="100%" height="100%">
+				<p class="piece-description">{{ p.description | truncate(80) }}</p>
+			</body>
+			</foreignObject>
+		</svg>
+	{% else %}
+		{% set img = p.images[0] %}
+		{% set url_title = p.title | replace(" ", "-") %}
+		{% set path = rootPath + "images/portfolio/" + url_title + "/" %}
+		<picture class="portfolio-thumbnail">
+			<!--
+				the problem is that the max grid size on desktop
+				(at least my 1080p one)
+				is ~500px, whereas the max on mobile is ~800px
+				(because the grid collapses)
+				so responsive images don't really make sense
+				as you need a smaller one on desktop than mobile?
+				guess I could make a mobile one more lq
+				but should see whether it's an issue first!
+			-->
+			<source
+				type="image/webp"
+				srcset="{{ path }}{{ img.file }}-square.webp">
+			<img src="{{ path }}{{ img.file }}-square.jpg" alt="{{ img.alt }}">
+		</picture>
+	{% endif %}
+			<div class="center piece-name">
+				{{ p.title | truncate(80) }}
+			</div>
 	</a>
 {% endfor %}
 {% for i in range(0, 15) %}

@@ -2,9 +2,11 @@ var gulp = require('gulp'),
 	gulp_front_matter = require('gulp-front-matter'),
 	assign = require('lodash').assign,
 	clean = require('gulp-clean'),
+	es = require('event-stream'),
 	connect = require('gulp-connect'),
 	sass = require('gulp-sass'),
 	autoprefixer = require('gulp-autoprefixer'),
+	responsive = require('gulp-responsive'),
 	runSequence = require('run-sequence');
 
 var gulpsmith = require('gulpsmith'),
@@ -18,7 +20,7 @@ var gulpsmith = require('gulpsmith'),
 	njMD = require('nunjucks-markdown-filter');
 
 nunjucks.configure('', {
-	watch: true,
+	watch: false,
 	noCache: true,
 })
 .addFilter('date', njDate)
@@ -134,9 +136,69 @@ gulp.task('sass', function () {
 		.pipe(gulp.dest('./build/css'));
 });
 
-gulp.task('images', function() {
-	return gulp.src('./images/**/*')
-		.pipe(gulp.dest('./build/images'));
+gulp.task('images', ['resize-images'], function() {
+	es.merge(
+		gulp.src('./generated-images/**/*'),
+		gulp.src(['./images/**/*', "!./images/portfolio{,/**/*}"]))
+	.pipe(gulp.dest('./build/images'));
+});
+
+gulp.task('resize-images', function() {
+	var size = 800;
+	var quality = 60;
+	return gulp.src('./images/portfolio/**/*')
+		.pipe(responsive({
+			'**/*': [
+				{
+					width: size,
+					height: size,
+					quality: quality,
+					rename:
+					{
+						suffix: '-square',
+						extname: '.jpg'
+					}
+				},
+				{
+					width: size,
+					height: size,
+					quality: quality,
+					rename:
+					{
+						suffix: '-square',
+						extname: '.webp'
+					}
+				},
+				{
+					width: 2560,
+					height: 1440,
+					min: true,
+					rename:
+					{
+						extname: '.jpg'
+					}
+				},
+				{
+					width: 2560,
+					height: 1440,
+					min: true,
+					rename:
+					{
+						extname: '.webp'
+					}
+				}
+			]
+		},
+		{
+			progressive: true,
+			crop: 'centre',
+			stats: false,
+			silent: true,
+			errorOnUnusedImage: false,
+			errorOnEnlargement: false,
+			withoutEnlargement: true
+		}))
+		.pipe(gulp.dest('./generated-images/portfolio'));
 });
 
 gulp.task('clean', function() {

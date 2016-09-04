@@ -2,6 +2,17 @@
 title: test 1 ahahaa
 date: 2015-05-01
 finisheddate: 2015-12-01
+description: |
+    Lorem markdownum pararet motu quam, cum mori ministris stricto praecipitem
+    utque. Edendo accipitrem pabula.
+images:
+    -   file: "IMG_0732"
+        type: "image"
+        alt: "blah blah blah"
+    -   file: "blah2"
+        type: "vimeo"
+        alt: "blah blah video"
+        id: 98276732
 ---
 
 # Primus Ceyx spina humano

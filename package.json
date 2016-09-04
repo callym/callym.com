@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/callym/callym.com#readme",
   "devDependencies": {
+    "event-stream": "^3.3.4",
     "fs": "0.0.2",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.1",
@@ -24,6 +25,7 @@
     "gulp-connect": "^5.0.0",
     "gulp-front-matter": "^1.3.0",
     "gulp-less": "^3.1.0",
+    "gulp-responsive": "^2.5.1",
     "gulp-sass": "^2.3.2",
     "gulpsmith": "^0.5.5",
     "lodash": "^4.15.0",
