@@ -15,40 +15,39 @@
 							</image>
 						</pattern>
 					</defs>
-					<text x="50%" y="50%"
-						text-anchor="middle"
-						dominant-baseline="middle"
-						font-family =	"Georgia,
-										Times,
-										Times New Roman,
-										serif"
-						font-size="400"
-						fill="url(#filler)"
-						stroke="#000"
-						stroke-width="10"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-antialiasing="true"
-						paint-order="stroke"
-						letter-spacing="10">
-						call<tspan letter-spacing="20">ym</tspan>
+					<text x="50%" y="50%" fill="url(#filler)" id="glitter">
+						call<tspan class="extra-space">ym</tspan>
+					</text>
+					<text x="50%" y="50%" id="stroke">
+						call<tspan class="extra-space">ym</tspan>
 					</text>
 				</svg>
 			</h1>
 		</div>
 	</a>
-
-	{% set class = "center" %}
 	
 	<div id="links" class="row-flex">
-		<a href="{{ rootPath }}" class="{{ class }}">
-			home
-		</a>
+		<div class="center">
+			<a href="{{ rootPath }}"
+				class="hover-link {{ "current" if layout == "portfolio-index.nunjucks" }}">
+				home
+			</a>
+		</div>
 		{% for p in page %}
 			{% if not p.hide %}
-			<a href="{{ rootPath }}{{ p.path }}" class="{{ class }}">
-				{{ p.title }}
-			</a>
+			{% set is_page = false %}
+			{% set is_page = true if title == p.title %}
+			{% for c in collection %}
+				{% if c == p.title %}
+					{% set is_page = true %}
+				{% endif %}
+			{% endfor %}
+			<div class="center">
+				<a href="{{ rootPath }}{{ p.path }}"
+					class="hover-link {{ "current" if is_page }}">
+					{{ p.title }}
+				</a>
+			</div>
 			{% endif %}
 		{% endfor %}
 	</div>

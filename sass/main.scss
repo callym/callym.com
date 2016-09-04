@@ -1,42 +1,40 @@
 @import 'math';
 @import 'include-media';
 
+//
+// VARIABLES
+//
+
 $serif: Georgia, Times, Times New Roman, serif;
-$sans-serif: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+$sans-serif: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;
 
 $pink: #fbe4ff;
 $blue: #6bafff;
 $yellow: #ffffb8;
 
+//
+// DEFAULT TAG STYLES
+//
+
 html {
 	font-family: $sans-serif;
+	font-weight: 500;
 	font-size: 1.5em;
+	overflow-y: scroll;
+	font-feature-settings: 
+		"liga" 1,
+		"dlig" 1,
+		"onum" 1,
+		"hlig" 1,
+		"calt" 1,
+		"zero" 1,
+		"kern" 1,
+		"swsh" 1,
+		"cswh" 1;
 }
 
 body {
 	animation: colorchange 60s infinite;
-}
-
-@keyframes colorchange {
-	$blah: "needed to get colors below to show in vs code?";
-	$colors-list:
-		$yellow
-		$pink;
-	$len: length($colors-list);
-
-	@for $i from 1 through $len {
-		$perc: 100% / ($len - 1);
-		#{$perc * (($i - 1) / 2)} {
-			background: nth($colors-list, $i);
-		}
-	}
-	@for $i from 1 through $len {
-		$half: ($len - 1) / 2;
-		$perc: 100% / ($len - 1);
-		#{$perc * ($half + ($i - 1) / 2)} {
-			background: nth($colors-list, $len - $i + 1);
-		}
-	}
 }
 
 p {
@@ -63,6 +61,10 @@ pre {
 	}
 }
 
+//
+// HEADER NAME
+//
+
 #callym {
 	margin-bottom: -4vw;
 	@include media("<tablet") {
@@ -72,19 +74,46 @@ pre {
 	& h1 {
 		margin: inherit;
 	}
-}
 
-#links {
-	margin: 0;
-	@include media("<tablet") {
-		font-size: 2.5em;
+	& #glitter {
+		transition: all 500ms ease-in-out;
+	}
+	
+	&:hover #glitter {
+		opacity: 0.5;
+	}
+
+	& #stroke, #glitter {
+		font-size: 400px;
+		text-anchor: middle;
+		dominant-baseline: middle;
+		font-family: $serif;
+
+		& .space {
+			letter-spacing: 10px;
+		}
+
+		& .extra-space {
+			letter-spacing: 20px;
+		}
+	}
+
+	& #stroke {
+		fill: transparent;
+		stroke: black;
+		stroke-width: 5;
+		@include media("<tablet") {
+			stroke-width: 10;
+		}
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		stroke-antialiasing: true;
 	}
 }
 
-a {
-	text-decoration: none;
-	color: black;
-}
+//
+// LAYOUTS
+//
 
 .grid {
 	display: flex;
@@ -116,30 +145,6 @@ a {
 	}
 }
 
-.hex {
-	$rotate: 60deg;
-	$skew: 30deg;
-	$scale: cos(30deg);
-	
-	overflow: hidden;
-	transform:
-		rotate(-$rotate)
-		skewY($skew)
-		scaleX($scale);
-
-	& > * {
-		background-color: green;
-		display: block;
-		height: 100%;
-		overflow: hidden;
-		transform:
-			scaleX(1 / $scale)
-			skewY(-$skew)
-			rotate($rotate)
-			scaleX(0.9);
-	}
-}
-
 .row-flex {
 	display: flex;
 	justify-content: space-around;
@@ -157,13 +162,16 @@ a {
 	}
 }
 
+//
+// CLASSES
+//
+
 .center {
 	text-align: center;
 }
 
 .text, .title {
 	margin-top: 1em;
-	border: 1px solid black;
 	margin: auto;
 	width: 80vw;
 	max-width: 1200px;
@@ -190,10 +198,9 @@ a {
 	font-style: italic;
 }
 
-.sublinks {
-	margin: 2em auto;
-	width: 50vw;
-}
+//
+// PORTFOLIO THUMBNAILS & INDEX
+//
 
 .piece-name {
 	position: absolute;
@@ -222,22 +229,28 @@ a {
 		bottom: 0;
 		transform: 
 			translateY(0);
+		border-top: 2px solid rgba(white, 0.5);
 	}
 }
 
 .grid > *:hover {
-	& .piece-name {
-		transform: none;
-		opacity: 1;
-	}
+	/*
+	* don't need/want the animations on mobiles!
+	*/
+	@include media(">tablet") {
+		& .piece-name {
+			transform: none;
+			opacity: 1;
+		}
 
-	& .piece-description {
-		color: transparent;
-		text-shadow: 0 0 10px rgba(black, 0.5);
-	}
+		& .piece-description {
+			color: transparent;
+			text-shadow: 0 0 10px rgba(black, 0.5);
+		}
 
-	& .portfolio-thumbnail img {
-		filter: blur(2px);
+		& .portfolio-thumbnail img {
+			filter: blur(2px);
+		}
 	}
 }
 
@@ -245,7 +258,7 @@ a {
 	text-align: center;
 	font-family: $serif;
 	font-weight: bold;
-	font-size: 6vw;
+	font-size: 2.3em;
 	margin: 0;
 	width: 100%;
 	height: 100%;
@@ -262,4 +275,93 @@ a {
 	width: 100%;
 	height: 100%;
 	transition: all 500ms ease-in-out;
+}
+
+//
+// LINKS
+//
+
+a {
+	text-decoration: none;
+	color: black;
+}
+
+#links {
+	@include media("<tablet") {
+		font-size: 1.5em;
+		line-height: 0.5;
+	}
+
+	margin: 0 20vw;
+}
+
+.sublinks {
+	margin: 2em auto;
+	width: 50vw;
+	@include media("<tablet") {
+		margin: 1em auto 0;
+	}
+}
+
+.hover-link {
+	position: relative;
+
+	@include media(">tablet") {
+		&:hover:before {
+			transform:
+				scaleX(1.1);
+		}
+
+		&.current:hover:before {
+			transform:
+				scaleX(0);
+		}
+	}
+
+	&:before {
+		content: "";
+		position: absolute;
+		width: 100%;
+		height: 2px;
+		bottom: 0;
+		left: 0;
+		background-color: black;
+		transform:
+			scaleX(0);
+		transition: all 500ms ease-in-out;
+	}
+
+	&.current {
+		font-style: italic;
+
+		&:before {
+			transform:
+				scaleX(1);
+		}
+	}
+}
+
+//
+// KEYFRAMES
+//
+
+@keyframes colorchange {
+	$colors-list:
+		$yellow
+		$pink;
+	$len: length($colors-list);
+
+	@for $i from 1 through $len {
+		$perc: 100% / ($len - 1);
+		#{$perc * (($i - 1) / 2)} {
+			background: nth($colors-list, $i);
+		}
+	}
+	@for $i from 1 through $len {
+		$half: ($len - 1) / 2;
+		$perc: 100% / ($len - 1);
+		#{$perc * ($half + ($i - 1) / 2)} {
+			background: nth($colors-list, $len - $i + 1);
+		}
+	}
 }
