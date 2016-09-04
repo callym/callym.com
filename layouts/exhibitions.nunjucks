@@ -16,10 +16,8 @@
     {% endif %}
 
     {% if e.url %}
-        <a href="{{ e.url }}">
-            <div>
-                {{ e.url }}
-            </div>
+        <a href="{{ e.url }}" class="hover-link">
+            {{ e.url }}
         </a>
     {% endif %}
 
@@ -31,6 +29,12 @@
         {% endif %}
     </div>
 
+    {% if e.piece %}
+        <a href="{{ e.piece.url }}" class="hover-link">
+            {{ e.piece.name }}
+        </a>
+    {% endif %}
+    
     {{ e.description | md(false) | safe }}
 </div>
 {% endfor %}
