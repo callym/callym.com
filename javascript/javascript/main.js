@@ -20,3 +20,6 @@ function onOnline() {
 function onOffline() {
 	document.getElementById("offline").style.opacity = "1";
 }
+
+//=require lib/_zepto.js
+//=require lib/_magnific-popup.js
