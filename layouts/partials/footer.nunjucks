@@ -1,3 +1,4 @@
 </div>
+<script src="{{ rootPath }}javascript/main.js"></script>
 </body>
 </html>

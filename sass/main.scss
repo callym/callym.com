@@ -75,30 +75,27 @@ pre {
 		margin: inherit;
 	}
 
-	& #glitter {
+	& .glitter {
 		transition: all 500ms ease-in-out;
 	}
 	
-	&:hover #glitter {
+	&:hover .glitter {
 		opacity: 0.5;
 	}
 
-	& #stroke, #glitter {
+	& .stroke, .glitter {
 		font-size: 400px;
 		text-anchor: middle;
 		dominant-baseline: middle;
 		font-family: $serif;
-
-		& .space {
-			letter-spacing: 10px;
-		}
+		letter-spacing: 10px;
 
 		& .extra-space {
 			letter-spacing: 20px;
 		}
 	}
 
-	& #stroke {
+	& .stroke {
 		fill: transparent;
 		stroke: black;
 		stroke-width: 5;
@@ -339,6 +336,55 @@ a {
 				scaleX(1);
 		}
 	}
+}
+
+//
+// OFFLINE
+//
+#offline {
+	position: fixed;
+	text-align: center;
+	width: 100%;
+	background-color: lighten($blue, 20);
+	bottom: 0;
+	left: 0;
+	border-top: 10px solid $blue;
+	box-shadow: 0 0 20px 0px black;
+	z-index: 100;
+	padding-top: 10px;
+
+	transition: all 500ms ease-in-out;
+	opacity: 0;
+
+	& .stroke, .glitter {
+		font-size: 200px;
+		text-anchor: middle;
+		dominant-baseline: central;
+		font-family: $serif;
+		letter-spacing: 50px;
+	}
+
+	& .stroke {
+		fill: transparent;
+		stroke: black;
+		stroke-width: 4;
+		@include media("<tablet") {
+			stroke-width: 6;
+		}
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		stroke-antialiasing: true;
+	}
+}
+
+.offline-text {
+	font-size: 5vw;
+	text-align: center;
+}
+
+.offline-emoji {
+	margin: 1em auto;
+	max-width: 250px;
 }
 
 //

@@ -6,9 +6,19 @@
 	<title>{{title}} // callym</title>
 	
 	<link rel="stylesheet" href="{{ rootPath }}css/main.css"/>
+	<link rel="manifest" href="{{ rootPath }}manifest.json">
+
+	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="theme-color" content="#6bafff">
+	<!-- Windows Phone -->
+	<meta name="msapplication-navbutton-color" content="#6bafff">
+	<!-- iOS Safari -->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 	<meta name="viewport" content="width=device-width">
 </head>
 <body>
+	{% include "layouts/partials/offline.nunjucks" %}
 	<div id="container">
 	{% include "layouts/partials/title.nunjucks" %}

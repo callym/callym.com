@@ -15,10 +15,10 @@
 							</image>
 						</pattern>
 					</defs>
-					<text x="50%" y="50%" fill="url(#filler)" id="glitter">
+					<text x="50%" y="50%" fill="url(#filler)" class="glitter">
 						call<tspan class="extra-space">ym</tspan>
 					</text>
-					<text x="50%" y="50%" id="stroke">
+					<text x="50%" y="50%" class="stroke">
 						call<tspan class="extra-space">ym</tspan>
 					</text>
 				</svg>
@@ -26,6 +26,7 @@
 		</div>
 	</a>
 	
+	{% if not p.hide-others %}
 	<div id="links" class="row-flex">
 		<div class="center">
 			<a href="{{ rootPath }}"
@@ -35,20 +36,21 @@
 		</div>
 		{% for p in page %}
 			{% if not p.hide %}
-			{% set is_page = false %}
-			{% set is_page = true if title == p.title %}
-			{% for c in collection %}
-				{% if c == p.title %}
-					{% set is_page = true %}
-				{% endif %}
-			{% endfor %}
-			<div class="center">
-				<a href="{{ rootPath }}{{ p.path }}"
-					class="hover-link {{ "current" if is_page }}">
-					{{ p.title }}
-				</a>
-			</div>
+				{% set is_page = false %}
+				{% set is_page = true if title == p.title %}
+				{% for c in collection %}
+					{% if c == p.title %}
+						{% set is_page = true %}
+					{% endif %}
+				{% endfor %}
+				<div class="center">
+					<a href="{{ rootPath }}{{ p.path }}"
+						class="hover-link {{ "current" if is_page }}">
+						{{ p.title }}
+					</a>
+				</div>
 			{% endif %}
 		{% endfor %}
 	</div>
+	{% endif %}
 </header>
