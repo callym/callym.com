@@ -114,8 +114,6 @@ gulp.task('watch', ['connect', 'default'], function() {
 	gulp.watch('images/**/*', ['images']);
 	gulp.watch('assets/**/*', ['assets']);
 	gulp.watch('javascript/**/*', ['javascript']);
-	
-	gulp.watch('build/**/*', ['livereload']);
 });
 
 gulp.task('connect', function() {
@@ -336,11 +334,12 @@ gulp.task('javascript', function() {
 gulp.task('cache-bust', function() {
 	manifest = gulp.src('./between/rev-*.json');
 
-	return gulp.src('./build/**/*.{html,css,js,json}', { base: './' })
+	gulp.src('./build/**/*.{html,css,js,json}', { base: './' })
 		.pipe(build ? revR({
 			manifest: manifest
 		}) : gutil.noop())
 		.pipe(gulp.dest('./build'));
+	return runSequence('livereload');
 });
 
 gulp.task('clean', function() {
