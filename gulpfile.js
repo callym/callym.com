@@ -4,6 +4,7 @@ var gulp = require('gulp'),
 	through = require('through2'),
 	_ = require('lodash'),
 	assign = _.assign,
+	template = require('gulp-template'),
 	clean = require('gulp-clean'),
 	plumber = require('gulp-plumber'),
 	gutil = require('gulp-util'),
@@ -15,7 +16,6 @@ var gulp = require('gulp'),
 	autoprefixer = require('gulp-autoprefixer'),
 	responsive = require('gulp-responsive'),
 	rename = require('gulp-rename'),
-	replace = require('gulp-replace'),
 	rev = require('gulp-rev'),
 	revD = require('rev-del'),
 	revR = require('gulp-rev-replace'),
@@ -60,7 +60,8 @@ nunjucks.configure('', {
 	noCache: true,
 })
 .addFilter('date', njDate)
-.addFilter('md', njMD);
+.addFilter('md', njMD)
+.addGlobal('now', now);
 
 var assign_layout = function(options) {
 	return function (files, metalsmith, done) {
@@ -309,6 +310,10 @@ gulp.task('javascript', function() {
 	}, { restore: true });
 
 	gulp.src(['./javascript/**/*.js', '!**/_*.js'])
+		.pipe(template({
+			now: now,
+			build: build
+		}))
 		.pipe(include())
 		.pipe(babel({
 			presets: build ? ['babili'] : [],
@@ -335,11 +340,6 @@ gulp.task('cache-bust', function() {
 		.pipe(build ? revR({
 			manifest: manifest
 		}) : gutil.noop())
-		// ||| used for versioning
-		.pipe(replace(
-			/\|\|\|/g,
-			now
-		))
 		.pipe(gulp.dest('./build'));
 });
 

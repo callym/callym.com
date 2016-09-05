@@ -1,4 +1,4 @@
-var version = "date::|||";
+var version = "date::<%= now %>";
 
 self.addEventListener("install", function(event) {
 	console.log('WORKER: install event in progress.');
@@ -8,7 +8,9 @@ self.addEventListener("install", function(event) {
 			.open(version + '::pages')
 			.then(function(cache) {
 				return cache.addAll([
+					<% if (build) { %>
 					'/css/main.css',
+					<% } %>
 					'/images/blueglitter.gif',
 					'/offline/index.html'
 				]);
