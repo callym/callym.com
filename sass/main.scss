@@ -27,6 +27,12 @@ html {
 		historical-ligatures,
 		contextual,
 		oldstyle-nums;
+	font-feature-settings: 
+		'liga' 1,
+		'dlig' 1,
+		'hlig' 1,
+		'calt' 1,
+		'onum' 1;
 }
 
 body {
