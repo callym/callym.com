@@ -23,6 +23,7 @@ var gulpsmith = require('gulpsmith'),
 	njMD = require('nunjucks-markdown-filter');
 
 var build = false;
+var now = moment().format("DD-MMM-YYYY-HH-mm-ss-SS");
 
 nunjucks.configure('', {
 	watch: false,
@@ -59,6 +60,7 @@ gulp.task('default', function(cb) {
 	runSequence(
 		'clean',
 		['metalsmith', 'sass', 'images', 'assets', 'javascript'],
+		'cache-bust',
 		cb);
 });
 
@@ -71,7 +73,6 @@ gulp.task('build', function(cb) {
 	build = true;
 	runSequence(
 		'default',
-		'cache-bust',
 		cb);
 });
 
@@ -79,7 +80,7 @@ gulp.task('watch', ['connect', 'default'], function() {
 	gulp.watch(['./src/**/*', './layouts/**/*'], ['metalsmith']);
 	gulp.watch('./sass/**/*', ['sass']);
 	gulp.watch('./images/**/*', ['images']);
-	gulp.watch('./build/**/*', ['livereload']);
+	gulp.watch('./build/**/*', ['cache-bust','livereload']);
 	gulp.watch('./assets/**/*', ['assets']);
 	gulp.watch('./javascript/**/*', ['javascript']);
 });
@@ -92,6 +93,7 @@ gulp.task('connect', function() {
 });
 
 gulp.task('livereload', function() {
+	now = moment().format("DD-MMM-YYYY-HH-mm-ss-SS");
 	return gulp.src("./build/**/*")
 		.pipe(connect.reload());
 });
@@ -237,9 +239,14 @@ gulp.task('javascript', function() {
 		.pipe(gulp.dest('./build'));
 });
 
-var now = moment().format("DD-MMM-YYYY-HH-mm-ss-SS");
 gulp.task('cache-bust-rename', function() {
-	return gulp.src('./build/**/*.{js,css,json}', { base: './build' })
+	if (!build) {
+		return gulp.src('.');
+	}
+	return gulp.src([
+			'!./build/service-worker.js',
+			'./build/**/*.{js,css,json}'
+		], { base: './build' })
 		.pipe(clean({
 			force: true
 		}))
@@ -256,15 +263,22 @@ gulp.task('cache-bust', ['cache-bust-rename'], function() {
 				/@@(.*?)@@/g,
 				function(str) {
 					str = str.replace(/@@/g, '');
-					str = str.substring(
+					if (build)
+					{
+						str = str.substring(
 							0,
 							str.lastIndexOf(".")
 						) + "-" + now + 
 						str.substring(
 							str.lastIndexOf(".")
 						);
+					}
 					return str;
 				}
+			))
+			.pipe(replace(
+				/\|\|\|/g,
+				now
 			))
 	).pipe(gulp.dest('./build'));
 });

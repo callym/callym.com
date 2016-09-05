@@ -1,31 +1,15 @@
-// ServiceWorker is a progressive technology. Ignore unsupported browsers
 if ('serviceWorker' in navigator) {
-	console.log('CLIENT: service worker registration in progress.');
-	navigator.serviceWorker.register('@@/service-worker.js@@').then(function() {
-		console.log('CLIENT: service worker registration complete.');
-	}, function() {
-		console.log('CLIENT: service worker registration failure.');
-	});
-} else {
-	console.log('CLIENT: service worker is not supported.');
+	navigator.serviceWorker.register('/service-worker.js');
 }
 
-window.addEventListener('online', function(e) {
-	console.log("You are online");
-	onOnline();
-}, false);
+window.addEventListener('online', () => onOnline());
 
-window.addEventListener('offline', function(e) {
-	console.log("You are offline");
-	onOffline();
-}, false);
+window.addEventListener('offline', () => onOffline());
 
 // Check if the user is connected.
 if (navigator.onLine) {
-	console.log("online");
 	onOnline();
 } else {
-	console.log("offline");
 	onOffline();
 }
 
