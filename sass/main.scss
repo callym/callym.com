@@ -21,16 +21,12 @@ html {
 	font-weight: 500;
 	font-size: 1.5em;
 	overflow-y: scroll;
-	font-feature-settings: 
-		"liga" 1,
-		"dlig" 1,
-		"onum" 1,
-		"hlig" 1,
-		"calt" 1,
-		"zero" 1,
-		"kern" 1,
-		"swsh" 1,
-		"cswh" 1;
+	font-variant:
+		common-ligatures,
+		discretionary-ligatures,
+		historical-ligatures,
+		contextual,
+		oldstyle-nums;
 }
 
 body {
