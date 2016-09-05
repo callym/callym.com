@@ -3,10 +3,13 @@ var gulp = require('gulp'),
 	assign = require('lodash').assign,
 	clean = require('gulp-clean'),
 	es = require('event-stream'),
+	moment = require('moment'),
 	connect = require('gulp-connect'),
 	sass = require('gulp-sass'),
 	autoprefixer = require('gulp-autoprefixer'),
 	responsive = require('gulp-responsive'),
+	rename = require('gulp-rename'),
+	replace = require('gulp-replace'),
 	runSequence = require('run-sequence');
 
 var gulpsmith = require('gulpsmith'),
@@ -18,6 +21,8 @@ var gulpsmith = require('gulpsmith'),
 	nunjucks = require('nunjucks'),
 	njDate = require('nunjucks-date-filter')
 	njMD = require('nunjucks-markdown-filter');
+
+var build = false;
 
 nunjucks.configure('', {
 	watch: false,
@@ -49,8 +54,25 @@ var assign_layout = function(options) {
 	};
 };
 
-gulp.task('default', function (cb) {
-	runSequence('clean', ['metalsmith', 'sass', 'images', 'assets', 'javascript'], cb);
+gulp.task('default', function(cb) {
+	console.log("*** build: " + build + " ***");
+	runSequence(
+		'clean',
+		['metalsmith', 'sass', 'images', 'assets', 'javascript'],
+		cb);
+});
+
+gulp.task('build', function(cb) {
+	// this function should be used when
+	// ready to deploy!
+	// should do things like compress
+	// minify
+	// etc
+	build = true;
+	runSequence(
+		'default',
+		'cache-bust',
+		cb);
 });
 
 gulp.task('watch', ['connect', 'default'], function() {
@@ -70,12 +92,12 @@ gulp.task('connect', function() {
 });
 
 gulp.task('livereload', function() {
-	gulp.src("./build/**/*")
+	return gulp.src("./build/**/*")
 		.pipe(connect.reload());
 });
 
 gulp.task('metalsmith', function() {
-	gulp.src("./src/**/*")
+	return gulp.src("./src/**/*")
 		.pipe(gulp_front_matter()).on("data", function(file) {
 			assign(file, file.frontMatter);
 			delete file.frontMatter;
@@ -118,7 +140,9 @@ gulp.task('metalsmith', function() {
 
 gulp.task('sass', function () {
 	return gulp.src('./sass/*.scss')
-		.pipe(sass())
+		.pipe(sass({
+			outputStyle: build ? 'compressed' : 'expanded'
+		}))
 		.pipe(autoprefixer(
 			{
 				browsers: [
@@ -139,7 +163,7 @@ gulp.task('sass', function () {
 });
 
 gulp.task('images', ['resize-images'], function() {
-	es.merge(
+	return es.merge(
 		gulp.src('./generated-images/**/*'),
 		gulp.src(['./images/**/*', "!./images/portfolio{,/**/*}"]))
 	.pipe(gulp.dest('./build/images'));
@@ -211,6 +235,38 @@ gulp.task('assets', function() {
 gulp.task('javascript', function() {
 	return gulp.src('./javascript/**/*')
 		.pipe(gulp.dest('./build'));
+});
+
+var now = moment().format("DD-MMM-YYYY-HH-mm-ss-SS");
+gulp.task('cache-bust-rename', function() {
+	return gulp.src('./build/**/*.{js,css,json}', { base: './build' })
+		.pipe(clean({
+			force: true
+		}))
+		.pipe(rename({
+			suffix: "-" + now
+		}))
+		.pipe(gulp.dest('./build'));
+});
+
+gulp.task('cache-bust', ['cache-bust-rename'], function() {
+	return es.merge(
+		gulp.src('./build/**/*.{html,js}', { base: './build' })
+			.pipe(replace(
+				/@@(.*?)@@/g,
+				function(str) {
+					str = str.replace(/@@/g, '');
+					str = str.substring(
+							0,
+							str.lastIndexOf(".")
+						) + "-" + now + 
+						str.substring(
+							str.lastIndexOf(".")
+						);
+					return str;
+				}
+			))
+	).pipe(gulp.dest('./build'));
 });
 
 gulp.task('clean', function() {
