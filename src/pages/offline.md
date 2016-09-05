@@ -1,7 +1,7 @@
 ---
 title: offline
 hide: true
-hide-others: true
+hideOthers: true
 ---
 <div class="offline-text">
 	you are currently offline
