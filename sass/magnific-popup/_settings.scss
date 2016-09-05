@@ -42,3 +42,8 @@ $mfp-caption-subtitle-color:          #BDBDBD !default;                    // Ca
 
 // A11y
 $mfp-use-visuallyhidden:              false !default;                      // Hide content from browsers, but make it available for screen readers
+
+.mfp-iframe-holder .mfp-bottom-bar {
+	position: absolute;
+	margin-top: 2px;
+}

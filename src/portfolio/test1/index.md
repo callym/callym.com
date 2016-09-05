@@ -9,7 +9,7 @@ images:
     -   file: "IMG_0732"
         type: "image"
         alt: "blah blah blah"
-    -   file: "blah2"
+    -   file: "1"
         type: "vimeo"
         alt: "blah blah video"
         id: 98276732
