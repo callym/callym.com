@@ -1,3 +1,6 @@
+//=require lib/_zepto.js
+//=require lib/_magnific-popup.js
+
 if ('serviceWorker' in navigator) {
 	navigator.serviceWorker.register('/service-worker.js');
 }
@@ -14,12 +17,23 @@ if (navigator.onLine) {
 }
 
 function onOnline() {
-	document.getElementById("offline").style.opacity = "0";
-}
+	$('#offline')
+		.anim({
+			opacity: 0
+		},
+		0.5,
+		'ease-in-out',
+		function() {
+			document.getElementById("offline").style.visibility = '';
+		});
+};
 
 function onOffline() {
-	document.getElementById("offline").style.opacity = "1";
-}
-
-//=require lib/_zepto.js
-//=require lib/_magnific-popup.js
+	document.getElementById("offline").style.visibility = 'visible';
+	$('#offline')
+		.anim({
+			opacity: 1
+		},
+		0.5,
+		'ease-in-out');
+};
