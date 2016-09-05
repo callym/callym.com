@@ -19,6 +19,8 @@ var gulp = require('gulp'),
 	revD = require('rev-del'),
 	revR = require('gulp-rev-replace'),
 	filter = require('gulp-filter'),
+	include = require('gulp-include'),
+	babel = require('gulp-babel'),
 	runSequence = require('run-sequence');
 
 var gulpsmith = require('gulpsmith'),
@@ -296,7 +298,12 @@ gulp.task('javascript', function() {
 		return !(file.path.lastIndexOf('service-worker') > -1);
 	}, { restore: true });
 
-	gulp.src('./javascript/**/*')
+	gulp.src(['./javascript/**/*.js', '!**/_*.js'])
+		.pipe(include())
+		.pipe(babel({
+			presets: build ? ['babili'] : [],
+			comments: build? false : true
+		}))
 		.pipe(rev_filter)
 		.pipe(rev())
 		.pipe(rev_filter.restore)
