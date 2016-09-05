@@ -7,6 +7,7 @@ var gulp = require('gulp'),
 	clean = require('gulp-clean'),
 	plumber = require('gulp-plumber'),
 	gutil = require('gulp-util'),
+	lazypipe = require('lazypipe'),
 	es = require('event-stream'),
 	moment = require('moment'),
 	connect = require('gulp-connect'),
@@ -46,6 +47,13 @@ gulp.src = function() {
 
 var build = false;
 var now = moment().format("DD-MMM-YYYY-HH-mm-ss-SS");
+
+var noop = through.obj(function(file, enc, cb) {
+	cb(null, file);
+});
+
+var rev_pipe = lazypipe()
+	.pipe(gutil.noop);
 
 nunjucks.configure('', {
 	watch: false,
@@ -93,6 +101,7 @@ gulp.task('build', function(cb) {
 	// minify
 	// etc
 	build = true;
+	rev_pipe = rev_pipe.pipe(rev);
 	return runSequence(
 		'default',
 		cb);
@@ -122,7 +131,7 @@ gulp.task('livereload', function() {
 });
 
 gulp.task('metalsmith', function() {
-	return gulp.src("./src/**/*")
+	gulp.src("./src/**/*")
 		.pipe(gulp_front_matter()).on("data", function(file) {
 			assign(file, file.frontMatter);
 			delete file.frontMatter;
@@ -161,6 +170,7 @@ gulp.task('metalsmith', function() {
 					default: 'page.nunjucks',
 				}))
 		).pipe(gulp.dest("./build"));
+	return runSequence('cache-bust');
 });
 
 gulp.task('sass', function () {
@@ -184,7 +194,7 @@ gulp.task('sass', function () {
 				cascade: false
 			}
 		))
-		.pipe(rev())
+		.pipe(rev_pipe())
 		.pipe(gulp.dest('./build/css'))
 		.pipe(rev.manifest("rev-css-manifest.json"))
 		.pipe(through.obj(function(file, enc, cb) {
@@ -204,7 +214,7 @@ gulp.task('sass', function () {
 			dest: './build'
 		}))
 		.pipe(gulp.dest('./between'));
-	return runSequence('metalsmith', 'cache-bust');
+	return runSequence('metalsmith');
 });
 
 gulp.task('images', ['resize-images'], function() {
@@ -280,7 +290,7 @@ gulp.task('assets', function() {
 
 	gulp.src('./assets/**/*')
 		.pipe(rev_filter)
-		.pipe(rev())
+		.pipe(rev_pipe())
 		.pipe(rev_filter.restore)
 		.pipe(gulp.dest('./build'))
 		.pipe(rev.manifest("rev-assets-manifest.json"))
@@ -289,7 +299,7 @@ gulp.task('assets', function() {
 			dest: './build'
 		}))
 		.pipe(gulp.dest('./between'));
-	return runSequence('metalsmith', 'cache-bust');
+	return runSequence('metalsmith');
 });
 
 gulp.task('javascript', function() {
@@ -302,10 +312,11 @@ gulp.task('javascript', function() {
 		.pipe(include())
 		.pipe(babel({
 			presets: build ? ['babili'] : [],
-			comments: build? false : true
+			comments: build ? false : true,
+			compact: build ? true : false
 		}))
 		.pipe(rev_filter)
-		.pipe(rev())
+		.pipe(rev_pipe())
 		.pipe(rev_filter.restore)
 		.pipe(gulp.dest('./build'))
 		.pipe(rev.manifest("rev-js-manifest.json"))
@@ -314,16 +325,16 @@ gulp.task('javascript', function() {
 			dest: './build'
 		}))
 		.pipe(gulp.dest('./between'));
-	return runSequence('metalsmith', 'cache-bust');
+	return runSequence('metalsmith');
 });
 
 gulp.task('cache-bust', function() {
 	manifest = gulp.src('./between/rev-*.json');
 
-	return gulp.src('./build/**/*', { base: './build' })
-		.pipe(revR({
+	return gulp.src('./build/**/*.{html,css,js,json}', { base: './build' })
+		.pipe(build ? revR({
 			manifest: manifest
-		}))
+		}) : gutil.noop())
 		// ||| used for versioning
 		.pipe(replace(
 			/\|\|\|/g,

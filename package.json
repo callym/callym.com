@@ -38,6 +38,7 @@
     "gulp-sass": "^2.3.2",
     "gulp-util": "^3.0.7",
     "gulpsmith": "^0.5.5",
+    "lazypipe": "^1.0.1",
     "lodash": "^4.15.0",
     "metalsmith": "^2.2.0",
     "metalsmith-collections": "^0.7.0",
