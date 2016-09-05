@@ -331,7 +331,7 @@ gulp.task('javascript', function() {
 gulp.task('cache-bust', function() {
 	manifest = gulp.src('./between/rev-*.json');
 
-	return gulp.src('./build/**/*.{html,css,js,json}', { base: './build' })
+	return gulp.src('./build/**/*.{html,css,js,json}', { base: './' })
 		.pipe(build ? revR({
 			manifest: manifest
 		}) : gutil.noop())
