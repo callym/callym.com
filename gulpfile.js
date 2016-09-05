@@ -1,7 +1,12 @@
 var gulp = require('gulp'),
 	gulp_front_matter = require('gulp-front-matter'),
-	assign = require('lodash').assign,
+	fs = require('fs'),
+	through = require('through2'),
+	_ = require('lodash'),
+	assign = _.assign,
 	clean = require('gulp-clean'),
+	plumber = require('gulp-plumber'),
+	gutil = require('gulp-util'),
 	es = require('event-stream'),
 	moment = require('moment'),
 	connect = require('gulp-connect'),
@@ -10,6 +15,10 @@ var gulp = require('gulp'),
 	responsive = require('gulp-responsive'),
 	rename = require('gulp-rename'),
 	replace = require('gulp-replace'),
+	rev = require('gulp-rev'),
+	revD = require('rev-del'),
+	revR = require('gulp-rev-replace'),
+	filter = require('gulp-filter'),
 	runSequence = require('run-sequence');
 
 var gulpsmith = require('gulpsmith'),
@@ -21,6 +30,17 @@ var gulpsmith = require('gulpsmith'),
 	nunjucks = require('nunjucks'),
 	njDate = require('nunjucks-date-filter')
 	njMD = require('nunjucks-markdown-filter');
+
+var gulp_src = gulp.src;
+gulp.src = function() {
+	return gulp_src.apply(gulp, arguments)
+		.pipe(plumber(function(error) {
+			// Output an error message
+			gutil.log(gutil.colors.red('Error (' + error.plugin + '): ' + error.message));
+			// emit the end event, to properly end the task
+			this.emit('end');
+		}));
+};
 
 var build = false;
 var now = moment().format("DD-MMM-YYYY-HH-mm-ss-SS");
@@ -57,7 +77,7 @@ var assign_layout = function(options) {
 
 gulp.task('default', function(cb) {
 	console.log("*** build: " + build + " ***");
-	runSequence(
+	return runSequence(
 		'clean',
 		['metalsmith', 'sass', 'images', 'assets', 'javascript'],
 		'cache-bust',
@@ -71,18 +91,19 @@ gulp.task('build', function(cb) {
 	// minify
 	// etc
 	build = true;
-	runSequence(
+	return runSequence(
 		'default',
 		cb);
 });
 
 gulp.task('watch', ['connect', 'default'], function() {
-	gulp.watch(['./src/**/*', './layouts/**/*'], ['metalsmith']);
-	gulp.watch('./sass/**/*', ['sass']);
-	gulp.watch('./images/**/*', ['images']);
-	gulp.watch('./build/**/*', ['cache-bust','livereload']);
-	gulp.watch('./assets/**/*', ['assets']);
-	gulp.watch('./javascript/**/*', ['javascript']);
+	gulp.watch(['src/**/*', './layouts/**/*'], ['metalsmith']);
+	gulp.watch('sass/**/*', ['sass']);
+	gulp.watch('images/**/*', ['images']);
+	gulp.watch('assets/**/*', ['assets']);
+	gulp.watch('javascript/**/*', ['javascript']);
+	
+	gulp.watch('build/**/*', ['livereload']);
 });
 
 gulp.task('connect', function() {
@@ -141,7 +162,7 @@ gulp.task('metalsmith', function() {
 });
 
 gulp.task('sass', function () {
-	return gulp.src('./sass/*.scss')
+	gulp.src('./sass/*.scss')
 		.pipe(sass({
 			outputStyle: build ? 'compressed' : 'expanded'
 		}))
@@ -161,12 +182,32 @@ gulp.task('sass', function () {
 				cascade: false
 			}
 		))
-		.pipe(gulp.dest('./build/css'));
+		.pipe(rev())
+		.pipe(gulp.dest('./build/css'))
+		.pipe(rev.manifest("rev-css-manifest.json"))
+		.pipe(through.obj(function(file, enc, cb) {
+			var json = JSON.parse(file.contents.toString());
+			json = _.mapKeys(json, function(value, key) {
+				return "css/" + key;
+			});
+			json = _.mapValues(json, function(value, key) {
+				return "css/" + value;
+			});
+			var buffer = new Buffer(JSON.stringify(json));
+			file.contents = buffer;
+			cb(null, file);
+		}))
+		.pipe(revD({
+			oldManifest: './between/rev-css-manifest.json',
+			dest: './build'
+		}))
+		.pipe(gulp.dest('./between'));
+	return runSequence('metalsmith', 'cache-bust');
 });
 
 gulp.task('images', ['resize-images'], function() {
 	return es.merge(
-		gulp.src('./generated-images/**/*'),
+		gulp.src('./between/generated-images/**/*'),
 		gulp.src(['./images/**/*', "!./images/portfolio{,/**/*}"]))
 	.pipe(gulp.dest('./build/images'));
 });
@@ -226,64 +267,68 @@ gulp.task('resize-images', function() {
 			errorOnEnlargement: false,
 			withoutEnlargement: true
 		}))
-		.pipe(gulp.dest('./generated-images/portfolio'));
+		.pipe(gulp.dest('./between/generated-images/portfolio'));
 });
 
 gulp.task('assets', function() {
-	return gulp.src('./assets/**/*')
-		.pipe(gulp.dest('./build'));
+	var rev_filter = filter(function(file) {
+		// version webapp manifest file
+		return (file.path.lastIndexOf('manifest') > -1);
+	}, { restore: true });
+
+	gulp.src('./assets/**/*')
+		.pipe(rev_filter)
+		.pipe(rev())
+		.pipe(rev_filter.restore)
+		.pipe(gulp.dest('./build'))
+		.pipe(rev.manifest("rev-assets-manifest.json"))
+		.pipe(revD({
+			oldManifest: './between/rev-assets-manifest.json',
+			dest: './build'
+		}))
+		.pipe(gulp.dest('./between'));
+	return runSequence('metalsmith', 'cache-bust');
 });
 
 gulp.task('javascript', function() {
-	return gulp.src('./javascript/**/*')
-		.pipe(gulp.dest('./build'));
+	var rev_filter = filter(function(file) {
+		// don't version service-worker
+		return !(file.path.lastIndexOf('service-worker') > -1);
+	}, { restore: true });
+
+	gulp.src('./javascript/**/*')
+		.pipe(rev_filter)
+		.pipe(rev())
+		.pipe(rev_filter.restore)
+		.pipe(gulp.dest('./build'))
+		.pipe(rev.manifest("rev-js-manifest.json"))
+		.pipe(revD({
+			oldManifest: './between/rev-js-manifest.json',
+			dest: './build'
+		}))
+		.pipe(gulp.dest('./between'));
+	return runSequence('metalsmith', 'cache-bust');
 });
 
-gulp.task('cache-bust-rename', function() {
-	if (!build) {
-		return gulp.src('.');
-	}
-	return gulp.src([
-			'!./build/service-worker.js',
-			'./build/**/*.{js,css,json}'
-		], { base: './build' })
-		.pipe(clean({
-			force: true
-		}))
-		.pipe(rename({
-			suffix: "-" + now
-		}))
-		.pipe(gulp.dest('./build'));
-});
+gulp.task('cache-bust', function() {
+	manifest = gulp.src('./between/rev-*.json');
 
-gulp.task('cache-bust', ['cache-bust-rename'], function() {
-	return es.merge(
-		gulp.src('./build/**/*.{html,js}', { base: './build' })
-			.pipe(replace(
-				/@@(.*?)@@/g,
-				function(str) {
-					str = str.replace(/@@/g, '');
-					if (build)
-					{
-						str = str.substring(
-							0,
-							str.lastIndexOf(".")
-						) + "-" + now + 
-						str.substring(
-							str.lastIndexOf(".")
-						);
-					}
-					return str;
-				}
-			))
-			.pipe(replace(
-				/\|\|\|/g,
-				now
-			))
-	).pipe(gulp.dest('./build'));
+	return gulp.src('./build/**/*', { base: './build' })
+		.pipe(revR({
+			manifest: manifest
+		}))
+		// ||| used for versioning
+		.pipe(replace(
+			/\|\|\|/g,
+			now
+		))
+		.pipe(gulp.dest('./build'));
 });
 
 gulp.task('clean', function() {
-	return gulp.src('./build', {read: false})
-		.pipe(clean());
+	return es.merge(
+		gulp.src('./build', { read: false }),
+		gulp.src('./between/*.json', { read: false })
+	)
+	.pipe(clean());
 });

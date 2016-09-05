@@ -1,6 +1,6 @@
 build
 *.tmp
-generated-images
+between
 
 # Logs
 logs

@@ -1,4 +1,4 @@
 </div>
-<script src="@@{{ rootPath }}javascript/main.js@@"></script>
+<script src="{{ rootPath }}javascript/main.js"></script>
 </body>
 </html>

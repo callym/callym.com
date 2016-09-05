@@ -5,8 +5,8 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>{{title}} // callym</title>
 	
-	<link rel="stylesheet" href="@@{{ rootPath }}css/main.css@@"/>
-	<link rel="manifest" href="@@{{ rootPath }}manifest.json@@">
+	<link rel="stylesheet" href="{{ rootPath }}css/main.css"/>
+	<link rel="manifest" href="{{ rootPath }}manifest.json">
 
 	<!-- Chrome, Firefox OS and Opera -->
 	<meta name="theme-color" content="#6bafff">

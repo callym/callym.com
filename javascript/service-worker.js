@@ -8,7 +8,7 @@ self.addEventListener("install", function(event) {
 			.open(version + '::pages')
 			.then(function(cache) {
 				return cache.addAll([
-					'@@/css/main.css@@',
+					'/css/main.css',
 					'/images/blueglitter.gif',
 					'/offline/index.html'
 				]);
