@@ -70,7 +70,7 @@
 
 {% endblock %}
 
-{% block footer %}
+{% block scripts %}
 {{ super() }}
 <script>
 $(document).ready(function() {
