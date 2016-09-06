@@ -39,6 +39,15 @@ exhibitions:
             * [Lu Williams](http://luwilliams.com/)
             * [Ruth Smith](http://ruth-smith.com)
             * [Ruth Spencer Jolly](http://ruthspencerjolly.com/)
+    -   title: "ITS NOT THAT FAR"
+        location: "St Hugh's College, Oxford"
+        date:
+            begin: 2015-11-23
+            end: 2015-11-25
+        piece:
+            url: blahblah
+            name: blahblah
+        description: ""
     -   title: "RUSKIN SCHOOL OF ART FIRST YEAR EXHIBITION"
         location: "Ruskin School of Art, University of Oxford"
         date:
