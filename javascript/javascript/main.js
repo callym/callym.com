@@ -1,5 +1,6 @@
 //=require lib/_zepto.js
 //=require lib/_magnific-popup.js
+//=require lib/_list.js
 
 if ('serviceWorker' in navigator) {
 	navigator.serviceWorker.register('/service-worker.js');

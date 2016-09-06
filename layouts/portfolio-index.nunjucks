@@ -2,9 +2,32 @@
 
 {% block contents %}
 
-<div class="grid">
+{% set categories = [
+	"portfolio",
+	"generated"
+] %}
+{% set class = "hover-link center" %}
+<div class="sublinks row-flex">
+    <a href=""
+        class="{{ class }}"
+		id="listjs-all">
+        all
+    </a>
+{% for c in categories %}
+    <a href=""
+    class="{{ class }}"
+	id="listjs-{{ c }}">
+        {{ c }}
+    </a>
+{% endfor %}
+</div>
+
+<div id="listjs">
+<div class="list grid">
 {% for p in portfolio %}
-	<a href="{{ p.path }}">
+	<a href="{{ p.path }}"
+		class="item"
+		data-categories="portfolio">
 	{% if not p.images %}
 		<svg xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 500 500"
@@ -52,12 +75,68 @@
 	</a>
 {% endfor %}
 {% for i in range(0, 15) %}
-	<a href="">
+	<a href=""
+		class="item"
+		data-categories="generated">
 		<div class="center piece-name">
 			{{ i }}
 		</div>
 	</a>
 {% endfor %}
 </div>
+</div>
 
+{% endblock %}
+
+{% block footer %}
+{{ super() }}
+<script>
+$(document).ready(function() {
+	filterList = new List('listjs', {
+		valueNames: [
+			{
+				data: ['categories']
+			}
+		]
+	});
+
+	var fade_list = function(cb) {
+		var time = 0.25;
+		$('#listjs')
+			.anim({
+				opacity: 0
+			},
+			time,
+			'ease-in-out',
+			function() {
+				cb();
+				$('#listjs')
+				.anim({
+					opacity: 1
+				},
+				time,
+				'ease-in-out');
+			});
+	}
+
+	$('#listjs-all').on('click', function(e) {
+		e.preventDefault();
+	    e.stopPropagation();
+		fade_list(
+			() => { filterList.filter() }
+		)
+		return false;
+	});
+	{% for c in categories %}
+	$('#listjs-{{ c }}').on('click', function(e) {
+		e.preventDefault();
+	    e.stopPropagation();
+		fade_list(
+			() => { filterList.filter((item) => item.values().categories == "{{ c }}") }
+		);
+		return false;
+	});
+	{% endfor %}
+});
+</script>
 {% endblock %}
