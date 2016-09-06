@@ -338,7 +338,7 @@ gulp.task('cache-bust', function() {
 		.pipe(build ? revR({
 			manifest: manifest
 		}) : gutil.noop())
-		.pipe(gulp.dest('./build'));
+		.pipe(gulp.dest('./'));
 	return runSequence('livereload');
 });
 
