@@ -16,10 +16,10 @@
 						</pattern>
 					</defs>
 					<text x="50%" y="50%" fill="url(#filler)" class="glitter">
-						call<tspan class="extra-space">ym</tspan>
+						<tspan>call</tspan><tspan class="extra-space">ym</tspan>
 					</text>
 					<text x="50%" y="50%" class="stroke">
-						call<tspan class="extra-space">ym</tspan>
+						<tspan>call</tspan><tspan class="extra-space">ym</tspan>
 					</text>
 				</svg>
 			</h1>
