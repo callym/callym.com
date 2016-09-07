@@ -324,6 +324,16 @@ a {
 	&.filter {
 		margin: 2em auto;
 		width: 80vw;
+		max-width: 1000px;
+
+		flex-flow: row wrap;
+
+		& > * {
+			margin-bottom: 2.5vw;
+			flex-basis: 25%;
+			flex-grow: 0;
+		}
+
 		@include media("<tablet") {
 			margin: 1em auto 0;
 			font-size: 1.5em;

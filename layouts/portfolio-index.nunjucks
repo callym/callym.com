@@ -2,7 +2,16 @@
 
 {% block contents %}
 
-{% set categories = [] %}
+{#
+	categories here are for ordering
+	but if I add a new one
+	it'll automatically find it!
+#}
+{% set categories = [
+	"web",
+	"game",
+	"3d"
+] %}
 {% for p in portfolio %}
 	{% if p.categories %}
 		{% set categories_list = p.categories.split(" ") %}
