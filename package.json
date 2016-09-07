@@ -42,6 +42,7 @@
     "lazypipe": "^1.0.1",
     "lodash": "^4.15.0",
     "metalsmith": "^2.2.0",
+    "metalsmith-alias": "git+https://github.com/callym/metalsmith-alias.git",
     "metalsmith-branch": "0.0.4",
     "metalsmith-collections": "^0.7.0",
     "metalsmith-copy": "^0.2.1",

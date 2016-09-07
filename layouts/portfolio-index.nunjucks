@@ -84,7 +84,11 @@
 			<div class="center piece-name">
 				<div>
 					<div>
-						{{ p.title | truncate(80) }}
+						{% if p.displaytitle %}
+							{{ p.displaytitle | truncate(80) }}
+						{% else %}
+							{{ p.title | truncate(80) }}
+						{% endif %}
 					</div>
 				</div>
 			</div>

@@ -34,6 +34,7 @@ var gulpsmith = require('gulpsmith'),
 	branch = require('metalsmith-branch'),
 	copy = require('metalsmith-copy'),
 	ignore = require('metalsmith-ignore'),
+	alias = require('metalsmith-alias'),
 	nunjucks = require('nunjucks'),
 	njDate = require('nunjucks-date-filter')
 	njMD = require('nunjucks-markdown-filter');
@@ -221,6 +222,7 @@ gulp.task('metalsmith', function() {
 					default: 'page.nunjucks',
 					pattern: '**/*.html'
 				}))
+				.use(alias())
 		).pipe(gulp.dest("./build"));
 	return runSequence('cache-bust');
 });
