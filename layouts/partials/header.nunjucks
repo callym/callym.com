@@ -3,7 +3,12 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>{{title}} // callym</title>
+	<title>
+	{% if title %}
+		{{title}} // 
+	{% endif %}
+		callym
+	</title>
 	
 	<link rel="stylesheet" href="{{ rootPath }}css/main.css"/>
 	<link rel="manifest" href="{{ rootPath }}manifest.json">
