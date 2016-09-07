@@ -368,6 +368,11 @@ gulp.task('javascript', function() {
 		return !(file.path.lastIndexOf('service-worker') > -1);
 	}, { restore: true });
 
+	var babel_presets = ['latest'];
+	if (build) {
+		babel_presets.push('babili');
+	}
+
 	gulp.src(['./javascript/**/*.js', '!**/_*.js'])
 		.pipe(template({
 			now: now,
@@ -378,7 +383,7 @@ gulp.task('javascript', function() {
 		}))
 		.pipe(include())
 		.pipe(babel({
-			presets: build ? ['babili'] : [],
+			presets: babel_presets,
 			comments: build ? false : true,
 			compact: build ? true : false
 		}))

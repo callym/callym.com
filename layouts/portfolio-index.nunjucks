@@ -159,7 +159,7 @@ $(document).ready(function() {
 		$('.sublinks.filter').children().removeClass('current');
 		$(this).addClass('current');
 		fade_list(
-			() => { filterList.filter() }
+			function() { filterList.filter() }
 		)
 		return false;
 	});
@@ -170,7 +170,7 @@ $(document).ready(function() {
 		$('.sublinks.filter').children().removeClass('current');
 		$(this).addClass('current');
 		fade_list(
-			() => {
+			function() {
 				filterList.filter(function(item) {
 					var cat = item.values().categories.split(" ");
 					return cat.indexOf("{{ c }}") > -1;
