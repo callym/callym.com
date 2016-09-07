@@ -13,14 +13,7 @@ images:
     -   file: "3"
         type: "image"
         alt: "screenshot"
+itchio: 33017
+github: my-little-astral-being
 ---
-<div class="center">
-<iframe src="//itch.io/embed/33017?linkback=true"
-    width="552"
-    height="167"
-    frameborder="0"
-    style="max-width: 100%;">
-</iframe>
-</div>
-
 look after your own astral being, conveniently trapped into a physical form.

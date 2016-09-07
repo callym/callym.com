@@ -64,6 +64,28 @@
     {% endif %}
 {% endfor %}
 </div>
+
+{% if itchio %}
+	<div class="center itchio">
+		<iframe src="https://itch.io/embed/{{ itchio }}?linkback=true"
+			width="552"
+			height="167"
+			frameborder="0"
+			style="max-width: 100%;">
+		</iframe>
+	</div>
+{% endif %}
+
+{% if github %}
+	<div class="center">
+		<p>
+			<a href="https://github.com/callym/{{ github }}/" class="hover-link">
+				github
+			</a>
+		</p>
+	</div>
+{% endif %}
+
 <div class="text">
     {{ contents | safe }}
 </div>
