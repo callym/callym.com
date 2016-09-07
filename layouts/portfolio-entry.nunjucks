@@ -59,7 +59,7 @@
         {{ d | date("YYYY") }}/{{ d | date("add", 1, "years") | date("YYYY") }}
     {% endif %}
 
-    {% if loop.first %}
+    {% if loop.first and not loop.last %}
         &ndash;
     {% endif %}
 {% endfor %}
