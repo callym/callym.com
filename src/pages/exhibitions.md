@@ -10,6 +10,9 @@ exhibitions:
         date:
             begin: 2016-06-17
             end: 2016-06-22
+        piece:
+            url: /portfolio/tides
+            name: tides
         description: ""
     -   title: "Future Late"
         location: "Tate Modern"
@@ -17,7 +20,7 @@ exhibitions:
             begin: 2016-06-17
             end: 2016-06-19
         piece:
-            url: https://callym.com/portfolio/in-your-presence
+            url: /portfolio/in-your-presence
             name: in-your-presence
         description: |
             part of the Tate Collectives’
@@ -28,7 +31,7 @@ exhibitions:
             begin: 2015-12-08
             end: 2015-12-09
         piece:
-            url: https://callym.com/calarts
+            url: /portfolio/calarts
             name: "CAL ARTS: +6"
         description: |
             curated by myself, featuring my piece
@@ -45,8 +48,8 @@ exhibitions:
             begin: 2015-11-23
             end: 2015-11-25
         piece:
-            url: blahblah
-            name: blahblah
+            url: /portfolio/not-touching
+            name: (not) touching
         description: ""
     -   title: "RUSKIN SCHOOL OF ART FIRST YEAR EXHIBITION"
         location: "Ruskin School of Art, University of Oxford"
@@ -54,7 +57,7 @@ exhibitions:
             begin: 2014-06-06
             end: 2014-06-07
         piece:
-            url: https://callym.com/portfolio/threedimensionsoftime
+            url: /portfolio/three-dimensions-of-time
             name: three dimensions of time
         description: ""
 ---
