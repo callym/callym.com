@@ -260,7 +260,8 @@ pre {
 
 		& .piece-description {
 			color: transparent;
-			text-shadow: 0 0 20px rgba(black, 0.5);
+			text-shadow: 0 0 20px black;
+			text-shadow: 0 0 20px var(--color, black);
 		}
 
 		& .portfolio-thumbnail img {
@@ -279,10 +280,12 @@ pre {
 	width: 100%;
 	height: 100%;
 	transition: all 500ms ease-in-out;
+	color: var(--color);
 }
 
 .piece-description-background {
 	background-color: $pink;
+	background-color: var(--background-color, $pink);
 	position: absolute;
 }
 

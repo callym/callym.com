@@ -5,6 +5,11 @@ categories: web
 date: 2015-12-08
 description: |
     Rescue the artists
+descriptionStyle:
+    text:
+        color: white
+    background:
+        color: black
 layout: empty.nunjucks
 alias:
     -   calarts

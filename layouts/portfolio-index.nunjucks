@@ -43,7 +43,11 @@
 	{% if not p.images %}
 		<svg xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 500 500"
-			class="piece-description-background">
+			class="piece-description-background"
+			style="
+				{% if p.descriptionStyle.background.color %}
+					--background-color: {{ p.descriptionStyle.background.color }}
+				{% endif %}">
 			<defs>
 				{% set size = 160 %}
 				<pattern id="filler"
@@ -56,7 +60,13 @@
 				</pattern>
 			</defs>
 			<foreignObject width="100%" height="100%">
-				<p class="piece-description">{{ p.description | truncate(40) }}</p>
+				<p class="piece-description"
+					style="
+						{% if p.descriptionStyle.text.color %}
+							--color: {{ p.descriptionStyle.text.color }}
+						{% endif %}">
+					{{ p.description | truncate(40) }}
+				</p>
 			</body>
 			</foreignObject>
 		</svg>

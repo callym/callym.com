@@ -4,6 +4,11 @@ categories: web
 date: 2015-07-13
 description: |
     how to overcome artist block
+descriptionStyle:
+    text:
+        color: orange
+    background:
+        color: black
 layout: empty.nunjucks
 ---
 <!DOCTYPE html><html><head><title>artist block // callym</title><meta charset=utf-8><style>a,body{color:#222}body{font:18px "Helvetica Neue",Helvetica,Arial,sans-serif}#passage{max-width:38em;margin:0 auto;line-height:145%}a{text-decoration:none;border-bottom:2px solid #bbb}a:hover{color:#cc8929;border-color:#cc8929}a:active{color:#ffb040;border-color:#ffb040}tw-storydata{display:none}@media screen and (max-device-width:480px){#passage{font-size:70%}}</style></head><body><div id=passage></div><tw-storydata name="ArtistBlock" startnode="1" creator="Twine" creator-version="2.0.8" ifid="4BE2AFCC-15FC-4468-9896-CD4ACD001FC3" format="Snowman" options=""><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">body
