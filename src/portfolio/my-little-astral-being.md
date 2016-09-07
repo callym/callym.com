@@ -1,6 +1,6 @@
 ---
 title: "my little astral being"
-categories: web
+categories: web game
 date: 2015-08-11
 description: "look after your own astral being, conveniently trapped into a physical form."
 images:

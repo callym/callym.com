@@ -1,6 +1,5 @@
 ---
 title: in-your-presence
-categories: sculpture
 date: 2016-04-21
 description: |
     my thoughts on time and it being a social construct
