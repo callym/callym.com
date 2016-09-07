@@ -1,0 +1,28 @@
+#sign-list {
+    display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+
+	& > div {
+		flex-grow: 0;
+		min-width: 128px;
+		flex-basis: 16%;
+		margin: 1em 0;
+
+		& > img {
+			max-width: 75%;
+			height: auto;
+			filter: grayscale(100%);
+			transition: all 200ms ease-in-out;
+
+			&:hover {
+				filter: grayscale(0%);
+			}
+		}
+	}
+
+	& .active > img {
+		filter: grayscale(0%);
+		transform: scale(1.2);
+	}
+}

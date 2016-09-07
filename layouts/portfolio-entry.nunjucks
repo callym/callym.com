@@ -4,7 +4,7 @@
 
 <div class="grid popup-gallery">
 {% for i in images %}
-	{% set url_title = title | replace(" ", "-") %}
+	{% set url_title = title | replace(" ", "-") | replace("?", "") %}
 	{% set path = rootPath + "images/portfolio/" + url_title + "/" %}
 	{% if i.type == "image" %}
 	<a href="{{ path }}{{ i.file }}.jpg"

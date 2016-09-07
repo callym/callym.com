@@ -8,6 +8,7 @@ var gulp = require('gulp'),
 	clean = require('gulp-clean'),
 	plumber = require('gulp-plumber'),
 	gutil = require('gulp-util'),
+	gif = require('gulp-if'),
 	lazypipe = require('lazypipe'),
 	es = require('event-stream'),
 	moment = require('moment'),
@@ -30,6 +31,7 @@ var gulpsmith = require('gulpsmith'),
 	permalinks = require('metalsmith-permalinks'),
 	collections = require('metalsmith-collections'),
 	root = require('metalsmith-rootpath'),
+	branch = require('metalsmith-branch'),
 	nunjucks = require('nunjucks'),
 	njDate = require('nunjucks-date-filter')
 	njMD = require('nunjucks-markdown-filter');
@@ -109,7 +111,8 @@ gulp.task('build', function(cb) {
 });
 
 gulp.task('watch', ['connect', 'default'], function() {
-	gulp.watch(['src/**/*', './layouts/**/*'], ['metalsmith']);
+	gulp.watch('src/**/*', ['metalsmith']);
+	gulp.watch('layouts/**/*', ['metalsmith']);
 	gulp.watch('sass/**/*', ['sass']);
 	gulp.watch('images/**/*', ['images']);
 	gulp.watch('assets/**/*', ['assets']);
@@ -130,11 +133,43 @@ gulp.task('livereload', function() {
 });
 
 gulp.task('metalsmith', function() {
+	var use_markdown = (file, props, i) => test_markdown(file, props, i);
+	var dont_use_markdown = (file, props, i) => !test_markdown(file, props, i);
+	var test_markdown = function(file, props, i) {
+		if (props.layout == "empty.nunjucks") {
+			return false;
+		}
+		return true;
+	};
+
+	var rename_markdown = function(options) {
+		return function (files, metalsmith, done) {
+			Object.keys(files).forEach(function(file) {
+				var data = files[file];
+				var html = file.replace(/\.md$/, ".html");
+				delete files[file];
+				files[html] = data;
+			});
+			done();      
+		};
+	};
+
+	var log = function(file, props, i) {
+		console.log(file);
+		_.forOwn(props, function(value, key) {
+			if (key != "contents")
+			{
+				console.log("    " + key + ": " + value);
+			}
+		});
+		return true;
+	}
+
 	gulp.src("./src/**/*")
-		.pipe(gulp_front_matter()).on("data", function(file) {
+		.pipe(gif(["**/*", "!**/*.{jpg,png}"], gulp_front_matter().on("data", function(file) {
 			assign(file, file.frontMatter);
 			delete file.frontMatter;
-		}).pipe(
+		}))).pipe(
 			gulpsmith()
 				.use(collections({
 					page: {
@@ -150,9 +185,15 @@ gulp.task('metalsmith', function() {
 					page: 'page.nunjucks',
 					portfolio: 'portfolio-entry.nunjucks'
 				}))
-				.use(markdown())
+				.use(branch(use_markdown)
+					.use(markdown())
+				)
+				.use(branch(dont_use_markdown)
+					.use(rename_markdown())
+				)
 				.use(permalinks({
 					pattern: ':title',
+					relative: false,
 					linksets: [
 						{
 							match: { collection: 'portfolio' },
@@ -167,13 +208,14 @@ gulp.task('metalsmith', function() {
 						'nunjucks': nunjucks,
 					},
 					default: 'page.nunjucks',
+					pattern: '**/*.html'
 				}))
 		).pipe(gulp.dest("./build"));
 	return runSequence('cache-bust');
 });
 
 gulp.task('sass', function () {
-	gulp.src('./sass/*.scss')
+	gulp.src('./sass/**/*.scss')
 		.pipe(sass({
 			outputStyle: build ? 'compressed' : 'expanded'
 		}))
@@ -233,6 +275,7 @@ gulp.task('resize-images', function() {
 					width: size,
 					height: size,
 					quality: quality,
+					withoutEnlargement: false,
 					rename:
 					{
 						suffix: '-square',
@@ -243,6 +286,7 @@ gulp.task('resize-images', function() {
 					width: size,
 					height: size,
 					quality: quality,
+					withoutEnlargement: false,
 					rename:
 					{
 						suffix: '-square',
@@ -311,6 +355,9 @@ gulp.task('javascript', function() {
 		.pipe(template({
 			now: now,
 			build: build
+		},
+		{
+			interpolate: /<%=([\s\S]+?)%>/g
 		}))
 		.pipe(include())
 		.pipe(babel({
@@ -333,12 +380,14 @@ gulp.task('javascript', function() {
 
 gulp.task('cache-bust', function() {
 	manifest = gulp.src('./between/rev-*.json');
-
-	gulp.src('./build/**/*.{html,css,js,json}', { base: './' })
-		.pipe(build ? revR({
-			manifest: manifest
-		}) : gutil.noop())
-		.pipe(gulp.dest('./'));
+	if (build)
+	{
+		gulp.src('./build/**/*.{html,css,js,json}', { base: './' })
+			.pipe(build ? revR({
+				manifest: manifest
+			}) : gutil.noop())
+			.pipe(gulp.dest('./'));
+	}
 	return runSequence('livereload');
 });
 
