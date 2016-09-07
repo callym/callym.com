@@ -117,7 +117,7 @@ gulp.task('watch', ['connect', 'default'], function() {
 	gulp.watch('src/**/*', ['metalsmith']);
 	gulp.watch('layouts/**/*', ['metalsmith']);
 	gulp.watch('sass/**/*', ['sass']);
-	gulp.watch('images/**/*', ['images']);
+//	gulp.watch('images/**/*', ['images']);
 	gulp.watch('assets/**/*', ['assets']);
 	gulp.watch('javascript/**/*', ['javascript']);
 });
@@ -271,7 +271,7 @@ gulp.task('sass', function () {
 	return runSequence('metalsmith');
 });
 
-gulp.task('images', ['resize-images'], function() {
+gulp.task('images', function() {
 	return es.merge(
 		gulp.src('./between/generated-images/**/*'),
 		gulp.src(['./images/**/*', "!./images/portfolio{,/**/*}"]))
