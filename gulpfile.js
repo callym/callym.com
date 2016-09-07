@@ -178,6 +178,9 @@ gulp.task('metalsmith', function() {
 					standalone: {
 						pattern: 'standalone/**/*.md'
 					},
+					empty: {
+						pattern: '**/*.html'
+					},
 					page: {
 						pattern: 'pages/**/*.md'
 					},
@@ -189,6 +192,7 @@ gulp.task('metalsmith', function() {
 				}))
 				.use(assign_layout({
 					standalone: 'empty.nunjucks',
+					empty: 'empty.nunjucks',
 					page: 'page.nunjucks',
 					portfolio: 'portfolio-entry.nunjucks'
 				}))
