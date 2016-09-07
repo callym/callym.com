@@ -1,6 +1,6 @@
 ---
 title: artist block
-categories: web
+categories: web text
 date: 2015-07-13
 description: |
     how to overcome artist block

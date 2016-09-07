@@ -1,10 +1,10 @@
 ---
 title: "calarts"
 displaytitle: "CAL ARTS: +6"
-categories: web
+categories: web game
 date: 2015-12-08
 description: |
-    Rescue the artists
+    rescue the artists in this game!
 descriptionStyle:
     text:
         color: white

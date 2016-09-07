@@ -1,9 +1,9 @@
 ---
 title: spirituality essay
-categories: web
+categories: web text
 date: 2015-10-18
 description: |
-    A hyperlink essay on spirituality and technology
+    a hyperlink essay on spirituality and technology
 descriptionStyle:
     text:
         color: white
