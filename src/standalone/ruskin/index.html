@@ -1,0 +1,299 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ruskin.show.editor</title><link rel="stylesheet" href="css/main.css"><script type="text/javascript" src="js/jszip.js"></script><script type="text/javascript" src="js/FileSaver.js"></script><script type="text/javascript" src="js/json-editor.js"></script><script type="text/javascript" src="js/yaml.js"></script></head><body><div class="center header">RUSKIN.SHOW<div class="subheader">editor</div></div><div id="editor-wrapper"><div id="editor"><div>upload images using the buttons below.<br><br>then change the <span class="highlight">name</span> box that appears to the title of the piece.<br><br>for youtube & vimeo videos, the "id" is:<ul><li>https://www.youtube.com/watch?v=<span class="highlight">Kh0Y2hVe_bw</span></li><li>https://vimeo.com/<span class="highlight">109943349</span></li></ul>the artist bio will appear next to your work on the website, & only needs to be a couple of paragraphs long.<br><br>when you have finished, click the <span class="highlight">generate</span> button, save the file, & then email it to me.</div><br><br><form class="center"><button type="button" id="add-image">add image</button> <button type="button" id="add-youtube">add youtube</button> <button type="button" id="add-vimeo">add vimeo</button> <button type="button" id="add-iframe">add iframe</button> <button type="button" id="add-link">add link</button></form><div id="editor_holder"></div><h3>bio</h3><form class="center radio">is your artist bio written in: <span><input type="radio" name="person" id="first" value="first" checked="true"><label for="first">first person</label></span>or <span><input type="radio" name="person" id="third" value="third"><label for="third">third person</label></span></form><div id="artist-info-wrapper"><textarea id="artist-info" autocomplete="off" cols="120" rows="20" placeholder="This is the bio that will appear next to your work on the website.
+
+It only needs to be around 150 words.
+
+Start a new paragraph by leaving a blank line."></textarea></div><form class="center"><button type="button" id="submit">generate</button></form><input type="file" id="image-input" accept="image/jpeg"> <input type="file" id="vimeo-input" accept="image/jpeg"> <input type="file" id="youtube-input" accept="image/jpeg"> <input type="file" id="iframe-input" accept="image/jpeg"><div class="center"><a href="http://callym.com" class="callym">callym.com</a></div></div></div><script type="text/javascript">if (navigator.userAgent.indexOf('Safari') != -1 &&
+	navigator.userAgent.indexOf('Chrome') == -1)
+{
+	alert("this site doesn't work on safari, please try another browser (such as chrome)");
+	window.location.assign("http://google.com/chrome");
+}
+var editor = new JSONEditor(document.getElementById('editor_holder'),
+{
+	schema:
+	{
+		"type": "object",
+		"properties": {
+			"title": {
+				"type": "string"
+			},
+			"images": {
+				"type": "array",
+				"format": "table",
+				"items":
+				{
+					"type": "string"
+				}
+			},
+			"youtube": {
+				"type": "array",
+				"format": "table",
+				"items":
+				{
+					"type": "object",
+					"properties": {
+						"name": {
+							"type": "string"
+						},
+						"id": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"vimeo": {
+				"type": "array",
+				"format": "table",
+				"items":
+				{
+					"type": "object",
+					"properties": {
+						"name": {
+							"type": "string"
+						},
+						"id": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"iframe": {
+				"type": "array",
+				"format": "table",
+				"items":
+				{
+					"type": "object",
+					"properties": {
+						"name": {
+							"type": "string"
+						},
+						"id": {
+							"type": "string"
+						}
+					}
+				}
+			},
+			"links": {
+				"type": "array",
+				"format": "table",
+				"items":
+				{
+					"type": "string"
+				}
+			}
+		}
+	},
+	disable_collapse: true,
+	disable_edit_json: true,
+	disable_properties: true,
+	remove_empty_properties: true,
+	disable_array_reorder: true,
+	disable_array_delete: true
+});
+var roots = ["images", "youtube", "vimeo", "iframe", "links"];
+for (var i = 0; i < roots.length; i++)
+{
+	var r = "root." + roots[i];
+	var e = editor.getEditor("root." + roots[i]);
+	e.add_row_button.hidden = true;
+	e.remove_all_rows_button.hidden = true;
+	e.delete_last_row_button.hidden = true;
+}
+editor.getEditor("root").header.hidden = true;
+editor.getEditor("root.title").header.innerHTML = "name";
+editor.getEditor("root.title").container.getElementsByTagName('input')[0].placeholder = "your name";
+editor.getEditor("root.images").header_row.getElementsByTagName('th')[0].innerHTML = "name";
+editor.getEditor("root.links").header_row.hidden = true;
+
+var zip = new JSZip();
+
+var input =
+{
+	image: document.getElementById("image-input"),
+	vimeo: document.getElementById("vimeo-input"),
+	youtube: document.getElementById("youtube-input"),
+	iframe: document.getElementById("iframe-input")
+}
+var downloadButton = document.getElementById("submit");
+var filenameInput = editor.getEditor('root.title');
+var artistInfo = document.getElementById('artist-info');
+var numberOfImages = 1;
+var numberOfVideos = 1;
+var numberOfIframes = 1;
+
+function addToForm(formName, string)
+{
+	var form = editor.getEditor("root." + formName);
+	form.addRow();
+	form.refreshValue();
+	form.refreshRowButtons();
+	form.onChange(true);
+
+	if (typeof string !== 'undefined')
+	{
+		var lastRow = form.table.rows[form.table.rows.length - 1];
+		lastRow.getElementsByTagName('input')[0].placeholder = string + " title";
+		var cell = lastRow.insertCell(-1);
+		cell.innerHTML = string;
+	}
+
+	console.log("added " + formName);
+}
+
+document.getElementById("add-image").addEventListener('click', function()
+{
+	input.image.click();
+}, false);
+
+document.getElementById("add-youtube").addEventListener('click', function()
+{
+	input.youtube.click();
+}, false);
+
+document.getElementById("add-vimeo").addEventListener('click', function()
+{
+	input.vimeo.click();
+}, false);
+
+document.getElementById("add-iframe").addEventListener('click', function()
+{
+	input.iframe.click();
+}, false);
+
+document.getElementById("add-link").addEventListener('click', function()
+{
+	addToForm("links");
+}, false);
+
+function addFile(files, type)
+{
+	var prefix = "";
+	var form = "";
+	if (type == "vimeo" || type == "youtube")
+	{
+		prefix = "v" + numberOfVideos;
+		numberOfVideos++;
+	}
+	else if (type == "iframe")
+	{
+		prefix = "i" + numberOfIframes;
+		numberOfIframes++;
+	}
+	else if (type = "images")
+	{
+		prefix = numberOfImages;
+		numberOfImages++;
+	}
+
+	for (var i = 0; i < files.length; i++)
+	{
+		var file = files[i];
+		var name = file.name;
+		var reader = new FileReader();
+		reader.onload = function(e)
+		{
+			zip.file(prefix + ".jpg", reader.result);
+			addToForm(type, name);
+		}
+		reader.readAsArrayBuffer(file);
+	}
+}
+
+input.image.addEventListener('change', function()
+{
+	addFile(this.files, "images");
+}, false);
+
+input.vimeo.addEventListener('change', function()
+{
+	addFile(this.files, "vimeo");
+}, false);
+
+input.youtube.addEventListener('change', function()
+{
+	addFile(this.files, "youtube");
+}, false);
+
+input.iframe.addEventListener('change', function()
+{
+	addFile(this.files, "iframe");
+}, false);
+
+downloadButton.addEventListener("click", function(event)
+{
+	var isOkay = false;
+	var errors = [];
+	var rootsToCheck = roots.concat("title");
+	console.log(rootsToCheck);
+	if (artistInfo.value == "")
+	{
+		alert("you have not added an artist bio" +
+				"\nplease change this and try again.");
+			return;
+	}
+	for (var i = 0; i < rootsToCheck.length; i++)
+	{
+		var r = rootsToCheck[i];
+		var e = editor.getEditor("root." + r);
+		var element = null;
+		if (typeof e.table !== "undefined")
+		{
+			element = e.table;
+		}
+		else
+		{
+			element = e.container;
+		}
+		var inputs = element.getElementsByTagName('input');
+		if (inputs.length > 0)
+		{
+			for (var j = 0; j < inputs.length; j++)
+			{
+				if (inputs[j].value == "")
+				{
+					alert("you have left '" + inputs[j].placeholder +
+						"' at the default value." +
+						"\nplease change this and try again.");
+					return;
+				}
+			}
+		}
+		else
+		{
+			errors.push(rootsToCheck[i]);
+		}
+	}
+	if (errors.length > 0)
+	{
+		var errorMessage = "you have not added the following:\n";
+		for (var i = 0; i < errors.length; i++)
+		{
+			errorMessage += errors[i];
+			errorMessage += "\n";
+		}
+		errorMessage += "if you want to add these, press cancel."
+		isOkay = confirm(errorMessage);
+	}
+	if (isOkay)
+	{
+		editor.getEditor("root.title").container.getElementsByTagName('input')[0].placeholder = "Your Name";
+		var infoJSON = editor.getValue();
+
+		var whatperson = (document.querySelector('input[name="person"]:checked').value == "first");
+		infoJSON["firstperson"] = whatperson;
+
+		var infoYAML = YAML.stringify(infoJSON);
+		infoYAML = infoYAML.replace(/\b[ ]+\'/g, "'");
+		infoYAML = infoYAML.replace(/\'[ ]+\b/g, "'");
+
+		var infoAll = "---\r\n";
+		infoAll += infoYAML;
+		infoAll += "---\r\n";
+		infoAll += artistInfo.value;
+
+		zip.file("index.md", infoAll);
+		var blob = zip.generate({type: "blob"});
+		var nameString = filenameInput.getValue().replace(/\s+/g, "-").toLowerCase();
+		saveAs(blob, nameString + ".zip");
+	}
+}, false);</script></body></html>

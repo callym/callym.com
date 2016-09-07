@@ -32,6 +32,8 @@ var gulpsmith = require('gulpsmith'),
 	collections = require('metalsmith-collections'),
 	root = require('metalsmith-rootpath'),
 	branch = require('metalsmith-branch'),
+	copy = require('metalsmith-copy'),
+	ignore = require('metalsmith-ignore'),
 	nunjucks = require('nunjucks'),
 	njDate = require('nunjucks-date-filter')
 	njMD = require('nunjucks-markdown-filter');
@@ -172,6 +174,9 @@ gulp.task('metalsmith', function() {
 		}))).pipe(
 			gulpsmith()
 				.use(collections({
+					standalone: {
+						pattern: 'standalone/**/*.md'
+					},
 					page: {
 						pattern: 'pages/**/*.md'
 					},
@@ -182,6 +187,7 @@ gulp.task('metalsmith', function() {
 					}
 				}))
 				.use(assign_layout({
+					standalone: 'empty.nunjucks',
 					page: 'page.nunjucks',
 					portfolio: 'portfolio-entry.nunjucks'
 				}))
@@ -191,6 +197,11 @@ gulp.task('metalsmith', function() {
 				.use(branch(dont_use_markdown)
 					.use(rename_markdown())
 				)
+				.use(copy({
+					pattern: 'standalone/**/*',
+					transform: (path) => path.replace('standalone\\', '')
+				}))
+				.use(ignore('standalone/**/*'))
 				.use(permalinks({
 					pattern: ':title',
 					relative: false,
