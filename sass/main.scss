@@ -127,6 +127,8 @@ pre {
 
 	& > * {
 		border: 1px solid black;
+		border-radius: 12.5%;
+		z-index: 0;
 		margin: 1vw;
 
 		overflow: hidden;
