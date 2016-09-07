@@ -81,6 +81,11 @@
 		</svg>
 	{% else %}
 		{% set img = p.images[0] %}
+		{% for i in p.images %}
+			{% if i.title %}
+				{% set img = i %}
+			{% endif %}
+		{% endfor %}
 		{% set url_title = p.title | replace(" ", "-") | replace("?", "") %}
 		{% set path = rootPath + "images/portfolio/" + url_title + "/" %}
 		<picture class="portfolio-thumbnail">
