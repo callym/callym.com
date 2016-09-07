@@ -1,17 +1,6 @@
 <div id="offline">
 	<svg xmlns="http://www.w3.org/2000/svg"
 		viewBox="0 0 1400 200">
-		<defs>
-			{% set size = 160 %}
-			<pattern id="filler"
-				patternUnits="userSpaceOnUse"
-				width="{{ size }}" height="{{ size }}">
-				<image xlink:href="/images/blueglitter.gif"
-					width="{{ size }}" height="{{ size }}"
-					preserveAspectRatio="none">
-				</image>
-			</pattern>
-		</defs>
 		<text x="50%" y="50%" fill="url(#filler)" class="glitter">
 			offline
 		</text>
