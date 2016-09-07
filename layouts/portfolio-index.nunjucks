@@ -2,12 +2,20 @@
 
 {% block contents %}
 
-{% set categories = [
-	"portfolio",
-	"generated"
-] %}
+{% set categories = [] %}
+{% for p in portfolio %}
+	{% if p.categories %}
+		{% set categories_list = p.categories.split(" ") %}
+		{% for c in categories_list %}
+			{% if (categories.indexOf(c) == -1) %}
+				{% set categories = (categories.push(c), categories) %}
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+{% endfor %}
+
 {% set class = "hover-link center" %}
-<div class="sublinks row-flex">
+<div class="sublinks row-flex filter">
     <a href=""
         class="{{ class }}"
 		id="listjs-all">
@@ -27,7 +35,11 @@
 {% for p in portfolio %}
 	<a href="{{ p.path }}"
 		class="item"
-		data-categories="portfolio">
+		{% if p.categories %}
+			data-categories="{{ p.categories }}">
+		{% else %}
+			data-categories="misc">
+		{% endif %}
 	{% if not p.images %}
 		<svg xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 500 500"
@@ -44,7 +56,7 @@
 				</pattern>
 			</defs>
 			<foreignObject width="100%" height="100%">
-				<p class="piece-description">{{ p.description | truncate(80) }}</p>
+				<p class="piece-description">{{ p.description | truncate(40) }}</p>
 			</body>
 			</foreignObject>
 		</svg>
@@ -70,17 +82,12 @@
 		</picture>
 	{% endif %}
 			<div class="center piece-name">
-				{{ p.title | truncate(80) }}
+				<div>
+					<div>
+						{{ p.title | truncate(80) }}
+					</div>
+				</div>
 			</div>
-	</a>
-{% endfor %}
-{% for i in range(0, 15) %}
-	<a href=""
-		class="item"
-		data-categories="generated">
-		<div class="center piece-name">
-			{{ i }}
-		</div>
 	</a>
 {% endfor %}
 </div>
@@ -122,6 +129,8 @@ $(document).ready(function() {
 	$('#listjs-all').on('click', function(e) {
 		e.preventDefault();
 	    e.stopPropagation();
+		$('.sublinks.filter').children().removeClass('current');
+		$(this).addClass('current');
 		fade_list(
 			() => { filterList.filter() }
 		)
@@ -131,12 +140,20 @@ $(document).ready(function() {
 	$('#listjs-{{ c }}').on('click', function(e) {
 		e.preventDefault();
 	    e.stopPropagation();
+		$('.sublinks.filter').children().removeClass('current');
+		$(this).addClass('current');
 		fade_list(
-			() => { filterList.filter((item) => item.values().categories == "{{ c }}") }
+			() => {
+				filterList.filter(function(item) {
+					var cat = item.values().categories.split(" ");
+					return cat.indexOf("{{ c }}") > -1;
+				})
+			}
 		);
 		return false;
 	});
 	{% endfor %}
+	$('#listjs-all').trigger('click');
 });
 </script>
 {% endblock %}

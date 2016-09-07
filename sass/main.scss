@@ -191,6 +191,9 @@ pre {
 .title {
 	& > h1 {
 		font-size: 300%;
+		@include media("<tablet") {
+			font-size: 200%;
+		}
 	}
 }
 
@@ -204,7 +207,7 @@ pre {
 
 .piece-name {
 	position: absolute;
-	font-size: 9vw;
+	font-size: 1.25em;
 	height: 100%;
 	width: 80%;
 
@@ -224,12 +227,24 @@ pre {
 	* at the bottom of the square
 	*/
 	@include media("<tablet") {
+		font-size: 1.5em;
 		opacity: 1;
 		height: auto;
 		bottom: 0;
 		transform: 
 			translateY(0);
 		border-top: 2px solid rgba(white, 0.5);
+	}
+	
+	& > div {
+		display: table;
+		width: 100%;
+		height: 100%;
+
+		& > div {
+			display: table-cell;
+			vertical-align: middle;
+		}
 	}
 }
 
@@ -245,11 +260,12 @@ pre {
 
 		& .piece-description {
 			color: transparent;
-			text-shadow: 0 0 10px rgba(black, 0.5);
+			text-shadow: 0 0 20px rgba(black, 0.5);
 		}
 
 		& .portfolio-thumbnail img {
-			filter: blur(2px);
+			filter:
+				blur(3px);
 		}
 	}
 }
@@ -258,7 +274,7 @@ pre {
 	text-align: center;
 	font-family: $serif;
 	font-weight: bold;
-	font-size: 2.3em;
+	font-size: 3.4em;
 	margin: 0;
 	width: 100%;
 	height: 100%;
@@ -300,6 +316,20 @@ a {
 	width: 50vw;
 	@include media("<tablet") {
 		margin: 1em auto 0;
+	}
+
+	&.filter {
+		margin: 2em auto;
+		width: 80vw;
+		@include media("<tablet") {
+			margin: 1em auto 0;
+			font-size: 1.5em;
+
+			& > * {
+				margin-bottom: 5vw;
+				flex-basis: 50%;
+			}
+		}
 	}
 }
 
