@@ -100,7 +100,7 @@ gulp.task('default', function(cb) {
 		cb);
 });
 
-gulp.task('build', function(cb) {
+gulp.task('build', ['resize-images'], function(cb) {
 	// this function should be used when
 	// ready to deploy!
 	// should do things like compress
