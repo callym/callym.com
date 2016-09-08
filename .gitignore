@@ -1,6 +1,7 @@
 build
 *.tmp
 between
+s3_website.yml
 
 # Logs
 logs
