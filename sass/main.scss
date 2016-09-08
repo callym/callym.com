@@ -172,6 +172,19 @@ pre {
 	text-align: center;
 }
 
+.right {
+	text-align: right;
+}
+
+.serif {
+	font-family: $serif;
+}
+
+.narrow {
+	width: 80%;
+	margin: 0 auto;
+}
+
 .text, .title {
 	margin-top: 1em;
 	margin: auto;
