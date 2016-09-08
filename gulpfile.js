@@ -284,7 +284,12 @@ gulp.task('images', function() {
 
 gulp.task('resize-images', function() {
 	var size = 800;
-	var quality = 60;
+	var size_large = {
+		width: 1920,
+		height: 1080
+	};
+	var quality = 75;
+	var high_quality = 90;
 	return gulp.src('./images/portfolio/**/*')
 		.pipe(responsive({
 			'**/*': [
@@ -311,18 +316,20 @@ gulp.task('resize-images', function() {
 					}
 				},
 				{
-					width: 2560,
-					height: 1440,
+					width: size_large.width,
+					height: size_large.height,
 					min: true,
+					quality : high_quality,
 					rename:
 					{
 						extname: '.jpg'
 					}
 				},
 				{
-					width: 2560,
-					height: 1440,
+					width: size_large.width,
+					height: size_large.height,
 					min: true,
+					quality: high_quality,
 					rename:
 					{
 						extname: '.webp'
