@@ -35,6 +35,7 @@ var gulpsmith = require('gulpsmith'),
 	copy = require('metalsmith-copy'),
 	ignore = require('metalsmith-ignore'),
 	alias = require('metalsmith-alias'),
+	htmlMinifier = require('metalsmith-html-minifier'),
 	nunjucks = require('nunjucks'),
 	njDate = require('nunjucks-date-filter')
 	njMD = require('nunjucks-markdown-filter');
@@ -67,6 +68,25 @@ nunjucks.configure('', {
 .addFilter('date', njDate)
 .addFilter('md', njMD)
 .addGlobal('now', now);
+
+var babel_presets = ['latest'];
+
+var babel_options = {
+	presets: babel_presets,
+	comments: build ? false : true,
+	compact: build ? true : false
+};
+
+var set_build = function() {
+	// this function should be used when
+	// ready to deploy!
+	// should do things like compress
+	// minify
+	// etc
+	build = true;
+	rev_pipe = rev_pipe.pipe(rev);
+	babel_presets.push('babili');
+};
 
 var assign_layout = function(options) {
 	return function (files, metalsmith, done) {
@@ -101,13 +121,7 @@ gulp.task('default', function(cb) {
 });
 
 gulp.task('build', ['resize-images'], function(cb) {
-	// this function should be used when
-	// ready to deploy!
-	// should do things like compress
-	// minify
-	// etc
-	build = true;
-	rev_pipe = rev_pipe.pipe(rev);
+	set_build();
 	return runSequence(
 		'default',
 		cb);
@@ -227,7 +241,17 @@ gulp.task('metalsmith', function() {
 					pattern: '**/*.html'
 				}))
 				.use(alias())
-		).pipe(gulp.dest("./build"));
+				.use(branch(use_markdown)
+					.use(htmlMinifier({
+						collapseWhitespace: build,
+						minifyJS: function(text, inline) {
+							var babel = require('babel-core');
+							return babel.transform(text, babel_options).code;
+						}
+					}))
+				)
+		)
+		.pipe(gulp.dest("./build"));
 	return runSequence('cache-bust');
 });
 
@@ -375,11 +399,6 @@ gulp.task('javascript', function() {
 		return !(file.path.lastIndexOf('service-worker') > -1);
 	}, { restore: true });
 
-	var babel_presets = ['latest'];
-	if (build) {
-		babel_presets.push('babili');
-	}
-
 	gulp.src(['./javascript/**/*.js', '!**/_*.js'])
 		.pipe(template({
 			now: now,
@@ -389,11 +408,7 @@ gulp.task('javascript', function() {
 			interpolate: /<%=([\s\S]+?)%>/g
 		}))
 		.pipe(include())
-		.pipe(babel({
-			presets: babel_presets,
-			comments: build ? false : true,
-			compact: build ? true : false
-		}))
+		.pipe(babel(babel_options))
 		.pipe(rev_filter)
 		.pipe(rev_pipe())
 		.pipe(rev_filter.restore)

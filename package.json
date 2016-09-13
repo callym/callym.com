@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/callym/callym.com#readme",
   "devDependencies": {
+    "babel-core": "^6.14.0",
     "babel-preset-babili": "0.0.2",
     "babel-preset-latest": "^6.14.0",
     "event-stream": "^3.3.4",
@@ -47,6 +48,7 @@
     "metalsmith-branch": "0.0.4",
     "metalsmith-collections": "^0.7.0",
     "metalsmith-copy": "^0.2.1",
+    "metalsmith-html-minifier": "^2.1.0",
     "metalsmith-ignore": "^0.1.2",
     "metalsmith-layouts": "^1.6.5",
     "metalsmith-markdown": "^0.2.1",
