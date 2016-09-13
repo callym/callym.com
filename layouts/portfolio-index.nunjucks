@@ -26,7 +26,7 @@
 {% set class = "hover-link center" %}
 <div class="sublinks row-flex filter">
     <a href=""
-        class="{{ class }}"
+        class="{{ class }} current"
 		id="listjs-all">
         all
     </a>
@@ -190,7 +190,6 @@ $(document).ready(function() {
 		return false;
 	});
 	{% endfor %}
-	$('#listjs-all').trigger('click');
 });
 </script>
 {% endblock %}
