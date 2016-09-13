@@ -3,7 +3,17 @@
 //=require lib/_list.js
 
 if ('serviceWorker' in navigator) {
-	navigator.serviceWorker.register('/service-worker.js');
+	navigator.serviceWorker.register('/service-worker.js')
+		.then(function(register) {
+			console.log('registered! ', register);
+			register.pushManager.subscribe({
+				userVisibleOnly: true
+			}).then(function(sub) {
+				console.log('endpoint: ', sub.endpoint);
+			});
+		}).catch(function(error) {
+			console.log('ERROR!', error);
+		});
 }
 
 window.addEventListener('online', () => onOnline());
