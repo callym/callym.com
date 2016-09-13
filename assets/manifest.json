@@ -1,7 +1,7 @@
 {
     "short_name": "callym.com",
     "name": "callym.com",
-    "description": "Progressive web application demonstration",
+    "description": "portfolio website",
     "icons": [
         {
             "src": "launcher-icon.png",
@@ -33,5 +33,5 @@
     "display": "standalone",
     "orientation": "portrait",
     "theme_color": "#6bafff",
-    "background_color": "#6bafff"
+    "background_color": "#ffffb8"
 }
