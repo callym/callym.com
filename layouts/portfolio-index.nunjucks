@@ -126,7 +126,7 @@
 {{ super() }}
 <script>
 $(document).ready(function() {
-	filterList = new List('listjs', {
+	var filterList = new List('listjs', {
 		valueNames: [
 			{
 				data: ['categories']
