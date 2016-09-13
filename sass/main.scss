@@ -17,19 +17,6 @@ $yellow: #ffffb8;
 // DEFAULT TAG STYLES
 //
 
-#color-picker {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	font-size: 1em;
-}
-
-#custom-color-picker {
-	position: fixed;
-	bottom: 0;
-	right: 0;
-}
-
 html {
 	font-family: $sans-serif;
 	font-weight: 500;
@@ -50,10 +37,7 @@ html {
 }
 
 body {
-	//animation: colorchange 60s infinite;
-	--pink_color: $pink;
-	--yellow_color: $yellow;
-	background-color: var(--pink_color);
+	background-color: $yellow;
 }
 
 p {
@@ -464,29 +448,4 @@ a {
 .offline-emoji {
 	margin: 1em auto;
 	max-width: 250px;
-}
-
-//
-// KEYFRAMES
-//
-
-@keyframes colorchange {
-	$colors-list:
-		$yellow
-		$pink;
-	$len: length($colors-list);
-
-	@for $i from 1 through $len {
-		$perc: 100% / ($len - 1);
-		#{$perc * (($i - 1) / 2)} {
-			background: nth($colors-list, $i);
-		}
-	}
-	@for $i from 1 through $len {
-		$half: ($len - 1) / 2;
-		$perc: 100% / ($len - 1);
-		#{$perc * ($half + ($i - 1) / 2)} {
-			background: nth($colors-list, $len - $i + 1);
-		}
-	}
 }
