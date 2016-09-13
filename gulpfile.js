@@ -69,7 +69,7 @@ nunjucks.configure('', {
 .addFilter('md', njMD)
 .addGlobal('now', now);
 
-var babel_presets = ['latest'];
+var babel_presets = ['latest', 'babili'];
 
 var babel_options = {
 	presets: babel_presets,
@@ -307,35 +307,81 @@ gulp.task('images', function() {
 });
 
 gulp.task('resize-images', function() {
-	var size = 800;
+	var thumbnail_large = 750;
+	var thumbnail_medium = 500;
+	var thumbnail_small = 250;
 	var size_large = {
 		width: 1920,
 		height: 1080
 	};
-	var quality = 75;
+	var quality = 60;
 	var high_quality = 90;
 	return gulp.src('./images/portfolio/**/*')
 		.pipe(responsive({
 			'**/*': [
 				{
-					width: size,
-					height: size,
+					width: thumbnail_large,
+					height: thumbnail_large,
 					quality: quality,
 					withoutEnlargement: false,
 					rename:
 					{
-						suffix: '-square',
+						suffix: '-square-large',
 						extname: '.jpg'
 					}
 				},
 				{
-					width: size,
-					height: size,
+					width: thumbnail_large,
+					height: thumbnail_large,
 					quality: quality,
 					withoutEnlargement: false,
 					rename:
 					{
-						suffix: '-square',
+						suffix: '-square-large',
+						extname: '.webp'
+					}
+				},
+				{
+					width: thumbnail_medium,
+					height: thumbnail_medium,
+					quality: quality,
+					withoutEnlargement: false,
+					rename:
+					{
+						suffix: '-square-medium',
+						extname: '.jpg'
+					}
+				},
+				{
+					width: thumbnail_medium,
+					height: thumbnail_medium,
+					quality: quality,
+					withoutEnlargement: false,
+					rename:
+					{
+						suffix: '-square-medium',
+						extname: '.webp'
+					}
+				},
+				{
+					width: thumbnail_small,
+					height: thumbnail_small,
+					quality: quality,
+					withoutEnlargement: false,
+					rename:
+					{
+						suffix: '-square-small',
+						extname: '.jpg'
+					}
+				},
+				{
+					width: thumbnail_small,
+					height: thumbnail_small,
+					quality: quality,
+					withoutEnlargement: false,
+					rename:
+					{
+						suffix: '-square-small',
 						extname: '.webp'
 					}
 				},
