@@ -3,6 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	{% set formatted_title -%}
 		{%- if title -%}
 			{{ title }} // 
@@ -45,7 +46,9 @@
 	{% endif %}
 
 	<meta property="og:title" content="{{ formatted_title }}">
+	<meta name="description" content="{{ (contents | striptags()) | truncate(250) }}">
 	<meta property="og:description" content="{{ (contents | striptags()) | truncate(250) }}">
+	<link rel="canonical" href="{{ base_path }}{{ path }}">
 	<meta property="og:url" content="{{ base_path }}{{ path }}">
 	<meta property="og:site_name" content="callym.com">
 	<meta name="twitter:creator" content="@callymcallym">
