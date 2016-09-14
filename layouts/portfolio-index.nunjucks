@@ -98,19 +98,15 @@
 				guess I could make a mobile one more lq
 				but should see whether it's an issue first!
 			-->
+			{% for format in ['webp', 'jpg'] %}
 			<source
-				type="image/webp"
-				srcset="{{ path }}{{ img.file }}-square-large.webp 750w,
-						{{ path }}{{ img.file }}-square-medium.webp 500w,
-						{{ path }}{{ img.file }}-square-small.webp 250w"
-				sizes="(min-width: 768px) 26vw,
+				type="image/{{ format }}"
+				srcset="{{ path }}{{ img.file }}-square-large.{{ format }} 600w,
+						{{ path }}{{ img.file }}-square-medium.{{ format }} 400w,
+						{{ path }}{{ img.file }}-square-small.{{ format }} 200w"
+				sizes="(min-width: 768px) 20vw,
 						100vw">
-			<source
-				srcset="{{ path }}{{ img.file }}-square-large.jpg 750w,
-						{{ path }}{{ img.file }}-square-medium.jpg 500w,
-						{{ path }}{{ img.file }}-square-small.jpg 250w"
-				sizes="(min-width: 768px) 26vw,
-						100vw">
+			{% endfor %}
 			<img src="{{ path }}{{ img.file }}-square-small.jpg" alt="{{ img.alt }}">
 		</picture>
 	{% endif %}

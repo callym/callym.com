@@ -326,9 +326,9 @@ gulp.task('images', function() {
 });
 
 gulp.task('resize-images', function() {
-	var thumbnail_large = 750;
-	var thumbnail_medium = 500;
-	var thumbnail_small = 250;
+	var thumbnail_large = 600;
+	var thumbnail_medium = 400;
+	var thumbnail_small = 200;
 	var size_large = {
 		width: 1920,
 		height: 1080
@@ -341,7 +341,7 @@ gulp.task('resize-images', function() {
 				{
 					width: thumbnail_large,
 					height: thumbnail_large,
-					quality: quality,
+					quality: quality + 10,
 					withoutEnlargement: false,
 					rename:
 					{
@@ -352,7 +352,7 @@ gulp.task('resize-images', function() {
 				{
 					width: thumbnail_large,
 					height: thumbnail_large,
-					quality: quality,
+					quality: quality + 10,
 					withoutEnlargement: false,
 					rename:
 					{
