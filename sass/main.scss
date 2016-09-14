@@ -130,7 +130,7 @@ ul {
 		margin: 0;
 	}
 
-	& > * {
+	& > a {
 		border: 1px solid black;
 		border-radius: 12.5%;
 		z-index: 0;
@@ -293,7 +293,7 @@ ul {
 	}
 }
 
-.grid > *:hover {
+.grid > a:hover {
 	/*
 	* don't need/want the animations on mobiles!
 	*/
