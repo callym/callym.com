@@ -211,7 +211,9 @@ gulp.task('metalsmith', function() {
 					portfolio: 'portfolio-entry.nunjucks'
 				}))
 				.use(branch(use_markdown)
-					.use(markdown())
+					.use(markdown({
+						smartypants: true
+					}))
 				)
 				.use(branch(dont_use_markdown)
 					.use(rename_markdown())
