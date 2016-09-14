@@ -14,6 +14,7 @@ var gulp = require('gulp'),
 	moment = require('moment'),
 	connect = require('gulp-connect'),
 	sass = require('gulp-sass'),
+	cleancss = require('gulp-clean-css'),
 	autoprefixer = require('gulp-autoprefixer'),
 	responsive = require('gulp-responsive'),
 	rename = require('gulp-rename'),
@@ -23,6 +24,7 @@ var gulp = require('gulp'),
 	filter = require('gulp-filter'),
 	include = require('gulp-include'),
 	babel = require('gulp-babel'),
+	sitemap = require('gulp-sitemap'),
 	runSequence = require('run-sequence');
 
 var gulpsmith = require('gulpsmith'),
@@ -120,6 +122,11 @@ gulp.task('default', function(cb) {
 		cb);
 });
 
+gulp.task('min-build', function() {
+	set_build();
+	return runSequence('default');
+})
+
 gulp.task('build', ['resize-images'], function(cb) {
 	set_build();
 	return runSequence(
@@ -131,9 +138,9 @@ gulp.task('watch', ['connect', 'default'], function() {
 	gulp.watch('src/**/*', ['metalsmith']);
 	gulp.watch('layouts/**/*', ['metalsmith']);
 	gulp.watch('sass/**/*', ['sass']);
-//	gulp.watch('images/**/*', ['images']);
 	gulp.watch('assets/**/*', ['assets']);
 	gulp.watch('javascript/**/*', ['javascript']);
+	gulp.watch('between/**/*.json', ['cache-bust']);
 });
 
 gulp.task('connect', function() {
@@ -150,6 +157,10 @@ gulp.task('livereload', function() {
 });
 
 gulp.task('metalsmith', function() {
+	return runSequence('do-metalsmith', 'cache-bust', 'sitemap');
+});
+
+gulp.task('do-metalsmith', function() {
 	var use_markdown = (file, props, i) => test_markdown(file, props, i);
 	var dont_use_markdown = (file, props, i) => !test_markdown(file, props, i);
 	var test_markdown = function(file, props, i) {
@@ -182,7 +193,7 @@ gulp.task('metalsmith', function() {
 		return true;
 	}
 
-	gulp.src("./src/**/*")
+	return gulp.src("./src/**/*")
 		.pipe(gif(["**/*", "!**/*.{jpg,png}"], gulp_front_matter().on("data", function(file) {
 			assign(file, file.frontMatter);
 			delete file.frontMatter;
@@ -254,14 +265,19 @@ gulp.task('metalsmith', function() {
 				)
 		)
 		.pipe(gulp.dest("./build"));
-	return runSequence('cache-bust');
+});
+
+gulp.task('sitemap', function() {
+	return gulp.src('./build/**/*.html')
+		.pipe(sitemap({
+			siteUrl: 'http://localhost:8080'
+		}))
+		.pipe(gulp.dest("./build"));
 });
 
 gulp.task('sass', function () {
 	gulp.src('./sass/**/*.scss')
-		.pipe(sass({
-			outputStyle: build ? 'compressed' : 'expanded'
-		}))
+		.pipe(sass())
 		.pipe(autoprefixer(
 			{
 				browsers: [
@@ -278,6 +294,7 @@ gulp.task('sass', function () {
 				cascade: false
 			}
 		))
+		.pipe(build ? cleancss() : gutil.noop())
 		.pipe(rev_pipe())
 		.pipe(gulp.dest('./build/css'))
 		.pipe(rev.manifest("rev-css-manifest.json"))
@@ -297,8 +314,8 @@ gulp.task('sass', function () {
 			oldManifest: './between/rev-css-manifest.json',
 			dest: './build'
 		}))
-		.pipe(gulp.dest('./between'));
-	return runSequence('metalsmith');
+		.pipe(gulp.dest('./between'))
+		.pipe(connect.reload());
 });
 
 gulp.task('images', function() {
@@ -437,8 +454,8 @@ gulp.task('assets', function() {
 			oldManifest: './between/rev-assets-manifest.json',
 			dest: './build'
 		}))
-		.pipe(gulp.dest('./between'));
-	return runSequence('metalsmith');
+		.pipe(gulp.dest('./between'))
+		.pipe(connect.reload());
 });
 
 gulp.task('javascript', function() {
@@ -466,8 +483,8 @@ gulp.task('javascript', function() {
 			oldManifest: './between/rev-js-manifest.json',
 			dest: './build'
 		}))
-		.pipe(gulp.dest('./between'));
-	return runSequence('metalsmith');
+		.pipe(gulp.dest('./between'))
+		.pipe(connect.reload());
 });
 
 gulp.task('cache-bust', function() {
