@@ -69,7 +69,7 @@ nunjucks.configure('', {
 .addFilter('md', njMD)
 .addGlobal('now', now);
 
-var babel_presets = ['latest', 'babili'];
+var babel_presets = ['latest'];
 
 var babel_options = {
 	presets: babel_presets,
