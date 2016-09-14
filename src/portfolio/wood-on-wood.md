@@ -1,8 +1,6 @@
 ---
 title: wood on wood
 date: 2014-06-01
-description: |
-    what if we wore urban materials as clothing?
 images:
     -   file: "1"
         type: "image"

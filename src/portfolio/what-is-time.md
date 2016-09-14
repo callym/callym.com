@@ -2,8 +2,6 @@
 title: what is time?
 categories: 3d audio video
 date: 2014-08-10
-description: |
-    a data-moshed 3d-rendered video of a glass triangle that guides us through the nature of time.
 images:
     -   file: "v1"
         type: "vimeo"

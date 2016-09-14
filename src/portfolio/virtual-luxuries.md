@@ -2,8 +2,6 @@
 title: virtual luxuries
 categories: 3d sculpture
 date: 2014-11-19
-description: |
-    3d environments
 images:
     -   file: "1"
         type: "image"

@@ -48,9 +48,16 @@
 		<meta property="twitter:card" content="summary">
 	{% endif %}
 
+	{% set desc = "" %}
+	{% if description %}
+		{% set desc = description %}
+	{% else %}
+		{% set desc = (contents | striptags()) | truncate(250) %}
+	{% endif %}
+
 	<meta property="og:title" content="{{ formatted_title }}">
-	<meta name="description" content="{{ description }}">
-	<meta property="og:description" content="{{ description }}">
+	<meta name="description" content="{{ desc }}">
+	<meta property="og:description" content="{{ desc }}">
 	<link rel="canonical" href="{{ base_path }}{{ path }}">
 	<meta property="og:url" content="{{ base_path }}{{ path }}">
 	<meta property="og:site_name" content="callym.com">

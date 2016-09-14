@@ -2,8 +2,6 @@
 title: box1
 categories: sculpture
 date: 2014-02-01
-description: |
-    Box1 expresses the innate human captivity to the beauty of light and reflections and colour through programmically controlled lighting in a diamante studded wooden frame.
 images:
     -   file: "1"
         type: "image"

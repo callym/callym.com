@@ -2,8 +2,6 @@
 title: synapse
 categories: sculpture video
 date: 2014-05-01
-description: |
-    a lava-lamp turned biological captured in a lo-fi video setting to represent synapses.
 images:
     -   file: "1"
         type: "image"

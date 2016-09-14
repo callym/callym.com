@@ -3,8 +3,6 @@ title: "not-touching"
 displaytitle: "(not) touching"
 categories: sculpture
 date: 2015-11-23
-description: |
-    rescue the artists in this game!
 images:
     -   file: "looking"
         type: "image"

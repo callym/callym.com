@@ -2,8 +2,6 @@
 title: digital spaces
 categories: 3d video
 date: 2014-11-04
-description: |
-    3d environments
 images:
     -   file: "1"
         type: "image"

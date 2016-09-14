@@ -2,8 +2,6 @@
 title: three dimensions of time
 categories: sculpture
 date: 2014-06-02
-description: |
-    my thoughts on time and it being a social construct
 images:
     -   file: "1"
         type: "image"
