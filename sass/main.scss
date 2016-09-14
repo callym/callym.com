@@ -368,33 +368,34 @@ a {
 }
 
 .sublinks {
+	width: 60vw;
+	max-width: 1000px;
+	flex-flow: row wrap;
+
 	margin: 2em auto;
-	width: 50vw;
+	font-size: 0.75em;
 	@include media("<tablet") {
-		margin: 1em auto 0;
+		margin: 1em auto 1em;
+		font-size: 1.5em;
+	}
+
+	& > * {
+		flex-grow: 0;
+
+		margin-bottom: 2.5vw;
+		@include media("<tablet") {
+			margin-bottom: 5vw;
+		}
 	}
 
 	&.filter {
-		font-size: 0.75em;
-		margin: 2em auto -2em;
-		width: 60vw;
-		max-width: 1000px;
-
-		flex-flow: row wrap;
-
-		& > * {
-			margin-bottom: 2.5vw;
-			flex-basis: 20%;
-			flex-grow: 0;
+		@include media("<tablet") {
+			width: 100%;
 		}
 
-		@include media("<tablet") {
-			margin: 1em auto 1em;
-			font-size: 1.5em;
-			width: 100%;
-
-			& > * {
-				margin-bottom: 5vw;
+		& > * {
+			flex-basis: 20%;
+			@include media("<tablet") {
 				flex-basis: 50%;
 			}
 		}
