@@ -10,6 +10,7 @@ $serif: Georgia, Times, Times New Roman, serif;
 $sans-serif: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;
 
 $pink: #fbe4ff;
+$dark-pink: darken($pink, 20);
 $blue: #6bafff;
 $yellow: #ffffb8;
 
@@ -320,6 +321,14 @@ pre {
 a {
 	text-decoration: none;
 	color: black;
+	
+	border-bottom: 2px solid $blue;
+
+	transition: border-bottom-color 250ms ease-in-out;
+
+	&:hover {
+		border-bottom-color: $dark-pink;
+	}
 }
 
 #links {
@@ -367,9 +376,11 @@ a {
 
 .hover-link {
 	position: relative;
+	border-bottom: none;
 
 	@include media(">tablet") {
 		&:hover:before {
+			background-color: $dark-pink;
 			transform:
 				scaleX(1.1);
 		}
@@ -387,7 +398,7 @@ a {
 		height: 2px;
 		bottom: -2px;
 		left: 0;
-		background-color: black;
+		background-color: $blue;
 		transform:
 			scaleX(0);
 		transition: all 500ms ease-in-out;
