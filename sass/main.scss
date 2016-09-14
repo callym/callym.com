@@ -65,6 +65,10 @@ pre {
 	}
 }
 
+ul {
+	list-style: none;
+}
+
 //
 // HEADER NAME
 //
@@ -197,7 +201,18 @@ pre {
 }
 
 .text {
+	@include media("<tablet") {
+		text-align: center;
+	}
+
 	& h1 {
+		margin-bottom: 0;
+		@include media("<tablet") {
+			font-size: 150%;
+		}
+	}
+
+	& > h2 {
 		@include media("<tablet") {
 			font-size: 100%;
 		}
@@ -215,6 +230,18 @@ pre {
 
 .date {
 	font-style: italic;
+	font-variant: small-caps;
+	@include media("<tablet") {
+		font-size: 0.75em;
+	}
+}
+
+.location {
+	font-style: italic;
+	@include media("<tablet") {
+		text-align: right;
+		font-size: 0.75em;
+	}
 }
 
 .itchio {
