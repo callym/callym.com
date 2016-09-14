@@ -21,7 +21,8 @@ images:
         alt: "animation test (Luxrender)"
         id: 116711874
 ---
-an experiment with 3d digital spaces, these images show spaces that do not physically exist.
+an experiment with 3d digital spaces, these images show spaces that do not
+physically exist.
 
 using technology to create what could be described as "digital sculpture" is a way
 of challenging the physically plausible by constructing in a virtual space.

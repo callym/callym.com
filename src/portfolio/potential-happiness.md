@@ -22,3 +22,5 @@ github: PotentialHappiness
 you hear rumours of a wizard that created gems of great power,
 to channel and control emotional energy
 but can you find them and bring them together?
+
+coded in C# using [MonoGame](http://www.monogame.net/)

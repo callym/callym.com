@@ -16,3 +16,5 @@ itchio: 33017
 github: my-little-astral-being
 ---
 look after your own astral being, conveniently trapped into a physical form.
+
+coded in javascript

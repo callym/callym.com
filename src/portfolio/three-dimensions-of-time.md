@@ -36,8 +36,8 @@ images:
 ---
 an installation of work from our end of first year show.
 
-exploring my ideas and thoughts about time being a socially constructed illusion, through various media,
-such as:
+exploring my ideas and thoughts about time being a socially constructed illusion,
+through various media, such as:
 <div class="center">
 <i>
 <br/>~ diagrams ~

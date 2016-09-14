@@ -14,6 +14,9 @@ images:
         alt: "videomanipulation"
         id: 97650289
 ---
-a lava-lamp turned biological, representing the synapses in the brain, and how they fire to create thoughts and emotions.
+a lava-lamp turned biological, representing the synapses in the brain, and how they
+fire to create thoughts and emotions.
 
-the first two images are of an object I created that showed the process of the chemicals in the synapse bridging the gap and moving across it, and the video expands upon this process.
+the first two images are of an object I created that showed the process of the
+chemicals in the synapse bridging the gap and moving across it, and the video
+expands upon this process.

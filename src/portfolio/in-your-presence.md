@@ -12,3 +12,5 @@ _a program/performance_
 
 in-your-presence uses non-verbal/visible communication to explore the
 feeling of sharing a physical space in silence
+
+coded in C#
