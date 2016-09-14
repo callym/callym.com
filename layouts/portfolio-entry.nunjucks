@@ -89,7 +89,7 @@
 {% if github %}
 	<div class="center">
 		<p>
-			<a href="https://github.com/callym/{{ github }}/" class="hover-link">
+			<a href="https://github.com/callym/{{ github }}/">
 				github
 			</a>
 		</p>
