@@ -5,10 +5,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	{% set formatted_title -%}
-		{%- if title -%}
-			{{ title }} // 
-		{%- endif -%}
-			callym
+		{%- if title %}{{ title }} // {% endif %}callym
 	{%- endset %}
 	<title>{{ formatted_title }}</title>
 	
@@ -28,14 +25,20 @@
 	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#6bafff">
 
 	{% set base_path = "https://beta.callym.com/" %}
-	{% if images %}
-		{% set img = images[0] %}
-		{% for i in images %}
+	{% if images or layout == "portfolio-index.nunjucks" %}
+		{% set p = { title: title, images: images } %}
+		{% if layout == "portfolio-index.nunjucks" %}
+			{% set p = portfolio[0] %}
+		{% endif %}
+
+		{% set img = p.images[0] %}
+		{% for i in p.images %}
 			{% if i.title %}
 				{% set img = i %}
 			{% endif %}
 		{% endfor %}
-		{% set url_title = title | replace(" ", "-") | replace("?", "") %}
+
+		{% set url_title = p.title | replace(" ", "-") | replace("?", "") %}
 		{% set image_path = base_path + "images/portfolio/" + url_title + "/" + img.file + ".jpg" %}
 
 		<meta property="og:image" content="{{ image_path }}">
@@ -46,8 +49,8 @@
 	{% endif %}
 
 	<meta property="og:title" content="{{ formatted_title }}">
-	<meta name="description" content="{{ (contents | striptags()) | truncate(250) }}">
-	<meta property="og:description" content="{{ (contents | striptags()) | truncate(250) }}">
+	<meta name="description" content="{{ description }}">
+	<meta property="og:description" content="{{ description }}">
 	<link rel="canonical" href="{{ base_path }}{{ path }}">
 	<meta property="og:url" content="{{ base_path }}{{ path }}">
 	<meta property="og:site_name" content="callym.com">
