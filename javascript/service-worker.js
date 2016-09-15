@@ -12,10 +12,15 @@ self.addEventListener("install", function(event) {
 					'/css/main.css',
 					<% } %>
 					'/images/blueglitter.gif',
-					'/offline/index.html'
+					'/offline/index.html',
+					'/notification-icon-512x512.png',
+					'/notification-badge-128x128.png'
 				]);
 			})
 			.then(() => self.skipWaiting())
+			.catch(function(error) {
+				console.log('WORKER: ', error);
+			})
 	);
 });
 
@@ -54,12 +59,20 @@ self.addEventListener("activate", function(event) {
 });
 
 self.addEventListener('push', function(event) {
-	var title = "push message";
+	var payload = event.data ? event.data.json() : {};
+
+	payload.title = payload.title || "callym.com";
+	payload.body = payload.body || "hi!";
+	payload.icon = payload.icon || "/notification-icon-512x512.png";
+	payload.badge = payload.badge || "/notification-badge-128x128.png";
+	payload.tag = payload.tag || "default";
+	
 	event.waitUntil(
-		self.registration.showNotification(title, {
-			body: "the message",
-			icon: "images/icon.png",
-			tag: "my-tag"
+		self.registration.showNotification(payload.title, {
+			body: payload.body,
+			icon: payload.icon,
+			badge: payload.badge,
+			tag: payload.tag
 		}))
 });
 
