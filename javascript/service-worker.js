@@ -66,13 +66,19 @@ self.addEventListener('push', function(event) {
 	payload.icon = payload.icon || "/notification-icon-512x512.png";
 	payload.badge = payload.badge || "/notification-badge-128x128.png";
 	payload.tag = payload.tag || "default";
+	payload.url = payload.url || "/";
+
+	console.log(payload);
 	
 	event.waitUntil(
 		self.registration.showNotification(payload.title, {
 			body: payload.body,
 			icon: payload.icon,
 			badge: payload.badge,
-			tag: payload.tag
+			tag: payload.tag,
+			data: {
+				url: payload.url
+			}
 		}))
 });
 
@@ -80,17 +86,16 @@ self.addEventListener('notificationclick', function(event) {
 	event.notification.close();
 	event.waitUntil(
 		clients.matchAll({
+			includeUncontrolled: true,
 			type: 'window'
 		})
-		.then(function(windowClients) {
-			for (var i = 0; i < windowClients.length; i++) {
-				var client = windowClients[i];
-				if (client.url === url && 'focus' in client) {
-					return client.focus();
-				}
+		.then(function(activeClients) {
+			if (activeClients.length > 0) {
+				activeClients[0].navigate(event.notification.data.url);
+				activeClients[0].focus()
 			}
-			if (clients.openWindow) {
-				return clients.openWindow("https://youtu.be/gYMkEMCHtJ4");
+			else {
+				clients.openWindow(event.notification.data.url);
 			}
 		})
 	)
