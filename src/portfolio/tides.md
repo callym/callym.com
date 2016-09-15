@@ -2,8 +2,6 @@
 title: tides
 categories: sculpture
 date: 2016-06-17
-description: |
-    Box1 expresses the innate human captivity to the beauty of light and reflections and colour through programmically controlled lighting in a diamante studded wooden frame.
 images:
     -   file: "curtain-corner"
         type: "image"

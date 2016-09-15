@@ -34,14 +34,10 @@ $mfp-include-image-type:              true !default;                       // En
 $mfp-image-background:                #444 !default;
 $mfp-image-padding-top:               40px !default;                       // Image padding top
 $mfp-image-padding-bottom:            40px !default;                       // Image padding bottom
-$mfp-include-mobile-layout-for-image: true !default;                       // Removes paddings from top and bottom
 
 // Image caption options
 $mfp-caption-title-color:             #F3F3F3 !default;                    // Caption title color
 $mfp-caption-subtitle-color:          #BDBDBD !default;                    // Caption subtitle color
-
-// A11y
-$mfp-use-visuallyhidden:              false !default;                      // Hide content from browsers, but make it available for screen readers
 
 .mfp-iframe-holder .mfp-bottom-bar {
 	position: absolute;

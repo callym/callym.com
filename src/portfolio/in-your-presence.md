@@ -1,8 +1,6 @@
 ---
 title: in-your-presence
 date: 2016-04-21
-description: |
-    my thoughts on time and it being a social construct
 images:
     -   file: "screenshot"
         type: "vimeo"
@@ -14,3 +12,5 @@ _a program/performance_
 
 in-your-presence uses non-verbal/visible communication to explore the
 feeling of sharing a physical space in silence
+
+coded in C#

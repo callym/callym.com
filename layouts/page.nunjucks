@@ -9,26 +9,7 @@
 {% endblock %}
 
 <script src="{{ rootPath }}javascript/main.js"></script>
-<select id="color-picker">
-	<option value="pink">pink</option>
-	<option value="yellow">yellow</option>
-</select>
-<div id="custom-color-picker">
-	<span></span>
-	<input type="color"/>
-</div>
-<script>
-	$('#color-picker').on('change', function() {
-		console.log(this.value);
-		$('body').css('background-color', 'var(--' + this.value + '_color)');
-	});
 
-	$('#custom-color-picker > input').on('change', function() {
-		console.log(this.value);
-		$('#custom-color-picker > span').html(this.value);
-		$('body').css('background-color', this.value);
-	});
-</script>
 {% block scripts %}
 
 {% endblock %}

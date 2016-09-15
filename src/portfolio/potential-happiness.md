@@ -2,10 +2,6 @@
 title: "potential-happiness"
 categories: game
 date: 2016-04-18
-description: |
-    you hear rumours of a wizard that created gems of great power,
-    to channel and control emotional energy
-    but can you find them and bring them together?
 images:
     -   file: "title"
         type: "image"
@@ -23,4 +19,8 @@ images:
 itchio: 63180
 github: PotentialHappiness
 ---
-look after your own astral being, conveniently trapped into a physical form.
+you hear rumours of a wizard that created gems of great power,
+to channel and control emotional energy
+but can you find them and bring them together?
+
+coded in C# using [MonoGame](http://www.monogame.net/)

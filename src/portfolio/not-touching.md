@@ -3,8 +3,6 @@ title: "not-touching"
 displaytitle: "(not) touching"
 categories: sculpture
 date: 2015-11-23
-description: |
-    rescue the artists in this game!
 images:
     -   file: "looking"
         type: "image"
@@ -21,3 +19,5 @@ in the other box
 
 the person triggering the sensors cannot easily see the effect
 that they're having on the other box
+
+built using two arduino boards, communicating via xbees

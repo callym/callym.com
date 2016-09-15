@@ -26,7 +26,7 @@
 {% set class = "hover-link center" %}
 <div class="sublinks row-flex filter">
     <a href=""
-        class="{{ class }}"
+        class="{{ class }} current"
 		id="listjs-all">
         all
     </a>
@@ -98,10 +98,16 @@
 				guess I could make a mobile one more lq
 				but should see whether it's an issue first!
 			-->
+			{% for format in ['webp', 'jpg'] %}
 			<source
-				type="image/webp"
-				srcset="{{ path }}{{ img.file }}-square.webp">
-			<img src="{{ path }}{{ img.file }}-square.jpg" alt="{{ img.alt }}">
+				type="image/{{ format }}"
+				srcset="{{ path }}{{ img.file }}-square-large.{{ format }} 600w,
+						{{ path }}{{ img.file }}-square-medium.{{ format }} 400w,
+						{{ path }}{{ img.file }}-square-small.{{ format }} 200w"
+				sizes="(min-width: 768px) 20vw,
+						100vw">
+			{% endfor %}
+			<img src="{{ path }}{{ img.file }}-square-small.jpg" alt="{{ img.alt }}">
 		</picture>
 	{% endif %}
 			<div class="center piece-name">
@@ -126,7 +132,7 @@
 {{ super() }}
 <script>
 $(document).ready(function() {
-	filterList = new List('listjs', {
+	var filterList = new List('listjs', {
 		valueNames: [
 			{
 				data: ['categories']
@@ -180,7 +186,6 @@ $(document).ready(function() {
 		return false;
 	});
 	{% endfor %}
-	$('#listjs-all').trigger('click');
 });
 </script>
 {% endblock %}

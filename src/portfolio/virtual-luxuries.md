@@ -2,8 +2,6 @@
 title: virtual luxuries
 categories: 3d sculpture
 date: 2014-11-19
-description: |
-    3d environments
 images:
     -   file: "1"
         type: "image"
@@ -26,5 +24,6 @@ images:
 ---
 you want to touch, but you cannot.
 
-even when the digital becomes a physical representation of itself, it is still out of reach.
+even when the digital becomes a physical representation of itself,
+it is still out of reach.
 

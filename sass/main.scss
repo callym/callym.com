@@ -10,25 +10,13 @@ $serif: Georgia, Times, Times New Roman, serif;
 $sans-serif: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;
 
 $pink: #fbe4ff;
+$dark-pink: darken($pink, 20);
 $blue: #6bafff;
 $yellow: #ffffb8;
 
 //
 // DEFAULT TAG STYLES
 //
-
-#color-picker {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	font-size: 1em;
-}
-
-#custom-color-picker {
-	position: fixed;
-	bottom: 0;
-	right: 0;
-}
 
 html {
 	font-family: $sans-serif;
@@ -50,10 +38,7 @@ html {
 }
 
 body {
-	//animation: colorchange 60s infinite;
-	--pink_color: $pink;
-	--yellow_color: $yellow;
-	background-color: var(--pink_color);
+	background-color: $yellow;
 }
 
 p {
@@ -78,6 +63,10 @@ pre {
 	&::-webkit-scrollbar-track {
 		border: 1px solid red;
 	}
+}
+
+ul {
+	list-style: none;
 }
 
 //
@@ -141,7 +130,7 @@ pre {
 		margin: 0;
 	}
 
-	& > * {
+	& > a {
 		border: 1px solid black;
 		border-radius: 12.5%;
 		z-index: 0;
@@ -212,7 +201,18 @@ pre {
 }
 
 .text {
+	@include media("<tablet") {
+		text-align: center;
+	}
+
 	& h1 {
+		margin-bottom: 0;
+		@include media("<tablet") {
+			font-size: 150%;
+		}
+	}
+
+	& > h2 {
 		@include media("<tablet") {
 			font-size: 100%;
 		}
@@ -230,6 +230,18 @@ pre {
 
 .date {
 	font-style: italic;
+	font-variant: small-caps;
+	@include media("<tablet") {
+		font-size: 0.75em;
+	}
+}
+
+.location {
+	font-style: italic;
+	@include media("<tablet") {
+		text-align: right;
+		font-size: 0.75em;
+	}
 }
 
 .itchio {
@@ -281,7 +293,7 @@ pre {
 	}
 }
 
-.grid > *:hover {
+.grid > a:hover {
 	/*
 	* don't need/want the animations on mobiles!
 	*/
@@ -336,6 +348,14 @@ pre {
 a {
 	text-decoration: none;
 	color: black;
+	
+	border-bottom: 2px solid $blue;
+
+	transition: border-bottom-color 250ms ease-in-out;
+
+	&:hover {
+		border-bottom-color: $dark-pink;
+	}
 }
 
 #links {
@@ -348,33 +368,34 @@ a {
 }
 
 .sublinks {
+	width: 60vw;
+	max-width: 1000px;
+	flex-flow: row wrap;
+
 	margin: 2em auto;
-	width: 50vw;
+	font-size: 0.75em;
 	@include media("<tablet") {
-		margin: 1em auto 0;
+		margin: 1em auto 1em;
+		font-size: 1.5em;
+	}
+
+	& > * {
+		flex-grow: 0;
+
+		margin-bottom: 2.5vw;
+		@include media("<tablet") {
+			margin-bottom: 5vw;
+		}
 	}
 
 	&.filter {
-		font-size: 0.75em;
-		margin: 2em auto -2em;
-		width: 60vw;
-		max-width: 1000px;
-
-		flex-flow: row wrap;
-
-		& > * {
-			margin-bottom: 2.5vw;
-			flex-basis: 20%;
-			flex-grow: 0;
+		@include media("<tablet") {
+			width: 100%;
 		}
 
-		@include media("<tablet") {
-			margin: 1em auto 1em;
-			font-size: 1.5em;
-			width: 100%;
-
-			& > * {
-				margin-bottom: 5vw;
+		& > * {
+			flex-basis: 20%;
+			@include media("<tablet") {
 				flex-basis: 50%;
 			}
 		}
@@ -383,9 +404,11 @@ a {
 
 .hover-link {
 	position: relative;
+	border-bottom: none;
 
 	@include media(">tablet") {
 		&:hover:before {
+			background-color: $dark-pink;
 			transform:
 				scaleX(1.1);
 		}
@@ -403,7 +426,7 @@ a {
 		height: 2px;
 		bottom: -2px;
 		left: 0;
-		background-color: black;
+		background-color: $blue;
 		transform:
 			scaleX(0);
 		transition: all 500ms ease-in-out;
@@ -464,29 +487,4 @@ a {
 .offline-emoji {
 	margin: 1em auto;
 	max-width: 250px;
-}
-
-//
-// KEYFRAMES
-//
-
-@keyframes colorchange {
-	$colors-list:
-		$yellow
-		$pink;
-	$len: length($colors-list);
-
-	@for $i from 1 through $len {
-		$perc: 100% / ($len - 1);
-		#{$perc * (($i - 1) / 2)} {
-			background: nth($colors-list, $i);
-		}
-	}
-	@for $i from 1 through $len {
-		$half: ($len - 1) / 2;
-		$perc: 100% / ($len - 1);
-		#{$perc * ($half + ($i - 1) / 2)} {
-			background: nth($colors-list, $len - $i + 1);
-		}
-	}
 }

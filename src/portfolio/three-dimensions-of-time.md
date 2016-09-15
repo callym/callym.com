@@ -2,8 +2,6 @@
 title: three dimensions of time
 categories: sculpture
 date: 2014-06-02
-description: |
-    my thoughts on time and it being a social construct
 images:
     -   file: "1"
         type: "image"
@@ -38,8 +36,8 @@ images:
 ---
 an installation of work from our end of first year show.
 
-exploring my ideas and thoughts about time being a socially constructed illusion, through various media,
-such as:
+exploring my ideas and thoughts about time being a socially constructed illusion,
+through various media, such as:
 <div class="center">
 <i>
 <br/>~ diagrams ~

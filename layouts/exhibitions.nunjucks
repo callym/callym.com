@@ -8,19 +8,6 @@
     <h1>
         {{ e.title }}
     </h1>
-
-    {% if e.location %}
-        <div>
-            {{ e.location }}
-        </div>
-    {% endif %}
-
-    {% if e.url %}
-        <a href="{{ e.url }}" class="hover-link">
-            {{ e.url }}
-        </a>
-    {% endif %}
-
     <div class="date">
         {{ e.date.begin | date("Do MMMM YYYY") }}
         {% if e.date.end %}
@@ -29,10 +16,27 @@
         {% endif %}
     </div>
 
+    {% if e.location %}
+        <div class="location">
+            {{ e.location }}
+        </div>
+    {% endif %}
+
+    {% if e.url %}
+        <div>
+            <a href="{{ e.url }}">
+                {{ e.url }}
+            </a>
+        </div>
+    {% endif %}
+
     {% if e.piece %}
-        <a href="{{ e.piece.url }}" class="hover-link">
-            {{ e.piece.name }}
-        </a>
+        <div>
+            work shown:
+            <a href="{{ e.piece.url }}">
+                {{ e.piece.name }}
+            </a>
+        </div>
     {% endif %}
     
     {{ e.description | md(false) | safe }}

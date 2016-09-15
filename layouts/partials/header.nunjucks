@@ -3,25 +3,73 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>
-	{% if title %}
-		{{title}} // 
-	{% endif %}
-		callym
-	</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	{% set formatted_title -%}
+		{%- if title %}{{ title }} // {% endif %}callym
+	{%- endset %}
+	<title>{{ formatted_title }}</title>
 	
 	<link rel="stylesheet" href="{{ rootPath }}css/main.css"/>
 	<link rel="manifest" href="{{ rootPath }}manifest.json">
 
-	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="application-name" content="callym.com">
 	<meta name="theme-color" content="#6bafff">
-	<!-- Windows Phone -->
 	<meta name="msapplication-navbutton-color" content="#6bafff">
-	<!-- iOS Safari -->
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="apple-mobile-web-app-title" content="callym.com">
 
-	<meta name="viewport" content="width=device-width">
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+	<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#6bafff">
+
+	{% set base_path = "https://beta.callym.com/" %}
+	{% if images or layout == "portfolio-index.nunjucks" %}
+		{% set p = { title: title, images: images } %}
+		{% if layout == "portfolio-index.nunjucks" %}
+			{% set p = portfolio[0] %}
+		{% endif %}
+
+		{% set img = p.images[0] %}
+		{% for i in p.images %}
+			{% if i.title %}
+				{% set img = i %}
+			{% endif %}
+		{% endfor %}
+
+		{% set url_title = p.title | replace(" ", "-") | replace("?", "") %}
+		{% set image_path = base_path + "images/portfolio/" + url_title + "/" + img.file + ".jpg" %}
+
+		<meta property="og:image" content="{{ image_path }}">
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:image:alt" content="{{ img.alt }}">
+	{% else %}
+		<meta property="twitter:card" content="summary">
+	{% endif %}
+
+	{% set desc = "" %}
+	{% if description %}
+		{% set desc = description %}
+	{% else %}
+		{% set desc = (contents | striptags()) | truncate(250) %}
+	{% endif %}
+
+	<meta property="og:title" content="{{ formatted_title }}">
+	<meta name="description" content="{{ desc }}">
+	<meta property="og:description" content="{{ desc }}">
+	<link rel="canonical" href="{{ base_path }}{{ path }}">
+	<meta property="og:url" content="{{ base_path }}{{ path }}">
+	<meta property="og:site_name" content="callym.com">
+	<meta name="twitter:creator" content="@callymcallym">
+	<meta name="twitter:site" content="@callymcallym">
+
+	<script>
+		window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+		ga('create', 'UA-51752036-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+	<script async src='https://www.google-analytics.com/analytics.js'></script>
 </head>
 <body>
 	{% include "layouts/partials/offline.nunjucks" %}

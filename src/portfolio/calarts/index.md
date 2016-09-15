@@ -37,3 +37,5 @@ and work from:
 * [Lu Williams](http://luwilliams.com/)
 * [Ruth Smith](http://ruth-smith.com)
 * [Ruth Spencer Jolly](http://ruthspencerjolly.com/)
+
+coded in javascript, using [Dedalus](https://github.com/pistacchio/Dedalus)

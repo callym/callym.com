@@ -25,10 +25,16 @@
 				guess I could make a mobile one more lq
 				but should see whether it's an issue first!
 			-->
+			{% for format in ['webp', 'jpg'] %}
 			<source
-				type="image/webp"
-				srcset="{{ path }}{{ i.file }}-square.webp">
-			<img src="{{ path }}{{ i.file }}-square.jpg" alt="{{ img.alt }}">
+				type="image/{{ format }}"
+				srcset="{{ path }}{{ i.file }}-square-large.{{ format }} 600w,
+						{{ path }}{{ i.file }}-square-medium.{{ format }} 400w,
+						{{ path }}{{ i.file }}-square-small.{{ format }} 200w"
+				sizes="(min-width: 768px) 20vw,
+						100vw">
+			{% endfor %}
+			<img src="{{ path }}{{ i.file }}-square-small.jpg" alt="{{ img.alt }}">
 		</picture>
 	</a>
 {% endfor %}
@@ -79,7 +85,7 @@
 {% if github %}
 	<div class="center">
 		<p>
-			<a href="https://github.com/callym/{{ github }}/" class="hover-link">
+			<a href="https://github.com/callym/{{ github }}/">
 				github
 			</a>
 		</p>
@@ -99,12 +105,8 @@ $(document).ready(function() {
 	$('.popup-gallery').magnificPopup({
 		disableOn: 768,
 		delegate: 'a',
-		tLoading: 'Loading image #%curr%...',
-		mainClass: 'mfp-img-mobile',
 		gallery: {
-			enabled: true,
-			navigateByImgClick: true,
-			preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+			enabled: true
 		},
 		image: {
 			tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',
@@ -112,19 +114,18 @@ $(document).ready(function() {
 		},
 		iframe: {
 			markup:
-				'<div class="mfp-iframe-scaler">'+
-					'<div class="mfp-close"></div>'+
-					'<iframe class="mfp-iframe" src="//about:blank" frameborder="0" allowfullscreen></iframe>'+
-					'<div class="mfp-bottom-bar">'+
-						'<div class="mfp-title"></div>'+
-						'<div class="mfp-counter"></div>'+
-					'</div>'+
-				'</div>'
-		},
-		callbacks: {
-			markupParse: function(template, values, item) {
-				values.title = item.el.attr('title');
-			}
+				`<div class="mfp-iframe-scaler">
+					<div class="mfp-close"></div>
+					<iframe class="mfp-iframe"
+						src="//about:blank"
+						frameborder="0"
+						allowfullscreen>
+					</iframe>
+					<div class="mfp-bottom-bar">
+						<div class="mfp-title"></div>
+						<div class="mfp-counter"></div>
+					</div>
+				</div>`
 		}
 	});
 });

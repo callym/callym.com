@@ -14,6 +14,7 @@ var gulp = require('gulp'),
 	moment = require('moment'),
 	connect = require('gulp-connect'),
 	sass = require('gulp-sass'),
+	cleancss = require('gulp-clean-css'),
 	autoprefixer = require('gulp-autoprefixer'),
 	responsive = require('gulp-responsive'),
 	rename = require('gulp-rename'),
@@ -23,6 +24,7 @@ var gulp = require('gulp'),
 	filter = require('gulp-filter'),
 	include = require('gulp-include'),
 	babel = require('gulp-babel'),
+	sitemap = require('gulp-sitemap'),
 	runSequence = require('run-sequence');
 
 var gulpsmith = require('gulpsmith'),
@@ -35,6 +37,7 @@ var gulpsmith = require('gulpsmith'),
 	copy = require('metalsmith-copy'),
 	ignore = require('metalsmith-ignore'),
 	alias = require('metalsmith-alias'),
+	htmlMinifier = require('metalsmith-html-minifier'),
 	nunjucks = require('nunjucks'),
 	njDate = require('nunjucks-date-filter')
 	njMD = require('nunjucks-markdown-filter');
@@ -68,6 +71,25 @@ nunjucks.configure('', {
 .addFilter('md', njMD)
 .addGlobal('now', now);
 
+var babel_presets = ['latest'];
+
+var babel_options = {
+	presets: babel_presets,
+	comments: build ? false : true,
+	compact: build ? true : false
+};
+
+var set_build = function() {
+	// this function should be used when
+	// ready to deploy!
+	// should do things like compress
+	// minify
+	// etc
+	build = true;
+	rev_pipe = rev_pipe.pipe(rev);
+	babel_presets.push('babili');
+};
+
 var assign_layout = function(options) {
 	return function (files, metalsmith, done) {
 		var metadata = metalsmith.metadata();
@@ -100,14 +122,13 @@ gulp.task('default', function(cb) {
 		cb);
 });
 
+gulp.task('min-build', function() {
+	set_build();
+	return runSequence('default');
+})
+
 gulp.task('build', ['resize-images'], function(cb) {
-	// this function should be used when
-	// ready to deploy!
-	// should do things like compress
-	// minify
-	// etc
-	build = true;
-	rev_pipe = rev_pipe.pipe(rev);
+	set_build();
 	return runSequence(
 		'default',
 		cb);
@@ -117,9 +138,9 @@ gulp.task('watch', ['connect', 'default'], function() {
 	gulp.watch('src/**/*', ['metalsmith']);
 	gulp.watch('layouts/**/*', ['metalsmith']);
 	gulp.watch('sass/**/*', ['sass']);
-//	gulp.watch('images/**/*', ['images']);
 	gulp.watch('assets/**/*', ['assets']);
 	gulp.watch('javascript/**/*', ['javascript']);
+	gulp.watch('between/**/*.json', ['cache-bust']);
 });
 
 gulp.task('connect', function() {
@@ -136,6 +157,10 @@ gulp.task('livereload', function() {
 });
 
 gulp.task('metalsmith', function() {
+	return runSequence('do-metalsmith', 'cache-bust', 'sitemap');
+});
+
+gulp.task('do-metalsmith', function() {
 	var use_markdown = (file, props, i) => test_markdown(file, props, i);
 	var dont_use_markdown = (file, props, i) => !test_markdown(file, props, i);
 	var test_markdown = function(file, props, i) {
@@ -168,7 +193,7 @@ gulp.task('metalsmith', function() {
 		return true;
 	}
 
-	gulp.src("./src/**/*")
+	return gulp.src("./src/**/*")
 		.pipe(gif(["**/*", "!**/*.{jpg,png}"], gulp_front_matter().on("data", function(file) {
 			assign(file, file.frontMatter);
 			delete file.frontMatter;
@@ -197,7 +222,9 @@ gulp.task('metalsmith', function() {
 					portfolio: 'portfolio-entry.nunjucks'
 				}))
 				.use(branch(use_markdown)
-					.use(markdown())
+					.use(markdown({
+						smartypants: true
+					}))
 				)
 				.use(branch(dont_use_markdown)
 					.use(rename_markdown())
@@ -227,15 +254,30 @@ gulp.task('metalsmith', function() {
 					pattern: '**/*.html'
 				}))
 				.use(alias())
-		).pipe(gulp.dest("./build"));
-	return runSequence('cache-bust');
+				.use(branch(use_markdown)
+					.use(htmlMinifier({
+						collapseWhitespace: build,
+						minifyJS: function(text, inline) {
+							var babel = require('babel-core');
+							return babel.transform(text, babel_options).code;
+						}
+					}))
+				)
+		)
+		.pipe(gulp.dest("./build"));
+});
+
+gulp.task('sitemap', function() {
+	return gulp.src('./build/**/*.html')
+		.pipe(sitemap({
+			siteUrl: 'http://localhost:8080'
+		}))
+		.pipe(gulp.dest("./build"));
 });
 
 gulp.task('sass', function () {
 	gulp.src('./sass/**/*.scss')
-		.pipe(sass({
-			outputStyle: build ? 'compressed' : 'expanded'
-		}))
+		.pipe(sass())
 		.pipe(autoprefixer(
 			{
 				browsers: [
@@ -252,6 +294,7 @@ gulp.task('sass', function () {
 				cascade: false
 			}
 		))
+		.pipe(build ? cleancss() : gutil.noop())
 		.pipe(rev_pipe())
 		.pipe(gulp.dest('./build/css'))
 		.pipe(rev.manifest("rev-css-manifest.json"))
@@ -271,8 +314,8 @@ gulp.task('sass', function () {
 			oldManifest: './between/rev-css-manifest.json',
 			dest: './build'
 		}))
-		.pipe(gulp.dest('./between'));
-	return runSequence('metalsmith');
+		.pipe(gulp.dest('./between'))
+		.pipe(connect.reload());
 });
 
 gulp.task('images', function() {
@@ -283,35 +326,81 @@ gulp.task('images', function() {
 });
 
 gulp.task('resize-images', function() {
-	var size = 800;
+	var thumbnail_large = 600;
+	var thumbnail_medium = 400;
+	var thumbnail_small = 200;
 	var size_large = {
 		width: 1920,
 		height: 1080
 	};
-	var quality = 75;
+	var quality = 60;
 	var high_quality = 90;
 	return gulp.src('./images/portfolio/**/*')
 		.pipe(responsive({
 			'**/*': [
 				{
-					width: size,
-					height: size,
-					quality: quality,
+					width: thumbnail_large,
+					height: thumbnail_large,
+					quality: quality + 10,
 					withoutEnlargement: false,
 					rename:
 					{
-						suffix: '-square',
+						suffix: '-square-large',
 						extname: '.jpg'
 					}
 				},
 				{
-					width: size,
-					height: size,
+					width: thumbnail_large,
+					height: thumbnail_large,
+					quality: quality + 10,
+					withoutEnlargement: false,
+					rename:
+					{
+						suffix: '-square-large',
+						extname: '.webp'
+					}
+				},
+				{
+					width: thumbnail_medium,
+					height: thumbnail_medium,
 					quality: quality,
 					withoutEnlargement: false,
 					rename:
 					{
-						suffix: '-square',
+						suffix: '-square-medium',
+						extname: '.jpg'
+					}
+				},
+				{
+					width: thumbnail_medium,
+					height: thumbnail_medium,
+					quality: quality,
+					withoutEnlargement: false,
+					rename:
+					{
+						suffix: '-square-medium',
+						extname: '.webp'
+					}
+				},
+				{
+					width: thumbnail_small,
+					height: thumbnail_small,
+					quality: quality,
+					withoutEnlargement: false,
+					rename:
+					{
+						suffix: '-square-small',
+						extname: '.jpg'
+					}
+				},
+				{
+					width: thumbnail_small,
+					height: thumbnail_small,
+					quality: quality,
+					withoutEnlargement: false,
+					rename:
+					{
+						suffix: '-square-small',
 						extname: '.webp'
 					}
 				},
@@ -365,8 +454,8 @@ gulp.task('assets', function() {
 			oldManifest: './between/rev-assets-manifest.json',
 			dest: './build'
 		}))
-		.pipe(gulp.dest('./between'));
-	return runSequence('metalsmith');
+		.pipe(gulp.dest('./between'))
+		.pipe(connect.reload());
 });
 
 gulp.task('javascript', function() {
@@ -374,11 +463,6 @@ gulp.task('javascript', function() {
 		// don't version service-worker
 		return !(file.path.lastIndexOf('service-worker') > -1);
 	}, { restore: true });
-
-	var babel_presets = ['latest'];
-	if (build) {
-		babel_presets.push('babili');
-	}
 
 	gulp.src(['./javascript/**/*.js', '!**/_*.js'])
 		.pipe(template({
@@ -389,11 +473,7 @@ gulp.task('javascript', function() {
 			interpolate: /<%=([\s\S]+?)%>/g
 		}))
 		.pipe(include())
-		.pipe(babel({
-			presets: babel_presets,
-			comments: build ? false : true,
-			compact: build ? true : false
-		}))
+		.pipe(babel(babel_options))
 		.pipe(rev_filter)
 		.pipe(rev_pipe())
 		.pipe(rev_filter.restore)
@@ -403,8 +483,8 @@ gulp.task('javascript', function() {
 			oldManifest: './between/rev-js-manifest.json',
 			dest: './build'
 		}))
-		.pipe(gulp.dest('./between'));
-	return runSequence('metalsmith');
+		.pipe(gulp.dest('./between'))
+		.pipe(connect.reload());
 });
 
 gulp.task('cache-bust', function() {
