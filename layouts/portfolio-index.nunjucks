@@ -16,7 +16,7 @@
 	{% if p.categories %}
 		{% set categories_list = p.categories.split(" ") %}
 		{% for c in categories_list %}
-			{% if (categories.indexOf(c) == -1) %}
+			{% if (categories.indexOf(c) == -1) and (c != "misc") %}
 				{% set categories = (categories.push(c), categories) %}
 			{% endif %}
 		{% endfor %}
