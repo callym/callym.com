@@ -1355,9 +1355,7 @@ $.magnificPopup.registerModule('gallery', {
 
 			mfp.direction = true; // true - next, false - prev
 
-/* CALLYM - this line breaks the babili code minifier!
 			if(!gSt || !gSt.enabled ) return false;
-*/
 
 			_wrapClasses += ' mfp-gallery';
 
