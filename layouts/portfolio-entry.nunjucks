@@ -126,6 +126,9 @@ $(document).ready(function() {
 						<div class="mfp-counter"></div>
 					</div>
 				</div>`
+		},
+		callbacks: { 
+			markupParse: (template, values, item) => values.title = item.el.attr('title')
 		}
 	});
 });
