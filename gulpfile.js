@@ -229,8 +229,11 @@ gulp.task('do-metalsmith', function() {
 				}))
 				.use(branch(use_markdown)
 					.use(markdown({
-						smartypants: true
+						smartypants: true,
+						langPrefix: 'language-'
 					}))
+					.use(prism())
+					.use(assign_contents())
 				)
 				.use(branch(dont_use_markdown)
 					.use(rename_markdown())
