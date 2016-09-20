@@ -175,6 +175,11 @@ $(document).ready(function() {
 		return false;
 	});
 	{% endfor %}
+
+	var url = window.location.search;
+	url = url.replace('?', '');
+	console.log(url);
+	$('#listjs-' + url).trigger('click');
 });
 </script>
 {% endblock %}
