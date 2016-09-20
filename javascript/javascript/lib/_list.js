@@ -7,9 +7,7 @@ By Jonny Strömberg (www.jonnystromberg.com, www.listjs.com)
 "use strict";
 
 var document = window.document,
-  getByClass = require('./src/utils/get-by-class'),
-  extend = require('./src/utils/extend'),
-  getAttribute = require('./src/utils/get-attribute');
+  extend = require('./src/utils/extend');
 
 var List = function(id, options, values) {
 
@@ -34,16 +32,14 @@ var List = function(id, options, values) {
       self.plugins        = {};
       self.valueNames     = [];
       self.utils          = {
-        getByClass: getByClass,
         extend: extend,
-        getAttribute: getAttribute,
       };
 
       self.utils.extend(self, options);
 
       self.listContainer = (typeof(id) === 'string') ? document.getElementById(id) : id;
       if (!self.listContainer) { return; }
-      self.list       = getByClass(self.listContainer, self.listClass, true);
+      self.list       = self.listContainer.getElementsByClassName(self.listClass)[0];
 
       self.parse      = require('./src/parse')(self);
       self.templater  = require('./src/templater')(self);
@@ -257,7 +253,7 @@ window.List = List;
 
 })(window);
 
-},{"./src/filter":2,"./src/item":3,"./src/parse":4,"./src/templater":5,"./src/utils/extend":6,"./src/utils/get-attribute":7,"./src/utils/get-by-class":8}],2:[function(require,module,exports){
+},{"./src/filter":2,"./src/item":3,"./src/parse":4,"./src/templater":5,"./src/utils/extend":6}],2:[function(require,module,exports){
 module.exports = function(list) {
 
   // Add handlers
@@ -417,12 +413,12 @@ var Templater = function(list) {
           el.setAttribute('data-'+valueNames[i].data[j], '');
         }
       } else if (valueNames[i].attr && valueNames[i].name) {
-        elm = list.utils.getByClass(el, valueNames[i].name, true);
+        elm = el.getElementsByClassName(valueNames[i].name)[0];
         if (elm) {
           elm.setAttribute(valueNames[i].attr, "");
         }
       } else {
-        elm = list.utils.getByClass(el, valueNames[i], true);
+        elm = el.getElementsByClassName(valueNames[i])[0];
         if (elm) {
           elm.innerHTML = "";
         }
@@ -467,13 +463,13 @@ var Templater = function(list) {
       var elm;
       if (valueNames[i].data) {
         for (var j = 0, jl = valueNames[i].data.length; j < jl; j++) {
-          values[valueNames[i].data[j]] = list.utils.getAttribute(item.elm, 'data-'+valueNames[i].data[j]);
+          values[valueNames[i].data[j]] = item.elm.getAttribute('data-'+valueNames[i].data[j]);
         }
       } else if (valueNames[i].attr && valueNames[i].name) {
-        elm = list.utils.getByClass(item.elm, valueNames[i].name, true);
-        values[valueNames[i].name] = elm ? list.utils.getAttribute(elm, valueNames[i].attr) : "";
+        elm = item.elm.getElementsByClassName(valueNames[i].name)[0];
+        values[valueNames[i].name] = elm ? elm.getAttribute(valueNames[i].attr) : "";
       } else {
-        elm = list.utils.getByClass(item.elm, valueNames[i], true);
+        elm = item.elm.getElementsByClassName(valueNames[i])[0];
         values[valueNames[i]] = elm ? elm.innerHTML : "";
       }
       elm = undefined;
@@ -506,12 +502,12 @@ var Templater = function(list) {
       if (valueName.data) {
         item.elm.setAttribute('data-'+valueName.data, value);
       } else if (valueName.attr && valueName.name) {
-        elm = list.utils.getByClass(item.elm, valueName.name, true);
+        elm = item.elm.getElementsByClassName(valueName.name)[0];
         if (elm) {
           elm.setAttribute(valueName.attr, value);
         }
       } else {
-        elm = list.utils.getByClass(item.elm, valueName, true);
+        elm = item.elm.getElementsByClassName(valueName)[0];
         if (elm) {
           elm.innerHTML = value;
         }
@@ -589,91 +585,5 @@ module.exports = function extend (object) {
 
     return object;
 };
-
-},{}],7:[function(require,module,exports){
-/**
- * A cross-browser implementation of getAttribute.
- * Source found here: http://stackoverflow.com/a/3755343/361337 written by Vivin Paliath
- *
- * Return the value for `attr` at `element`.
- *
- * @param {Element} el
- * @param {String} attr
- * @api public
- */
-
-module.exports = function(el, attr) {
-  var result = (el.getAttribute && el.getAttribute(attr)) || null;
-  if( !result ) {
-    var attrs = el.attributes;
-    var length = attrs.length;
-    for(var i = 0; i < length; i++) {
-      if (attr[i] !== undefined) {
-        if(attr[i].nodeName === attr) {
-          result = attr[i].nodeValue;
-        }
-      }
-    }
-  }
-  return result;
-};
-
-},{}],8:[function(require,module,exports){
-/**
- * A cross-browser implementation of getElementsByClass.
- * Heavily based on Dustin Diaz's function: http://dustindiaz.com/getelementsbyclass.
- *
- * Find all elements with class `className` inside `container`.
- * Use `single = true` to increase performance in older browsers
- * when only one element is needed.
- *
- * @param {String} className
- * @param {Element} container
- * @param {Boolean} single
- * @api public
- */
-
-module.exports = (function() {
-  if (document.getElementsByClassName) {
-    return function(container, className, single) {
-      if (single) {
-        return container.getElementsByClassName(className)[0];
-      } else {
-        return container.getElementsByClassName(className);
-      }
-    };
-  } else if (document.querySelector) {
-    return function(container, className, single) {
-      className = '.' + className;
-      if (single) {
-        return container.querySelector(className);
-      } else {
-        return container.querySelectorAll(className);
-      }
-    };
-  } else {
-    return function(container, className, single) {
-      var classElements = [],
-        tag = '*';
-      if (container === null) {
-        container = document;
-      }
-      var els = container.getElementsByTagName(tag);
-      var elsLen = els.length;
-      var pattern = new RegExp("(^|\\s)"+className+"(\\s|$)");
-      for (var i = 0, j = 0; i < elsLen; i++) {
-        if ( pattern.test(els[i].className) ) {
-          if (single) {
-            return els[i];
-          } else {
-            classElements[j] = els[i];
-            j++;
-          }
-        }
-      }
-      return classElements;
-    };
-  }
-})();
 
 },{}]},{},[1]);
