@@ -68,6 +68,25 @@
   box-sizing: border-box;
 }
 
+// Vertical centerer helper
+.mfp-container {
+  &:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+  }
+}
+
+// Remove vertical centering when popup has class `mfp-align-top`
+.mfp-align-top {
+  .mfp-container {
+    &:before {
+      display: none;
+    }
+  }
+}
+
 // Popup content holder
 .mfp-content {
   position: relative;
