@@ -1,4 +1,6 @@
 var gulp = require('gulp'),
+	watch = require('gulp-watch'),
+	batch = require('gulp-batch'),
 	gulp_front_matter = require('gulp-front-matter'),
 	fs = require('fs'),
 	through = require('through2'),
@@ -29,6 +31,7 @@ var gulp = require('gulp'),
 
 var gulpsmith = require('gulpsmith'),
 	markdown = require('metalsmith-markdown'),
+	prism = require('metalsmith-prism'),
 	layouts = require('metalsmith-layouts'),
 	permalinks = require('metalsmith-permalinks'),
 	collections = require('metalsmith-collections'),
@@ -113,6 +116,27 @@ var assign_layout = function(options) {
 	};
 };
 
+var assign_contents = function(options) {
+	return function (files, metalsmith, done) {
+		var metadata = metalsmith.metadata();
+		Object.keys(files).forEach(function(file) {
+			if (file == null) {
+				return;
+			}
+
+			var data = files[file];
+
+			if (data.markdown_contents != null) {
+				return;
+			}
+			
+			data.markdown_contents = data.contents;
+		});
+
+		done();      
+	};
+};
+
 gulp.task('default', function(cb) {
 	console.log("*** build: " + build + " ***");
 	return runSequence(
@@ -135,12 +159,31 @@ gulp.task('build', ['resize-images'], function(cb) {
 });
 
 gulp.task('watch', ['connect', 'default'], function() {
-	gulp.watch('src/**/*', ['metalsmith']);
-	gulp.watch('layouts/**/*', ['metalsmith']);
-	gulp.watch('sass/**/*', ['sass']);
-	gulp.watch('assets/**/*', ['assets']);
-	gulp.watch('javascript/**/*', ['javascript']);
-	gulp.watch('between/**/*.json', ['cache-bust']);
+	watch(['src/**/*', 'layouts/**/*'], batch(function(events, done) {
+		gulp.start('metalsmith', done);
+	}));
+
+	watch('sass/**/*', { awaitWriteFinish: true }, batch(function(events, done) {
+		gulp.start('sass', done);
+	}));
+
+	watch('assets/**/*', batch(function(events, done) {
+		gulp.start('assets', done);
+	}));
+
+	watch('javascript/**/*', batch(function(events, done) {
+		gulp.start('javascript', done);
+	}));
+
+	watch('between/**/*.json', batch(function(events, done) {
+		gulp.start('cache-bust', done);
+	}));
+//	gulp.watch('src/**/*', ['metalsmith']);
+//	gulp.watch('layouts/**/*', ['metalsmith']);
+//	gulp.watch('sass/**/*', ['sass']);
+//	gulp.watch('assets/**/*', ['assets']);
+//	gulp.watch('javascript/**/*', ['javascript']);
+//	gulp.watch('between/**/*.json', ['cache-bust']);
 });
 
 gulp.task('connect', function() {
@@ -276,7 +319,7 @@ gulp.task('sitemap', function() {
 });
 
 gulp.task('sass', function () {
-	gulp.src('./sass/**/*.scss')
+	return gulp.src('./sass/**/*.scss')
 		.pipe(sass())
 		.pipe(autoprefixer(
 			{
@@ -297,6 +340,7 @@ gulp.task('sass', function () {
 		.pipe(build ? cleancss() : gutil.noop())
 		.pipe(rev_pipe())
 		.pipe(gulp.dest('./build/css'))
+		.pipe(connect.reload())
 		.pipe(rev.manifest("rev-css-manifest.json"))
 		.pipe(through.obj(function(file, enc, cb) {
 			var json = JSON.parse(file.contents.toString());
