@@ -18,7 +18,7 @@
   "homepage": "https://github.com/callym/callym.com#readme",
   "devDependencies": {
     "babel-core": "^6.14.0",
-    "babel-preset-babili": "0.0.2",
+    "babel-preset-babili": "0.0.3",
     "babel-preset-latest": "^6.14.0",
     "event-stream": "^3.3.4",
     "gulp": "^3.9.1",
