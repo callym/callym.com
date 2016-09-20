@@ -159,7 +159,11 @@ gulp.task('build', ['resize-images'], function(cb) {
 });
 
 gulp.task('watch', ['connect', 'default'], function() {
-	watch(['src/**/*', 'layouts/**/*'], batch(function(events, done) {
+	watch('src/**/*', batch(function(events, done) {
+		gulp.start('metalsmith', done);
+	}));
+
+	watch('layouts/**/*', batch(function(events, done) {
 		gulp.start('metalsmith', done);
 	}));
 
@@ -534,6 +538,7 @@ gulp.task('javascript', function() {
 		.pipe(rev_filter)
 		.pipe(rev_pipe())
 		.pipe(rev_filter.restore)
+		.pipe(connect.reload())
 		.pipe(gulp.dest('./build'))
 		.pipe(rev.manifest("rev-js-manifest.json"))
 		.pipe(revD({
