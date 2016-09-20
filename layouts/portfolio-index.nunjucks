@@ -22,6 +22,9 @@
 		{% endfor %}
 	{% endif %}
 {% endfor %}
+{% if (categories.indexOf("misc") == -1) %}
+	{% set categories = (categories.push("misc"), categories) %}
+{% endif %}
 
 {% set class = "hover-link center" %}
 <div class="sublinks row-flex filter">
