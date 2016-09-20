@@ -77,8 +77,6 @@ var babel_presets = ['latest'];
 
 var babel_options = {
 	presets: babel_presets,
-	comments: build ? false : true,
-	compact: build ? true : false
 };
 
 var set_build = function() {
@@ -90,6 +88,7 @@ var set_build = function() {
 	build = true;
 	rev_pipe = rev_pipe.pipe(rev);
 	babel_presets.push('babili');
+	babel_options['comments'] = false;
 };
 
 var assign_layout = function(options) {
