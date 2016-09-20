@@ -1,0 +1,130 @@
+@import 'variables';
+
+//colors
+$background-select: $blue;
+$background: desaturate(darken($blue, 60), 50);
+$background-highlight: rgba(white, 0);
+
+$text: $pink;
+$comments: slategray;
+$const: pink;
+$string: darken($yellow, 10);
+$operator: $blue;
+$keyword: $blue;
+$function: hotpink;
+$variable: $string;
+
+pre[class*="language-"],
+code[class*="language-"] {
+	color: $text;
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 16px;
+	background: none;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+	tab-size: 4;
+	hyphens: none;
+
+	&::selection,
+	& ::selection {
+		text-shadow: none;
+		background: $background-select;
+	}
+}
+
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	background: $background;
+}
+
+.token {
+	&.comment,
+	&.prolog,
+	&.doctype,
+	&.cdata,
+	&.punctuation {
+		color: $comments;
+	}
+
+	&.property,
+	&.tag,
+	&.boolean,
+	&.number,
+	&.constant,
+	&.symbol,
+	&.deleted {
+		color: $const;
+	}
+
+	&.selector,
+	&.attr-name,
+	&.string,
+	&.char,
+	&.builtin,
+	&.inserted {
+		color: $string;
+	}
+
+	&.operator,
+	&.entity,
+	&.url {
+		color: $operator;
+		background: $background-highlight;
+	}
+
+	&.entity {
+		cursor: help;
+	}
+
+	&.atrule,
+	&.attr-value,
+	&.keyword {
+		color: $keyword;
+	}
+
+	&.function {
+		color: $function;
+	}
+
+	&.regex,
+	&.important,
+	&.variable {
+		color: $variable;
+	}
+
+	&.important,
+	&.bold {
+		font-weight: bold;
+	}
+
+	&.italic {
+		font-style: italic;
+	}
+}
+
+.namespace {
+	opacity: .7;
+}
+
+:not(pre) > code[class*="language-"] {
+	background: $variable;
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.language-css .token.string {
+	color: $operator;
+	background: $background-highlight;
+}
+
+.style .token.string {
+	color: $operator;
+	background: $background-highlight;
+}
