@@ -1,0 +1,144 @@
+@import 'variables';
+
+.blog-grid {
+	display: flex;
+	flex-flow: row wrap;
+	position: relative;
+
+	margin: 5vw 10vw 0;
+	@include media("<tablet") {
+		margin: 0;
+	}
+
+	& > a {
+		border: 1px solid black;
+		border-radius: 1.25vw;
+		z-index: 0;
+		margin: 1vw;
+
+		overflow: hidden;
+		position: relative;
+
+		flex-basis: 100%;
+		@include media("<tablet") {
+			flex-basis: 100%;
+		}
+
+		&:before {
+			content:'';
+			float: left;
+			padding-top: 33%;
+		}
+
+		&:hover {
+			/*
+			* don't need/want the animations on mobiles!
+			*/
+			@include media(">tablet") {
+				& .blog-index-extract {
+					color: transparent;
+					text-shadow: 0 0 20px black;
+					text-shadow: 0 0 20px var(--color, black);
+				}
+
+				& .blog-index-details {
+					transform: none;
+					opacity: 1;
+				}
+			}
+		}
+	}
+}
+
+.blog-index-name {
+	position: absolute;
+	font-size: 1.5em;
+	height: auto;
+	bottom: 0;
+	width: 100%;
+
+	background-color: rgba($blue, 0.75);
+	color: #fff;
+
+	border-top: 2px solid rgba(white, 0.5);
+}
+
+.blog-index-extract {
+	font-family: $serif;
+	font-style: italic;
+	font-size: 1em;
+	margin: 0 5%;
+	padding: 1.5em 0;
+	width: 90%;
+	height: calc(100% - 4em);
+	transition: all 500ms ease-in-out;
+	color: var(--color);
+}
+
+.blog-index-description-background {
+	background-color: $pink;
+	background-color: var(--background-color, $pink);
+	position: absolute;
+}
+
+.blog-index-details {
+	position: absolute;
+	font-size: 1.25em;
+	height: auto;
+	padding: 0.1em 0 0;
+	width: 100%;
+
+	background-color: rgba($blue, 0.75);
+	border-bottom: 2px solid rgba(white, 0.5);
+	color: #fff;
+	
+	transition: all 500ms ease-in-out;
+	opacity: 0;
+	transform:
+		translateY(-15vw);
+
+	/*
+	* as hover doesn't exist on mobile,
+	* set it so the name is shown as a thin banner
+	* at the bottom of the square
+	*/
+	@include media("<tablet") {
+		font-size: 1.5em;
+		opacity: 1;
+		height: auto;
+		top: 0;
+		transform: 
+			translateY(0);
+	}
+}
+
+.blog-index-categories, .blog-index-date {
+	margin: 0 0.25em;
+}
+
+.blog-index-date {
+	float: left;
+}
+
+.blog-index-categories {
+	float: right;
+	font-size: 50%;
+	max-width: 50%;
+
+	& > span {
+		margin: 0 0.5em;
+	}
+}
+
+.blog-entry-categories {
+	@include media("<tablet") {
+		width: 100%;
+	}
+
+	& > a {
+		flex-basis: 20%;
+		@include media("<tablet") {
+			flex-basis: 50%;
+		}
+	}
+}
