@@ -57,17 +57,6 @@
 				{% if p.descriptionStyle.background.color %}
 					--background-color: {{ p.descriptionStyle.background.color }}
 				{% endif %}">
-			<defs>
-				{% set size = 160 %}
-				<pattern id="filler"
-					patternUnits="userSpaceOnUse"
-					width="{{ size }}" height="{{ size }}">
-					<image xlink:href="/images/blueglitter.gif"
-						width="{{ size }}" height="{{ size }}"
-						preserveAspectRatio="none">
-					</image>
-				</pattern>
-			</defs>
 			<foreignObject width="100%" height="100%">
 				<p class="piece-description"
 					style="
