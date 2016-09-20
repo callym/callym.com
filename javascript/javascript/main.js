@@ -7,9 +7,7 @@ var key;
 var auth_secret;
 
 if ('serviceWorker' in navigator) {
-	navigator.serviceWorker.register('/service-worker.js');
-
-	navigator.serviceWorker.ready
+	navigator.serviceWorker.register('/service-worker.js')
 		.then(function(registration) {
 			return registration.pushManager.getSubscription()
 				.then(function(subscription) {
@@ -38,20 +36,28 @@ if ('serviceWorker' in navigator) {
 							))
 							: '';
 			endpoint = subscription.endpoint;
+			var topics = ['main'];
+			<% if (!build) { %>
+				topics.push('dev');
+			<% } %>
+
+			var data = {
+				endpoint: endpoint,
+				topics: topics,
+				key: key,
+				auth_secret: auth_secret
+			};
+			console.log(JSON.stringify(data));
 
 			fetch('https://uccr0qq45g.execute-api.eu-west-1.amazonaws.com/production/register', {
 				method: 'post',
 				headers: {
 					'Content-type' : 'application/json'
 				},
-				body: JSON.stringify({
-					endpoint: endpoint,
-					key: key,
-					auth_secret: auth_secret
-				})
+				body: JSON.stringify(data)
 			});
 		});
-};
+}
 
 window.addEventListener('online', () => onOnline());
 
