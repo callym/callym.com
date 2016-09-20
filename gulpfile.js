@@ -256,18 +256,27 @@ gulp.task('do-metalsmith', function() {
 						pattern: 'portfolio/**/*.md',
 						sortBy: 'date',
 						reverse: true
+					},
+					blog: {
+						pattern: 'blog/**/*.md',
+						sortBy: 'date',
+						reverse: true
 					}
 				}))
 				.use(assign_layout({
 					standalone: 'empty.nunjucks',
 					empty: 'empty.nunjucks',
 					page: 'page.nunjucks',
-					portfolio: 'portfolio-entry.nunjucks'
+					portfolio: 'portfolio-entry.nunjucks',
+					blog: 'blog-entry.nunjucks'
 				}))
 				.use(branch(use_markdown)
 					.use(markdown({
-						smartypants: true
+						smartypants: true,
+						langPrefix: 'language-'
 					}))
+					.use(prism())
+					.use(assign_contents())
 				)
 				.use(branch(dont_use_markdown)
 					.use(rename_markdown())
@@ -283,6 +292,10 @@ gulp.task('do-metalsmith', function() {
 					linksets: [
 						{
 							match: { collection: 'portfolio' },
+							pattern: ':collection/:title'
+						},
+						{
+							match: { collection: 'blog' },
 							pattern: ':collection/:title'
 						}
 					],

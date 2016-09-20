@@ -1,0 +1,175 @@
+{% extends "layouts/page.nunjucks" %}
+
+{% block contents %}
+
+{#
+	categories here are for ordering
+	but if I add a new one
+	it'll automatically find it!
+#}
+{% set categories = [] %}
+{% for b in blog %}
+	{% if b.categories %}
+		{% set categories_list = b.categories.split(" ") %}
+		{% for c in categories_list %}
+			{% if (categories.indexOf(c) == -1) %}
+				{% set categories = (categories.push(c), categories) %}
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+{% endfor %}
+{# adds misc to end of list #}
+{% if (categories.indexOf("misc") == -1) %}
+	{% set categories = (categories.push("misc"), categories) %}
+{% endif %}
+
+{% set class = "hover-link center" %}
+<div class="sublinks row-flex filter">
+    <a href=""
+        class="{{ class }} current"
+		id="listjs-all">
+        all
+    </a>
+{% for c in categories %}
+    <a href=""
+    class="{{ class }}"
+	id="listjs-{{ c }}">
+        {{ c }}
+    </a>
+{% endfor %}
+</div>
+
+<div id="listjs">
+<div class="list blog-grid">
+{% for b in blog %}
+	<a href="/{{ b.path }}"
+		class="item"
+		{% if b.categories %}
+			data-categories="{{ b.categories }}">
+		{% else %}
+			data-categories="misc">
+		{% endif %}
+		<svg xmlns="http://www.w3.org/2000/svg"
+			viewBox="0 0 600 200"
+			class="blog-index-description-background"
+			style="
+				{% if b.descriptionStyle.background.color %}
+					--background-color: {{ b.descriptionStyle.background.color }}
+				{% endif %}">
+			<foreignObject width="100%" height="100%">
+				<p class="blog-index-extract center"
+					style="
+						{% if b.descriptionStyle.text.color %}
+							--color: {{ b.descriptionStyle.text.color }}
+						{% endif %}">
+					{{ b.markdown_contents | string | striptags() | truncate(120) }}
+				</p>
+			</foreignObject>
+		</svg>
+			<div class="center blog-index-name">
+				<div>
+					<div>
+						{% if b.displaytitle %}
+							{{ b.displaytitle | truncate(80) }}
+						{% else %}
+							{{ b.title | truncate(80) }}
+						{% endif %}
+					</div>
+				</div>
+			</div>
+			<div class="center blog-index-details">
+				<div class="left blog-index-date">
+					{{ b.date | date("Do MMMM YYYY") }}
+				</div>
+				<div class="right blog-index-categories">
+					{% set post_categories = [] %}
+					{% if b.categories %}
+						{% set categories_list = b.categories.split(" ") %}
+						{% for c in categories_list %}
+							{% if (post_categories.indexOf(c) == -1) %}
+								{% set post_categories = (post_categories.push(c), post_categories) %}
+							{% endif %}
+						{% endfor %}
+					{% else %}
+						{% set post_categories = ["misc"] %}
+					{% endif %}
+					{% for c in post_categories %}
+					<span>
+						#{{ c }}
+					</span>
+					{% endfor %}
+				</div>
+			</div>
+	</a>
+{% endfor %}
+</div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+$(document).ready(function() {
+	var filterList = new List('listjs', {
+		valueNames: [
+			{
+				data: ['categories']
+			}
+		]
+	});
+
+	var fade_list = function(cb) {
+		var time = 0.25;
+		$('#listjs')
+			.anim({
+				opacity: 0
+			},
+			time,
+			'ease-in-out',
+			function() {
+				cb();
+				$('#listjs')
+				.anim({
+					opacity: 1
+				},
+				time,
+				'ease-in-out');
+			});
+	}
+
+	$('#listjs-all').on('click', function(e) {
+		e.preventDefault();
+	    e.stopPropagation();
+		$('.sublinks.filter').children().removeClass('current');
+		$(this).addClass('current');
+		fade_list(
+			function() { filterList.filter() }
+		)
+		return false;
+	});
+	{% for c in categories %}
+	$('#listjs-{{ c }}').on('click', function(e) {
+		e.preventDefault();
+	    e.stopPropagation();
+		$('.sublinks.filter').children().removeClass('current');
+		$(this).addClass('current');
+		fade_list(
+			function() {
+				filterList.filter(function(item) {
+					var cat = item.values().categories.split(" ");
+					return cat.indexOf("{{ c }}") > -1;
+				})
+			}
+		);
+		return false;
+	});
+	{% endfor %}
+
+	var url = window.location.search;
+	url = url.replace('?', '');
+	console.log(url);
+	$('#listjs-' + url).trigger('click');
+});
+</script>
+{% endblock %}
