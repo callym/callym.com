@@ -2,17 +2,11 @@
 @import 'include-media';
 @import 'magnific-popup/main';
 
-//
-// VARIABLES
-//
-
-$serif: Georgia, Times, Times New Roman, serif;
-$sans-serif: 'Century Gothic', CenturyGothic, Geneva, AppleGothic, sans-serif;
-
-$pink: #fbe4ff;
-$dark-pink: darken($pink, 20);
-$blue: #6bafff;
-$yellow: #ffffb8;
+@import 'variables';
+@import 'header';
+@import 'portfolio';
+@import 'blog';
+@import 'prism';
 
 //
 // DEFAULT TAG STYLES
@@ -45,112 +39,13 @@ p {
 	line-height: 1.5em;
 }
 
-pre {
-	overflow: auto;
-	font-family: 	monaco,
-					Consolas,
-					"Lucida Console",
-					monospace;
-	padding: 1em 0;
-
-	&::-webkit-scrollbar {
-		background-color: inherit;
-	}
-	&::-webkit-scrollbar-thumb {
-		background-color: blue;
-		border-radius: 100px;
-	}
-	&::-webkit-scrollbar-track {
-		border: 1px solid red;
-	}
-}
-
 ul {
 	list-style: none;
 }
 
 //
-// HEADER NAME
-//
-
-#callym {
-	margin-bottom: -4vw;
-	@include media("<tablet") {
-		margin-bottom: 0;
-	}
-
-	& h1 {
-		margin: inherit;
-	}
-
-	& .glitter {
-		transition: all 500ms ease-in-out;
-	}
-	
-	&:hover .glitter {
-		opacity: 0.5;
-	}
-
-	& .stroke, .glitter {
-		font-size: 400px;
-		text-anchor: middle;
-		dominant-baseline: middle;
-		font-family: $serif;
-		letter-spacing: 10px;
-
-		& .extra-space {
-			letter-spacing: 20px;
-		}
-	}
-
-	& .stroke {
-		fill: transparent;
-		stroke: black;
-		stroke-width: 5;
-		@include media("<tablet") {
-			stroke-width: 10;
-		}
-		stroke-linecap: round;
-		stroke-linejoin: round;
-		stroke-antialiasing: true;
-	}
-}
-
-//
 // LAYOUTS
 //
-
-.grid {
-	display: flex;
-	flex-flow: row wrap;
-	position: relative;
-
-	margin: 5vw 10vw 0;
-	@include media("<tablet") {
-		margin: 0;
-	}
-
-	& > a {
-		border: 1px solid black;
-		border-radius: 12.5%;
-		z-index: 0;
-		margin: 1vw;
-
-		overflow: hidden;
-		position: relative;
-
-		flex-basis: 30%;
-		@include media("<tablet") {
-			flex-basis: 100%;
-		}
-
-		&:before {
-			content:'';
-			float: left;
-			padding-top: 100%;
-		}
-	}
-}
 
 .row-flex {
 	display: flex;
@@ -172,6 +67,10 @@ ul {
 //
 // CLASSES
 //
+
+.left {
+	text-align: left;
+}
 
 .center {
 	text-align: center;
@@ -246,99 +145,6 @@ ul {
 
 .itchio {
 	margin-top: 1em;
-}
-
-//
-// PORTFOLIO THUMBNAILS & INDEX
-//
-
-.piece-name {
-	position: absolute;
-	font-size: 1.25em;
-	height: 100%;
-	width: 100%;
-
-	background-color: rgba($blue, 0.75);
-	color: #fff;
-	
-	transition: all 500ms ease-in-out;
-	opacity: 0;
-	transform:
-		translateY(15vw);
-
-	/*
-	* as hover doesn't exist on mobile,
-	* set it so the name is shown as a thin banner
-	* at the bottom of the square
-	*/
-	@include media("<tablet") {
-		font-size: 1.5em;
-		opacity: 1;
-		height: auto;
-		bottom: 0;
-		transform: 
-			translateY(0);
-		border-top: 2px solid rgba(white, 0.5);
-	}
-	
-	& > div {
-		display: table;
-		width: 100%;
-		height: 100%;
-
-		& > div {
-			display: table-cell;
-			vertical-align: middle;
-		}
-	}
-}
-
-.grid > a:hover {
-	/*
-	* don't need/want the animations on mobiles!
-	*/
-	@include media(">tablet") {
-		& .piece-name {
-			transform: none;
-			opacity: 1;
-		}
-
-		& .piece-description {
-			color: transparent;
-			text-shadow: 0 0 20px black;
-			text-shadow: 0 0 20px var(--color, black);
-		}
-
-		& .portfolio-thumbnail img {
-			filter:
-				blur(3px);
-		}
-	}
-}
-
-.piece-description {
-	text-align: center;
-	font-family: $serif;
-	font-weight: bold;
-	font-size: 3.4em;
-	margin: 0;
-	width: 100%;
-	height: 100%;
-	transition: all 500ms ease-in-out;
-	color: var(--color);
-}
-
-.piece-description-background {
-	background-color: $pink;
-	background-color: var(--background-color, $pink);
-	position: absolute;
-}
-
-.portfolio-thumbnail > img {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	transition: all 500ms ease-in-out;
 }
 
 //
