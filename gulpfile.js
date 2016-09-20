@@ -270,7 +270,7 @@ gulp.task('do-metalsmith', function() {
 gulp.task('sitemap', function() {
 	return gulp.src('./build/**/*.html')
 		.pipe(sitemap({
-			siteUrl: 'http://localhost:8080'
+			siteUrl: 'http://beta.callym.com'
 		}))
 		.pipe(gulp.dest("./build"));
 });
