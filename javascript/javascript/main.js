@@ -68,6 +68,32 @@ function push_subscribe() {
 			});
 		});
 };
+
+function push_unsubscribe() {
+	return navigator.serviceWorker.ready
+		.then(function(registration) {
+			return registration.pushManager.getSubscription()
+		})
+		.then(function(subscription) {
+			subscription.unsubscribe();
+			return subscription;
+		})
+		.then(function(subscription) {
+			var data = {
+				endpoint: subscription.endpoint
+			};
+			console.log(JSON.stringify(data));
+
+			fetch('https://uccr0qq45g.execute-api.eu-west-1.amazonaws.com/production/unregister', {
+				method: 'post',
+				headers: {
+					'Content-type' : 'application/json'
+				},
+				body: JSON.stringify(data)
+			});
+		});
+};
+
 if ('serviceWorker' in navigator) {
 	navigator.serviceWorker.register('/service-worker.js');
 }
