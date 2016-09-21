@@ -16,8 +16,8 @@ var endpoint;
 var key;
 var auth_secret;
 
-if ('serviceWorker' in navigator) {
-	navigator.serviceWorker.register('/service-worker.js')
+function push_subscribe() {
+	return navigator.serviceWorker.ready
 		.then(function(registration) {
 			return registration.pushManager.getSubscription()
 				.then(function(subscription) {
@@ -67,6 +67,9 @@ if ('serviceWorker' in navigator) {
 				body: JSON.stringify(data)
 			});
 		});
+};
+if ('serviceWorker' in navigator) {
+	navigator.serviceWorker.register('/service-worker.js');
 }
 
 window.addEventListener('online', () => onOnline());
