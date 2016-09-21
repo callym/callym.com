@@ -2,6 +2,16 @@
 //=require lib/_magnific-popup.js
 //=require lib/_list.js
 
+(function ($, doc) {
+	$.each(readyQ, function (index, handler) {
+		$(handler);
+	});
+	$.each(bindReadyQ, function (index, handler) {
+		$(doc).bind("ready", handler);
+	});
+})(Zepto, document);
+$ = Zepto;
+
 var endpoint;
 var key;
 var auth_secret;
