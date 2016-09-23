@@ -1,7 +1,7 @@
 <header id="header">
 	<a href="{{ rootPath }}">
 		<div id="callym">
-			<h1>
+			<h1 class="svg-container">
 				<svg xmlns="http://www.w3.org/2000/svg"
 					viewBox="0 0 1600 500">
 					<defs>
@@ -15,10 +15,12 @@
 							</image>
 						</pattern>
 					</defs>
-					<text x="50%" y="50%" fill="url(#filler)" class="glitter">
+					<text x="50%" y="50%" fill="url(#filler)" class="glitter"
+						dy="0.3em">
 						<tspan>call</tspan><tspan class="extra-space">ym</tspan>
 					</text>
-					<text x="50%" y="50%" class="stroke">
+					<text x="50%" y="50%" class="stroke"
+						dy="0.3em">
 						<tspan>call</tspan><tspan class="extra-space">ym</tspan>
 					</text>
 				</svg>

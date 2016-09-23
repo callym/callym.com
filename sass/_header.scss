@@ -6,6 +6,17 @@
 	margin-bottom: -4vw;
 	@include media("<tablet") {
 		margin-bottom: 0;
+	& .svg-container {
+		height: 0;
+		width: 100%;
+		padding-top: (500 / 1600) * 100%;
+		position: relative;
+
+		& svg {
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
 	}
 
 	& h1 {
@@ -23,7 +34,6 @@
 	& .stroke, .glitter {
 		font-size: 400px;
 		text-anchor: middle;
-		dominant-baseline: middle;
 		font-family: $serif;
 		letter-spacing: 10px;
 
