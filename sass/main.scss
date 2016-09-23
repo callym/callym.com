@@ -15,7 +15,7 @@
 html {
 	font-family: $sans-serif;
 	font-weight: 500;
-	font-size: 1.5em;
+	font-size: large;
 	overflow-y: scroll;
 	font-variant:
 		common-ligatures,
@@ -41,6 +41,30 @@ p {
 
 ul {
 	list-style: none;
+}
+
+del {
+	$color: $dark-pink;
+	$width: 10%;
+	$beginning: 50%;
+	$end: 50% + ($width);
+	background-size: 100% 100%;
+
+	text-decoration: none;
+	background-image: linear-gradient(
+		transparent $beginning,
+		$color $beginning,
+		$color $end,
+		transparent $end);
+}
+
+h1 {
+	font-size: 3em;
+	margin-bottom: 0.25em;
+
+	&.exhibitions {
+		font-size: 2em;
+	}
 }
 
 //
@@ -103,34 +127,6 @@ ul {
 	}
 }
 
-.text {
-	@include media("<tablet") {
-		text-align: center;
-	}
-
-	& h1 {
-		margin-bottom: 0;
-		@include media("<tablet") {
-			font-size: 150%;
-		}
-	}
-
-	& > h2 {
-		@include media("<tablet") {
-			font-size: 100%;
-		}
-	}
-}
-
-.title {
-	& > h1 {
-		font-size: 300%;
-		@include media("<tablet") {
-			font-size: 200%;
-		}
-	}
-}
-
 .date {
 	font-style: italic;
 	font-variant: small-caps;
@@ -183,7 +179,6 @@ a {
 	flex-flow: row wrap;
 
 	margin: 2em auto;
-	font-size: 0.75em;
 	@include media("<tablet") {
 		margin: 1em auto 1em;
 		font-size: 1.5em;

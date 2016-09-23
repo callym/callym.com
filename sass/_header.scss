@@ -3,9 +3,6 @@
 //
 
 #callym {
-	margin-bottom: -4vw;
-	@include media("<tablet") {
-		margin-bottom: 0;
 	& .svg-container {
 		height: 0;
 		width: 100%;

@@ -5,7 +5,7 @@
 
 {% for e in exhibitions %}
 <div class="text">
-    <h1>
+    <h1 class="exhibitions">
         {{ e.title }}
     </h1>
     <div class="date">
