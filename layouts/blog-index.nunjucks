@@ -24,7 +24,7 @@
 {% endif %}
 
 {% set class = "hover-link center" %}
-<div class="sublinks row-flex filter">
+<div class="sublinks row-flex filter" style="visibility: hidden;">
     <a href=""
         class="{{ class }} current"
 		id="listjs-all">
@@ -166,6 +166,8 @@ $(document).ready(function() {
 	{% for c in categories %}
 	$('#listjs-{{ c }}').on('click', (e) => on_filter_click($(e.currentTarget), '{{ c }}'));
 	{% endfor %}
+
+	$('.sublinks').css('visibility', 'visible');
 
 	var url = window.location.search;
 	url = url.replace('?', '');
