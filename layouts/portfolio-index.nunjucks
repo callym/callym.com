@@ -60,15 +60,41 @@
 				{% if p.descriptionStyle.background.color %}
 					--background-color: {{ p.descriptionStyle.background.color }}
 				{% endif %}">
-			<foreignObject width="100%" height="100%">
-				<p class="piece-description"
-					style="
-						{% if p.descriptionStyle.text.color %}
-							--color: {{ p.descriptionStyle.text.color }}
-						{% endif %}">
-					{{ p.description | truncate(40) }}
-				</p>
-			</foreignObject>
+			{% set max_chars = 13 %}
+			{% set lines = [] %}
+			{% set str = "" %}
+			{% for c in p.description | truncate(40) %}
+				{% set str = str + c %}
+
+				{% if (str | length) > max_chars %}
+					{% set trunc = str | truncate(max_chars, false, '') %}
+					{% set lines = (lines.push(trunc), lines) %}
+
+					{% set new_str = "" %}
+					{% for cc in str %}
+						{% if (loop.index0) > (trunc | length) %}
+							{% set new_str = new_str + cc %}
+						{% endif %}
+					{% endfor %}
+					{% set str = new_str %}
+				{% endif %}
+				{% if loop.last and (str | length) > 0 %}
+					{% set lines = (lines.push(str), lines) %}
+				{% endif %}
+			{% endfor %}
+			{% for l in lines %}
+			<text x="50%" y="50%"
+				{% set factor = (((lines | length) + 1) / 2) %}
+				{# add 0.15em to make it look more centered? #}
+				dy="{{ (loop.index - factor) * 1.5 + 0.15 }}em"
+				class="piece-description"
+				style="
+					{% if p.descriptionStyle.text.color %}
+						--color: {{ p.descriptionStyle.text.color }}
+					{% endif %}">
+				{{ l }}
+			</text>
+			{% endfor %}
 		</svg>
 	{% else %}
 		{% set img = p.images[0] %}
