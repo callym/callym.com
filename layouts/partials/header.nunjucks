@@ -11,6 +11,7 @@
 	
 	<link rel="stylesheet" href="{{ rootPath }}css/main.css"/>
 	<link rel="manifest" href="{{ rootPath }}manifest.json">
+	<script async src='https://www.google-analytics.com/analytics.js'></script>
 
 	<meta name="application-name" content="callym.com">
 	<meta name="theme-color" content="#6bafff">
@@ -68,10 +69,7 @@
 		window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
 		ga('create', 'UA-51752036-1', 'auto');
 		ga('send', 'pageview');
-	</script>
-	<script async src='https://www.google-analytics.com/analytics.js'></script>
-	{# http://writing.colin-gourlay.com/safely-using-ready-before-including-jquery/ #}
-	<script>
+		{# http://writing.colin-gourlay.com/safely-using-ready-before-including-jquery/ #}
 		(function (w, d, u) {
 			// Define two queues for handlers
 			w.readyQ = [];
