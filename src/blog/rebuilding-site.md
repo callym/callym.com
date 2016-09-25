@@ -2,6 +2,7 @@
 title: rebuilding callym.com
 categories: web programming
 date: 2016-09-20
+github_issue: 10
 ---
 The original callym.com was built using [Jekyll](http://jekyllrb.com),
 a really easy-to-use static blog generator.

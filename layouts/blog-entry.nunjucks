@@ -11,6 +11,11 @@
 <div class="date center">
 	{{ date | date("Do MMMM YYYY") }}
 </div>
+<div id="comment-link" class="center">
+	<a href="#comments">
+		comments ↘
+	</a>
+</div>
 <div class="center blog-entry-categories sublinks row-flex">
 	{% set post_categories = [] %}
 	{% if categories %}
@@ -34,4 +39,79 @@
     {{ contents | safe }}
 </div>
 
+{% if github_issue %}
+<section id="comments">
+	<header>
+		<h1>Comments</h1>
+		<p>Visit
+			<a href="https://github.com/callym/callym.com/issues/{{ github_issue }}">
+				this post's issue page on GitHub
+			</a>
+		to add a comment.</p>
+	</header>
+	<div id="comments-content">
+	</div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{% if github_issue %}
+<script>
+$(document).ready(function() {
+	$.ajax({
+		url: "https://api.github.com/repos/callym/callym.com/issues/{{ github_issue }}/comments",
+		method: "get",
+		headers: {
+			Accept: "application/vnd.github.full+json"
+		},
+		error: function(e) { },
+		success: function(response) {
+			var cuser, cuserlink, clink, cbody, cavatarlink, cdate;
+
+			$('#comment-link > a').text(
+				`${response.length} ${
+					(response.length == 1 ? "comment" : "comments")} ↘`
+			);
+
+			for (var i = 0; i < response.length; i++) {
+				cuser = response[i].user.login;
+				cuserlink = "https://github.com/" + response[i].user.login;
+				clink = "https://github.com/callym/callym.com/issues/{{ github_issue }}#issuecomment-" +
+					response[i].url.substring(response[i].url.lastIndexOf("/") +1);
+				cbody = response[i].body_html;
+				cavatarlink = response[i].user.avatar_url;
+				cdate = (new Date(response[i].created_at)).toLocaleString();
+
+				$("#comments-content").append(
+`<div class="comment">
+	<div class="comment-header">
+		<a class="comment-user" href="${cuserlink}">
+			<img class="comment-gravatar" src="${cavatarlink}">
+		</a>
+		<div class="comment-header-details">
+			<div class="comment-user-name">
+				<a href="${cuserlink}">
+					${cuser}
+				</a>
+			</div>
+			<div class="comment-date">
+				<a href="${clink}">
+					${cdate}
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="comment-body">
+		${cbody}
+	</div>
+</div>`
+);
+			}
+		}
+	});
+});
+</script>
+{% endif %}
 {% endblock %}
