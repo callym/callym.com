@@ -1,6 +1,7 @@
 //=require lib/_zepto.js
 //=require lib/_magnific-popup.js
 //=require lib/_list.js
+//=require lib/_date-format-lite.js
 
 (function ($, doc) {
 	$.each(readyQ, function (index, handler) {

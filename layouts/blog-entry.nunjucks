@@ -70,9 +70,14 @@ $(document).ready(function() {
 		success: function(response) {
 			var cuser, cuserlink, clink, cbody, cavatarlink, cdate;
 
+			if (response.length === 0) {
+				$('#comments-content').hide();
+				return;
+			}
+
 			$('#comment-link > a').text(
 				`${response.length} ${
-					(response.length == 1 ? "comment" : "comments")} ↘`
+					(response.length === 1 ? "comment" : "comments")} ↘`
 			);
 
 			for (var i = 0; i < response.length; i++) {
@@ -82,7 +87,22 @@ $(document).ready(function() {
 					response[i].url.substring(response[i].url.lastIndexOf("/") +1);
 				cbody = response[i].body_html;
 				cavatarlink = response[i].user.avatar_url;
-				cdate = (new Date(response[i].created_at)).toLocaleString();
+				cdate = new Date(response[i].created_at);
+				Date.am = "am";
+				Date.pm = "pm";
+				Number.prototype.nth= function() {
+					if (this % 1) return this;
+					var s = this % 100;
+					if (s > 3 && s < 21) return this + 'th';
+					switch(s % 10){
+						case 1: return this + 'st';
+						case 2: return this + 'nd';
+						case 3: return this + 'rd';
+						default: return this + 'th';
+					}
+				}
+				cdate = cdate.format(`HH:mmA, ${cdate.getDate().nth()} MMMM YYYY`);
+
 
 				$("#comments-content").append(
 `<div class="comment">
