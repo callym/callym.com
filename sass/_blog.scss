@@ -67,12 +67,9 @@
 	font-family: $serif;
 	font-style: italic;
 	font-size: 1.5em;
-	margin: 0 5%;
-	padding: 1.5em 0;
-	width: 90%;
-	height: calc(100% - 4em);
 	transition: all 500ms ease-in-out;
-	color: var(--color);
+	text-anchor: middle;
+	fill: var(--color);
 }
 
 .blog-index-description-background {
