@@ -11,13 +11,19 @@ title: contact
 
 # push notifications
 get notifications sent straight to your browser!
-<div class="center monospace">
-<span id="push_notifications">
-	<noscript>
-		push notifications only work with javascript turned on
-	</noscript>
-</span>
-<a href="" id="push_notifications_action" style="display: none;"></a>
+<div>
+<form class="center">
+	<label for="push_notifications_action" id="push_notifications_label">
+		<noscript>
+			push notifications only work with javascript turned on
+		</noscript>
+	</label>
+	<div class="big-button">
+		<button type="button" id="push_notifications_action" style="display: none">
+			subscribe!
+		</button>
+	</div>
+</form>
 </div>
 
 # email
@@ -67,21 +73,23 @@ get email updates!
 <script>
 $(document).ready(function() {
 	var is_subscribed = false;
-	var $action_link = $('#push_notifications_action');
+	var $push_notification_button = $('#push_notifications_action');
 
 	var update_message = function() {
 		var message = "";
 		var action = "";
 		if (is_subscribed) {
 			message = "you have already subscribed!";
-			action = "click here to unsubscribe";
+			action = "unsubscribe!";
+			$push_notification_button.addClass('error');
 		}
 		else {
 			message = "you aren't currently subscribed!";
-			action = "click here to subscribe";	
+			action = "subscribe!";
+			$push_notification_button.removeClass('error');
 		}
-		$('#push_notifications').html(message);
-		$action_link.html(action);
+		$('#push_notifications_label').html(message);
+		$push_notification_button.html(action);
 	};
 
 	var toggle_subscribe = function() {
@@ -102,18 +110,18 @@ $(document).ready(function() {
 		return false;
 	};
 
-	$action_link.on('click', toggle_subscribe);
+	$push_notification_button.on('click', toggle_subscribe);
 
 	if (!navigator.serviceWorker || !('PushManager' in window))
 	{
-		$('#push_notifications').html(
+		$('#push_notifications_label').html(
 			`<p>your web browser doesn't support Service Workers or Push Notifications</p>
 			<p>for more information about what browsers do, check
 			<a href="http://caniuse.com/#feat=push-api">here</a></p>`
 		);
 	}
 	else if (Notification.permission === 'denied') {
-		$('#push_notifications').html(
+		$('#push_notifications_label').html(
 			`<p>you have blocked notifications!</p>
 			<p>if you want to unblock them, see instructions
 			<a href="https://support.google.com/chrome/answer/6148059?hl=en-GB&ref_topic=3434353">
@@ -121,7 +129,7 @@ $(document).ready(function() {
 			(steps for Firefox are very similar)</p>`
 		);
 	} else {
-		$action_link.show();
+		$push_notification_button.show();
 		navigator.serviceWorker.ready
 			.then(function(registration) {
 				return registration.pushManager.getSubscription();
