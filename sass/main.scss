@@ -401,6 +401,49 @@ a {
 	}
 }
 
+.contact {
+	&.links {
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+
+		max-width: 80%;
+		margin: 0 auto;
+
+		@include media("<tablet") {
+			flex-flow: row wrap;
+		}
+
+		& > a {
+			flex-basis: 33%;
+			@include media("<tablet") {
+				flex-basis: 100%;
+			}
+
+			border: 1px solid black;
+			border-radius: 1em;
+
+			margin: 1em;
+			padding: 1em;
+
+			background-color: $blue;
+			color: white;
+
+			font-family: $serif;
+			font-style: italic;
+			font-size: 1.25em;
+
+			transition: background 250ms;
+
+			&:hover {
+				@include media(">tablet") {
+					background: $dark-pink;
+				}
+			}
+		}
+	}
+}
+
 //
 // OFFLINE
 //

@@ -2,12 +2,13 @@
 title: contact
 ---
 <h1>links</h1>
-
+<div class="contact links center">
 [@callymcallym](http://twitter.com/callymcallym)
 
-[github](http://github.com/callym)
+[github.com/callym](http://github.com/callym)
 
 [hi@callym.com](mailto:hi@callym.com)
+</div>
 
 # push notifications
 get notifications sent straight to your browser!
