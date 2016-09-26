@@ -192,7 +192,7 @@ $(document).ready(function() {
 		});
 	});
 	
-	$('#email-subscription-form #topics input[type=checkbox]').on('click', function() {
+	var check_subscribe = function() {
 		var checked = 0;
 		$('#email-subscription-form input[type=checkbox]').each(function() {
 			checked += $(this).prop('checked') ? 1 : 0;
@@ -203,21 +203,25 @@ $(document).ready(function() {
 		} else {
 			$('#email-subscription-button').removeClass('error').text('subscribe!');
 		}
-	});
+	}
+	
+	$('#email-subscription-form #topics input[type=checkbox]').on('click', check_subscribe);
 
 	var urlParams = new URLSearchParams(window.location.search);
 	$('#email-subscription-form #email').val(urlParams.get('email'));
 
-	var topics = urlParams.get('topics') || [];
+	var topics = urlParams.get('topics') || false;
 
-	$('#email-subscription-form input[type=checkbox]').each(function() {
-		var $this = $(this);
-		if (topics.indexOf($this.data('topic')) > -1) {
-			$this.prop('checked', true);
-		} else {
-			$this.prop('checked', false);
-		}
-	});
-	$('#email-subscription-form #topics').trigger('click');
+	if (topics) {
+		$('#email-subscription-form input[type=checkbox]').each(function() {
+			var $this = $(this);
+			if (topics.indexOf($this.data('topic')) > -1) {
+				$this.prop('checked', true);
+			} else {
+				$this.prop('checked', false);
+			}
+		});
+	}
+	check_subscribe();
 });
 </script>
