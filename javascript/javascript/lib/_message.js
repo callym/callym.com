@@ -79,18 +79,15 @@ if(!window.callym)
 		var obj = t.pull[id];
 		if (obj && obj.parentNode) {
 			obj.style.height = obj.clientHeight;
+
+			obj.classList.remove('visible');
 			obj.addEventListener('transitionend', function() {
 				if (obj && obj.parentNode) {
-					obj.classList.add('slide-off');
-					obj.addEventListener('transitionend', function() {
-						if (obj && obj.parentNode) {
-							obj.parentNode.removeChild(obj);
-							obj = null;
-						}
-					}, true);
+					obj.parentNode.removeChild(obj);
+					obj = null;
 				}
-			}, true);
-			obj.classList.remove('visible');
+			});
+			obj.classList.add('slide-off');
 			
 			if (t.timers[id]) {
 				window.clearTimeout(t.timers[id])
