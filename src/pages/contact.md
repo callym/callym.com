@@ -137,11 +137,22 @@ $(document).ready(function() {
 	$('#email-subscription-button').on('click', function() {
 		var $form = $('#email-subscription-form');
 
-		if (!$form[0].reportValidity()) {
+		var email = $form.find('#email').val();
+
+		if (email.length === 0) {
+			callym.message("you need to enter an email", 'error');
 			return;
 		}
 
-		var email = $form.find('#email').val();
+		if (email.indexOf('@') == -1) {
+			callym.message("your email address needs to contain an '@'");
+			return;
+		}
+
+		if (email.split('@').filter(Boolean).length < 2) {
+			callym.message("your email needs text before and after the '@'");
+			return;
+		}
 
 		// unsubscribe!
 		if ($(this).hasClass('error')) {
@@ -176,20 +187,22 @@ $(document).ready(function() {
 				'Content-type' : 'application/json'
 			},
 			body: JSON.stringify(subscription)
+		}).then(function() {
+			callym.message("you have been sent a confirmation email");
 		});
 	});
 	
-	$('#email-subscription-form #topics').on('click', function() {
+	$('#email-subscription-form #topics input[type=checkbox]').on('click', function() {
 		var checked = 0;
 		$('#email-subscription-form input[type=checkbox]').each(function() {
 			checked += $(this).prop('checked') ? 1 : 0;
 		});
 		if (checked <= 0) {
+			callym.message("please select at least one category to subscribe", 'error');
 			$('#email-subscription-button').addClass('error').text('unsubscribe!');
 		} else {
 			$('#email-subscription-button').removeClass('error').text('subscribe!');
 		}
-		console.log(checked);
 	});
 
 	var urlParams = new URLSearchParams(window.location.search);
