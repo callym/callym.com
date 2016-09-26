@@ -145,12 +145,12 @@ $(document).ready(function() {
 		}
 
 		if (email.indexOf('@') == -1) {
-			callym.message("your email address needs to contain an '@'");
+			callym.message("your email address needs to contain an '@'", 'error');
 			return;
 		}
 
 		if (email.split('@').filter(Boolean).length < 2) {
-			callym.message("your email needs text before and after the '@'");
+			callym.message("your email needs text before and after the '@'", 'error');
 			return;
 		}
 
