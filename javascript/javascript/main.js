@@ -18,7 +18,7 @@ var endpoint;
 var key;
 var auth_secret;
 
-function push_subscribe() {
+function push_subscribe(topics) {
 	return navigator.serviceWorker.ready
 		.then(function(registration) {
 			return registration.pushManager.getSubscription()
@@ -48,7 +48,7 @@ function push_subscribe() {
 							))
 							: '';
 			endpoint = subscription.endpoint;
-			var topics = ['main'];
+			topics = topics || [];
 			<% if (!build) { %>
 				topics.push('dev');
 			<% } %>
