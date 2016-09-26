@@ -105,7 +105,7 @@ form {
 			font-size: 1.25em;
 
 			border: 1px solid black;
-			border-radius: 1.25vw;
+			border-radius: 0.5em;
 
 			padding: 0.2em 0.2em;
 
@@ -157,7 +157,7 @@ form {
 
 		& label {
 			border: 1px solid black;
-			border-radius: 1.25vw;
+			border-radius: 0.5em;
 			margin: 0.5em;
 			padding: 0.5em;
 			background: $pink;
@@ -171,7 +171,7 @@ form {
 				content: '';
 				background: #fff;
 				border: 1px solid black;
-				border-radius: 12.5%;
+				border-radius: 0.5em;
 				display: inline-block;
 				vertical-align: middle;
 				width: 1.5em;
@@ -197,7 +197,7 @@ form {
 			min-width: 60%;
 			
 			border: 1px solid black;
-			border-radius: 3vw;
+			border-radius: 0.5em;
 
 			background: darken($blue, 10);
 			transition: background 250ms;
