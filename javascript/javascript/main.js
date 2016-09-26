@@ -2,6 +2,8 @@
 //=require lib/_magnific-popup.js
 //=require lib/_list.js
 //=require lib/_date-format-lite.js
+//=require lib/_url-search-params.js
+//=require lib/_message.js
 
 (function ($, doc) {
 	$.each(readyQ, function (index, handler) {

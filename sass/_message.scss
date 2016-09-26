@@ -1,0 +1,49 @@
+@import 'variables';
+
+.message_area {
+	position: fixed;
+	right: 5px;
+	width: 33vw;
+	@include media("<tablet") {
+		width: 50vw;
+	}
+	z-index: 1000;
+
+	.info {
+		position: relative;
+		
+		padding: 0.5em 1em;
+		margin: 0.5em;
+
+		font-family: $sans-serif;
+		font-style: italic;
+
+		border: 1px solid black;
+		border-radius: 1.25vw;
+
+		background-color:rgba(darken($blue, 10), 0.8);
+		color: white;
+		
+		transition: all 250ms ease;
+
+		z-index: 10000;
+		opacity: 0;
+
+		&.error {
+			background-color: rgba(crimson, 0.8);
+		}
+	}
+
+	.slide-off {
+		overflow: hidden;
+		max-height: 0;
+		padding-top: 0;
+		padding-bottom: 0;
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+
+	.visible {
+		opacity: 1;
+	}
+}
