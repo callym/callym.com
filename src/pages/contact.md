@@ -22,16 +22,16 @@ get notifications sent straight to your browser!
 
 # email
 get email updates!
-<form class="center">
+<form class="center" id="email-subscription-form">
 	<div class="email">
 		<label for="email">email</label>
 		<span class="email-input">
-			<input type="email" id="email" name="email_address"/>
+			<input type="email" id="email" name="email_address" required/>
 		</span>
 	</div>
-	<div class="checkboxes">
+	<div class="checkboxes" id="topics">
 		<div>
-			<input type="checkbox" id="email_updates"/>
+			<input type="checkbox" id="email_updates" data-topic="updates" checked/>
 			<label for="email_updates">updates
 			<div class="form-description">
 				get an email when I post new work on my site
@@ -40,7 +40,7 @@ get email updates!
 		</div>
 
 		<div>
-			<input type="checkbox" id="email_news"/>
+			<input type="checkbox" id="email_news" data-topic="news" checked/>
 			<label for="email_news">news
 			<div class="form-description">
 				get emails about things I've found that are interesting
@@ -49,7 +49,7 @@ get email updates!
 		</div>
 
 		<div>
-			<input type="checkbox" id="email_dogs"/>
+			<input type="checkbox" id="email_dogs" data-topic="dogs" checked/>
 			<label for="email_dogs">dogs
 			<div class="form-description">
 				get email summaries about cute dogs that I've found
@@ -58,7 +58,9 @@ get email updates!
 		</div>
 	</div>
 	<div class="big-button">
-		<button>subscribe!</button>
+		<button type="button" id="email-subscription-button">
+			subscribe!
+		</button>
 	</div>
 </form>
 
@@ -131,5 +133,78 @@ $(document).ready(function() {
 			})
 			.then(update_message);
 	}
+
+	$('#email-subscription-button').on('click', function() {
+		var $form = $('#email-subscription-form');
+
+		if (!$form[0].reportValidity()) {
+			return;
+		}
+
+		var email = $form.find('#email').val();
+
+		// unsubscribe!
+		if ($(this).hasClass('error')) {
+			var subscription = {
+				email: email
+			};
+
+			fetch('https://z8jnhu3g0g.execute-api.eu-west-1.amazonaws.com/production/unregister', {
+				method: 'post',
+				headers: {
+					'Content-type' : 'application/json'
+				},
+				body: JSON.stringify(subscription)
+			});
+		}
+
+		var topics = [];
+		$form.find('input[type=checkbox]').each(function() {
+			var $this = $(this);
+			if ($this.prop('checked')) {
+				topics.push($this.data('topic'));
+			}
+		});
+		
+		var subscription = {
+			email: email,
+			topics: topics
+		};
+		fetch('https://z8jnhu3g0g.execute-api.eu-west-1.amazonaws.com/production/register', {
+			method: 'post',
+			headers: {
+				'Content-type' : 'application/json'
+			},
+			body: JSON.stringify(subscription)
+		});
+	});
+	
+	$('#email-subscription-form #topics').on('click', function() {
+		var checked = 0;
+		$('#email-subscription-form input[type=checkbox]').each(function() {
+			checked += $(this).prop('checked') ? 1 : 0;
+		});
+		if (checked <= 0) {
+			$('#email-subscription-button').addClass('error').text('unsubscribe!');
+		} else {
+			$('#email-subscription-button').removeClass('error').text('subscribe!');
+		}
+		console.log(checked);
+	});
+
+	var urlParams = new URLSearchParams(window.location.search);
+	$('#email-subscription-form #email').val(urlParams.get('email'));
+
+	var topics = urlParams.get('topics') || [];
+
+	$('#email-subscription-form input[type=checkbox]').each(function() {
+		var $this = $(this);
+		if (topics.indexOf($this.data('topic')) > -1) {
+			$this.prop('checked', true);
+		} else {
+			$this.prop('checked', false);
+		}
+	});
+	$('#email-subscription-form #topics').trigger('click');
 });
 </script>

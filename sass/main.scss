@@ -64,6 +64,10 @@ h1 {
 }
 
 form {
+	& > div {
+		position: relative;
+	}
+
 	& > div:not(:first-child):not(:last-child) {
 		margin: 1em 0;
 	}
@@ -197,6 +201,10 @@ form {
 			background: darken($blue, 10);
 			transition: background 250ms;
 			color: white;
+
+			&.error {
+				background: crimson;
+			}
 
 			&:hover {
 				@include media(">tablet") {
