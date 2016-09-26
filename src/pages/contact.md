@@ -20,6 +20,48 @@ get notifications sent straight to your browser!
 <a href="" id="push_notifications_action" style="display: none;"></a>
 </div>
 
+# email
+get email updates!
+<form class="center">
+	<div class="email">
+		<label for="email">email</label>
+		<span class="email-input">
+			<input type="email" id="email" name="email_address"/>
+		</span>
+	</div>
+	<div class="checkboxes">
+		<div>
+			<input type="checkbox" id="email_updates"/>
+			<label for="email_updates">updates
+			<div class="form-description">
+				get an email when I post new work on my site
+			</div>
+			</label>
+		</div>
+
+		<div>
+			<input type="checkbox" id="email_news"/>
+			<label for="email_news">news
+			<div class="form-description">
+				get emails about things I've found that are interesting
+			</div>
+			</label>
+		</div>
+
+		<div>
+			<input type="checkbox" id="email_dogs"/>
+			<label for="email_dogs">dogs
+			<div class="form-description">
+				get email summaries about cute dogs that I've found
+			</div>
+			</label>
+		</div>
+	</div>
+	<div class="big-button">
+		<button>subscribe!</button>
+	</div>
+</form>
+
 <script>
 $(document).ready(function() {
 	var is_subscribed = false;
