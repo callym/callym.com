@@ -8,6 +8,13 @@
 	</div>
 {% endblock %}
 
+<script src="https://cdn.polyfill.io/v2/polyfill.js?
+	features=
+		Promise,
+		URL,
+		fetch
+	&rum=1
+	&flags=gated,always"></script>
 <script src="{{ rootPath }}javascript/main.js"></script>
 
 {% block scripts %}
