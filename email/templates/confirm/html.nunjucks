@@ -1,0 +1,31 @@
+{% include "email/templates/partials/header.nunjucks" %}
+{% from "email/templates/partials/components.nunjucks" import
+	hero,
+	button,
+	one_column_begin,
+	one_column_end,
+	section_start,
+	section_end,
+	two_columns_begin,
+	two_columns_middle,
+	two_columns_end,
+	thumbnail_item_begin,
+	thumbnail_item_end,
+	clear_spacer %}
+
+{{ one_column_begin() }}
+	you've asked to subscribe to the following callym.com emails:
+	<ul>
+	{% for t in topics %}
+		<li>{{ t }}</li>
+	{% endfor %}
+	</ul>
+	<br>
+	
+	{% set url = base_url + "/subscribed/?email=" + (email | urlencode()) + "&date=" + (date | urlencode()) %}
+
+	{{ button("confirm!", url, true) }}
+{{ one_column_end() }}
+{{ section_end() }}
+
+{% include "email/templates/partials/footer.nunjucks" %}
