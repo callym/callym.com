@@ -1,0 +1,212 @@
+@import 'variables';
+
+body {
+	background-color: $blue;
+}
+
+center {
+	width: 100%;
+	background: $blue;
+}
+
+.header-image {
+	color: $blue;
+	font-family: serif;
+	font-size: 50px;
+	font-weight: bold;
+	mso-height-rule: exactly;
+	line-height: 200px;
+}
+
+.hero-wrapper {
+	width: 100%;
+}
+
+.hero-image {
+	font-family: $sans-serif; 
+	font-size: 16px; 
+	mso-height-rule: exactly; 
+	line-height: 20px; 
+	color: #000000;
+	border: 1px solid black;
+	border-radius: 15px;
+}
+
+.button-wrapper {
+	border-radius: 0px;
+	text-align: center;
+}
+
+.button {
+	background: darken($blue, 10);
+	color: #ffffff;
+	font-family: $serif;
+	line-height: 1.1; 
+	text-align: center;
+	text-decoration: none;
+	display: block;
+	font-weight: bold;
+	font-style: italic;
+
+	&.small {
+		font-size: 25px;
+		border: 8px solid darken($blue, 10);
+		border-left-width: 16px;
+		border-right-width: 16px;
+		border-radius: 8px;
+	}
+
+	&.big {
+		font-size: 50px;
+		border: 16px solid darken($blue, 10);
+		border-left-width: 32px;
+		border-right-width: 32px;
+		border-radius: 16px;
+	}
+}
+
+.one-column {
+	padding: 40px;
+	font-family: $sans-serif;
+	font-size: 16px;
+	mso-height-rule: exactly;
+	line-height: 20px;
+	color: #000000;
+}
+
+.thumbnail-item-wrapper {
+	padding: 10px 0;
+}
+
+.thumbnail-item-image {
+	min-width: 100%;
+	width: 100%;
+	max-width: 200px;
+	font-family: $sans-serif;
+	font-size: 16px;
+	mso-height-rule: exactly;
+	line-height: 20px;
+	color: #000000;
+	border: 1px solid black;
+	border-radius: 15px;
+}
+
+.two-column {
+	display: inline-block;
+	margin: 0 -2px;
+	width: 100%;
+	min-width: 200px;
+	max-width: 330px;
+	vertical-align: top;
+}
+
+.background {
+	background: $yellow;
+}
+
+.rounded-corners-top {
+	border: 0px solid transparent;
+	border-radius: 30px 30px 0 0;
+}
+
+.rounded-corners-bottom {
+	border: 0px solid transparent;
+	border-radius: 0 0 30px 30px;
+}
+
+/* What it does: Stops email clients resizing small text. */
+* {
+	-ms-text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%;
+}
+
+/* What is does: Centers email on Android 4.4 */
+div[style*="margin: 16px 0"] {
+	margin: 0 !important;
+}
+
+/* What it does: Stops Outlook from adding extra spacing to tables. */
+table,
+td {
+	mso-table-lspace: 0pt !important;
+	mso-table-rspace: 0pt !important;
+}
+		
+/* What it does: Fixes webkit padding issue. 
+				Fix for Yahoo mail table alignment bug. 
+				Applies table-layout to the first 2 tables then removes for anything nested deeper. */
+table {
+	border-spacing: 0 !important;
+	border-collapse: collapse !important;
+	table-layout: fixed !important;
+	margin: 0 auto !important;
+}
+table table table {
+	table-layout: auto; 
+}
+
+/* What it does: Uses a better rendering method when resizing images in IE. */
+img {
+	-ms-interpolation-mode: bicubic;
+}
+
+/* What it does: A work-around for iOS meddling in triggered links. */
+.mobile-link--footer a,
+a[x-apple-data-detectors] {
+	color:inherit !important;
+	text-decoration: underline !important;
+}
+
+/* What it does: Hover styles for buttons */
+.button-td,
+.button-a {
+	transition: all 100ms ease-in;
+}
+.button-td:hover,
+.button-a:hover {
+	background: #555555 !important;
+	border-color: #555555 !important;
+}
+
+/* Media Queries */
+@media screen and (max-width: 480px) {
+	/* What it does: Forces elements to resize to the full width of their container. Useful for resizing images beyond their max-width. */
+	.fluid,
+	.fluid-centered {
+		width: 100% !important;
+		max-width: 100% !important;
+		height: auto !important;
+		margin-left: auto !important;
+		margin-right: auto !important;
+	}
+	/* And center justify these ones. */
+	.fluid-centered {
+		margin-left: auto !important;
+		margin-right: auto !important;
+	}
+
+	/* What it does: Forces table cells into full-width rows. */
+	.stack-column,
+	.stack-column-center {
+		display: block !important;
+		width: 100% !important;
+		max-width: 100% !important;
+		direction: ltr !important;
+	}
+	/* And center justify these ones. */
+	.stack-column-center {
+		text-align: center !important;
+	}
+
+	/* What it does: Generic utility class for centering. Useful for images, buttons, and nested tables. */
+	.center-on-narrow {
+		text-align: center !important;
+		display: block !important;
+		margin-left: auto !important;
+		margin-right: auto !important;
+		float: none !important;
+	}
+	table.center-on-narrow {
+		display: inline-block !important;
+	}
+}

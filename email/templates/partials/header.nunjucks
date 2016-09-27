@@ -1,0 +1,52 @@
+{% from "email/templates/partials/components.nunjucks" import
+	hero,
+    section_start,
+    section_end,
+    clear_spacer %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<!-- Disable auto-scale in iOS 10 Mail entirely -->
+    <meta name=”x-apple-disable-message-reformatting”>
+
+	<!-- The title tag shows in email notifications, like Android 4.4. -->
+    <title>{{ title }}</title>
+
+</head>
+<body width="100%" style="margin: 0;">
+    <center>
+        <!-- Visually Hidden Preheader Text : BEGIN -->
+        <div style="display:none;font-size:1px;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;mso-hide:all;font-family: sans-serif;">
+            {{ preheader }}
+        </div>
+        <!-- Visually Hidden Preheader Text : END -->
+
+        <!--    
+            Set the email width. Defined in two places:
+            1. max-width for all clients except Desktop Windows Outlook, allowing the email to squish on narrow but never go wider than 600px.
+            2. MSO tags for Desktop Windows Outlook enforce a 600px width.
+        -->
+		<div style="max-width: 680px; margin: auto;">
+            <!--[if mso]>
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="680" align="center">
+            <tr>
+            <td>
+            <![endif]-->
+
+			<!-- Email Body : BEGIN -->
+			<table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="95%" style="max-width: 680px;">
+                {{ clear_spacer() }}
+                {{ section_start() }}
+                <tr class="background">
+                    <td style="padding: 20px 0; text-align: center" align="center">
+						<a href="https://callym.com">
+							<img src="{{ s3_prefix }}header.png" width="600" height="180" alt="callym.com" border="0" class="header-image">
+						</a>
+                    </td>
+                </tr>
+                {{ clear_spacer(false) }}

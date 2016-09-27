@@ -1,0 +1,206 @@
+{% macro hero(name, alt = "alt")%}
+<!-- Hero Image, Flush : BEGIN -->
+<tr>
+	<td class="hero-wrapper background" align="center">
+		<img src="{{ name }}" width="600" height="300" alt="{{ alt }}" border="0" align="center" class="fluid hero-image">
+	</td>
+</tr>
+<!-- Hero Image, Flush : END -->
+{% endmacro %}
+
+{% macro button(text, link, big = false) %}
+{% set button_style = "button small" %}
+{% if big %}
+	{% set button_style = "button big" %}
+{% endif %}
+<!-- Button : Begin -->
+<table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" class="center-on-narrow" style="margin: auto;">
+	<tr>
+		<td class="button-td button-wrapper">
+			<a href="{{ link }}" class="button-a {{ button_style }}">
+				<span style="color:#ffffff">{{ text }}</span>
+			</a>
+		</td>
+	</tr>
+</table>
+<!-- Button : END -->
+{% endmacro %}
+
+{% macro one_column_begin() %}
+<tr>
+	<td class="background">
+		<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+			<tr>
+				<td class="one-column">
+{% endmacro %}
+
+{% macro one_column_end() %}
+				</td>
+			</tr>
+		</table>
+	</td>
+</tr>
+{% endmacro %}
+
+{% macro thumbnail_item_begin(title, image_src, image_alt = "alt", left = true, link = '') %}
+{% if left %}
+	{% set dir = "ltr" %}
+{% else %}
+	{% set dir = "rtl" %}
+{% endif %}
+<!-- Thumbnail : BEGIN -->
+<tr>
+	<!-- dir=ltr is where the magic happens. This can be changed to dir=rtl to swap the alignment on wide while maintaining stack order on narrow. -->
+	<td dir="{{ dir }}" align="center" height="100%" valign="top" width="100%" class="thumbnail-item-wrapper background">
+		<!--[if mso]>
+		<table role="presentation" border="0" cellspacing="0" cellpadding="0" align="center" width="660">
+		<tr>
+		<td align="center" valign="top" width="660">
+		<![endif]-->
+		<table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" width="100%" style="max-width:660px;">
+			<tr>
+				<td align="center" valign="top" style="font-size:0; padding: 10px 0;">
+					<!--[if mso]>
+					<table role="presentation" border="0" cellspacing="0" cellpadding="0" align="center" width="660">
+					<tr>
+					<td align="left" valign="top" width="220">
+					<![endif]-->
+					<div style="display:inline-block; margin: 0 -2px; max-width: 200px; min-width:160px; vertical-align:top; width:100%;" class="stack-column">
+						<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+							<tr>
+								<td dir="ltr" style="padding: 0 10px 10px 10px;">
+									{% if link != '' %}
+										<a href="{{ link }}">
+									{% endif %}
+									<img src="{{ image_src }}" width="200" height="200" border="0" alt="{{ image_alt }}" class="center-on-narrow thumbnail-item-image">
+									{% if link != '' %}
+										</a>
+									{% endif %}
+								</td>
+							</tr>
+						</table>
+					</div>
+					<!--[if mso]>
+					</td>
+					<td align="left" valign="top" width="440">
+					<![endif]-->
+					<div style="display:inline-block; margin: 0 -2px; max-width:66.66%; min-width:320px; vertical-align:top;" class="stack-column">
+						<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+							<tr>
+								<td dir="ltr" style="font-family: sans-serif; font-size: 15px; mso-height-rule: exactly; line-height: 20px; color: #555555; padding: 10px 10px 0; text-align: left;" class="center-on-narrow">
+									<strong style="color:#111111;">{{ title }}</strong>
+{% endmacro %}
+
+{% macro thumbnail_item_end() %}
+								</td>
+							</tr>
+						</table>
+					</div>
+					<!--[if mso]>
+					</td>
+					</tr>
+					</table>
+					<![endif]-->
+				</td>
+			</tr>
+		</table>
+		<!--[if mso]>
+		</td>
+		</tr>
+		</table>
+		<![endif]-->
+	</td>
+</tr>
+<!-- Thumbnail : END -->
+{% endmacro %}
+
+{% macro two_columns_begin() %}
+<!-- 2 Even Columns : BEGIN -->
+<tr>
+	<td class="background" align="center" height="100%" valign="top" width="100%">
+		<!--[if mso]>
+		<table role="presentation" border="0" cellspacing="0" cellpadding="0" align="center" width="660">
+		<tr>
+		<td align="center" valign="top" width="660">
+		<![endif]-->
+		<table role="presentation" border="0" cellpadding="0" cellspacing="0" align="center" width="100%" style="max-width:680px;">
+			<tr>
+				<td align="center" valign="top" style="font-size:0; padding: 10px 0;">
+					<!--[if mso]>
+					<table role="presentation" border="0" cellspacing="0" cellpadding="0" align="center" width="660">
+					<tr>
+					<td align="left" valign="top" width="330">
+					<![endif]-->
+					<div class="two-column stack-column">
+						<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+							<tr>
+								<td style="padding: 10px 10px;">
+{% endmacro %}
+
+{% macro two_columns_middle() %}
+								</td>
+							</tr>
+						</table>
+					</div>
+					<!--[if mso]>
+					</td>
+					<td align="left" valign="top" width="330">
+					<![endif]-->
+					<div class="two-column stack-column">
+						<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+							<tr>
+								<td style="padding: 10px 10px;">
+{% endmacro %}
+
+{% macro two_columns_end() %}
+								</td>
+							</tr>
+						</table>
+					</div>
+					<!--[if mso]>
+					</td>
+					</tr>
+					</table>
+					<![endif]-->
+				</td>
+			</tr>
+		</table>
+		<!--[if mso]>
+		</td>
+		</tr>
+		</table>
+		<![endif]-->
+	</td>
+</tr>
+<!-- 2 Even Columns : END -->
+{% endmacro %}
+
+{% macro clear_spacer(background_break = true) %}
+<!-- Clear Spacer : BEGIN -->
+{% if background_break %}
+<tr>
+{% else %}
+<tr class="background">
+{% endif %}
+	<td height="40" style="font-size: 0; line-height: 0;">
+		&nbsp;
+	</td>
+</tr>
+<!-- Clear Spacer : END -->
+{% endmacro %}
+
+{% macro section_start() %}
+<tr>
+	<td height="30" style="font-size: 0; line-height: 0;" class="rounded-corners-top background">
+		&nbsp;
+	</td>
+</tr>
+{% endmacro %}
+
+{% macro section_end() %}
+<tr>
+	<td height="30" style="font-size: 0; line-height: 0;" class="rounded-corners-bottom background">
+		&nbsp;
+	</td>
+</tr>
+{% endmacro %}
