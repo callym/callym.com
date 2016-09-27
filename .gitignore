@@ -2,6 +2,7 @@ build
 *.tmp
 between
 s3_website.yml
+*auth.json
 
 # Logs
 logs
