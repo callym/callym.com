@@ -11,10 +11,17 @@
     "url": "https://github.com/callym/callym.com/issues"
   },
   "homepage": "https://github.com/callym/callym.com#readme",
+  "scripts": {
+    "push": "s3_website push",
+    "email": "node email.js"
+  },
   "devDependencies": {
+    "async": "^2.0.1",
+    "aws-sdk": "^2.6.4",
     "babel-core": "^6.14.0",
     "babel-preset-babili": "0.0.3",
     "babel-preset-latest": "^6.14.0",
+    "email-templates": "^2.4.1",
     "event-stream": "^3.3.4",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.1",
@@ -54,12 +61,14 @@
     "metalsmith-prism": "^3.0.0",
     "metalsmith-rootpath": "^1.0.4",
     "moment": "^2.14.1",
+    "nodemailer": "^2.6.4",
     "nunjucks": "^2.4.2",
     "nunjucks-date-filter": "^0.1.1",
     "nunjucks-markdown-filter": "^0.1.0",
     "path": "^0.12.7",
     "rev-del": "git+https://github.com/EduardoRFS/rev-del.git",
     "run-sequence": "^1.2.2",
+    "s3": "^4.4.0",
     "through2": "^2.0.1"
   }
 }
