@@ -1,0 +1,30 @@
+{% include "email/templates/partials/header.nunjucks" %}
+{% from "email/templates/partials/components.nunjucks" import
+	one_column_begin,
+	one_column_end,
+	section_start,
+	section_end,
+	thumbnail_item_begin,
+	thumbnail_item_end,
+	clear_spacer %}
+
+{{ one_column_begin() }}
+	{{ description }}
+{{ one_column_end() }}
+{{ section_end() }}
+
+{{ clear_spacer() }}
+
+{{ section_start() }}
+{% for dog in dogs %}
+	{{ thumbnail_item_begin('',
+		assets_path + dog.image + '_thumbnail.jpg',
+		image_alt = dog.alt,
+		link = assets_path + dog.image + 'jpg',
+		left = ((loop.index0 % 2) == 0)) }}
+		{{ dog.caption }}
+	{{ thumbnail_item_end() }}
+{% endfor %}
+{{ section_end() }}
+
+{% include "email/templates/partials/footer.nunjucks" %}
