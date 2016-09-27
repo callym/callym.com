@@ -331,8 +331,11 @@ $(document).ready(function() {
 				body: JSON.stringify(subscription)
 			})
 			.then(function() {
+				callym.message("you have been unsubscribed");
 				remove_topics('email');
 			});
+
+			return;
 		}
 
 		var topics = get_topics('email');
@@ -387,7 +390,7 @@ $(document).ready(function() {
 		window.location.hash = '#email';
 		$('#email-subscription-form #email').val(urlParams.get('email'));
 
-		var topics = urlParams.get('topics') || null;
+		var topics = urlParams.get('topics') || [];
 
 		set_topics('email', topics);
 		check_email_subscribe();
