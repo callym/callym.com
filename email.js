@@ -1,5 +1,8 @@
 var fs = require('fs');
 var path = require('path');
+var colors = require('colors');
+var indent = require('indent-string');
+String.prototype.__defineGetter__('indent', function() { return indent('' + this, 4); });
 
 email_auth = JSON.parse(fs.readFileSync('./email/newsletter_auth.json'));
 s3_auth = JSON.parse(fs.readFileSync('./email/s3_auth.json'));
@@ -13,6 +16,12 @@ exports.send_email = function send_email(email, options = { /* dry_run, test */ 
 		dry_run = false,
 		test = false
 	} = options;
+
+	if (dry_run) {
+		console.log('*** dry_run ***'
+			.cyan
+			.bold);
+	}
 
 	exports.sync_assets();
 
@@ -39,11 +48,23 @@ exports.send_email = function send_email(email, options = { /* dry_run, test */ 
 		assets_path: s3_prefix + assets_path,
 		base_url: "https://beta.callym.com"
 	}
+	console.log('** constants **'
+		.magenta
+		.bold);
+	console.log(JSON.stringify(constants, null, 4)
+		.magenta
+		.indent);
 
 	var email = {
 		preheader: email_data.description,
 		topic: email_data.template,
 	}
+	console.log('** email **'
+		.green
+		.bold);
+	console.log(JSON.stringify(email_data, null, 4)
+		.green
+		.indent);
 
 	get_users(email.topic, test)
 		.then(function(users) {
@@ -60,11 +81,16 @@ exports.send_email = function send_email(email, options = { /* dry_run, test */ 
 		});
 	
 	function send_emails(users, template) {
-		async.mapLimit(users, 10, function (item, next) {
-			var item = Object.assign(constants, email, email_data, item);
+		async.mapLimit(users, 10, function (user, next) {
+			var item = Object.assign(constants, email, email_data, user);
 
 			if (dry_run) {
-				console.log(item);
+				console.log(`** ${user.email} **`
+					.yellow
+					.bold);
+				console.log(JSON.stringify(user, (k, v) => (k == 'email') ? undefined : v, 4)
+					.yellow
+					.indent);
 			}
 
 			template.render(item, function (error, results) {
@@ -73,12 +99,16 @@ exports.send_email = function send_email(email, options = { /* dry_run, test */ 
 				}
 
 				if (dry_run) {
-					console.log(`would have sent to: ${item.email}`);
+					console.log(`would have sent to: ${item.email}`
+						.cyan
+						.indent);
 					return next(null);
 				}
 
 				if (test) {
-					console.log('*** test ***');
+					console.log('*** test ***'
+						.magenta
+						.bold);
 				}
 
 				transport.sendMail({
@@ -90,18 +120,25 @@ exports.send_email = function send_email(email, options = { /* dry_run, test */ 
 					if (error) {
 						return next(error);
 					}
-					console.log(`sent to: ${item.email}`);
+					console.log(`sent to: ${item.email}`
+						.green);
 					next(null, responseStatus.message);
 				});
 			});
 		}, function(error) {
 			if (error) {
-				console.error(error);
+				console.log(`ERROR: ${error}`
+					.red
+					.bold);
 			}
 			if (dry_run) {
-				console.log(`would have sent ${users.length} emails`);
+				console.log(`would have sent ${users.length} emails`
+					.cyan
+					.bold);
 			} else {
-				console.log(`succesfully sent ${users.length} messages`);
+				console.log(`succesfully sent ${users.length} messages`
+					.green
+					.bold);
 			}
 		});
 	};
@@ -133,7 +170,9 @@ function get_users(email_topic, test) {
 		doc_client.scan(params, on_scan);
 		function on_scan(error, data) {
 			if (error) {
-				console.log("ERROR: ", JSON.stringify(error));
+				console.log(`ERROR: ${JSON.stringify(error)}`
+					.red
+					.bold);
 				return reject(error);
 			}
 			else {
@@ -175,7 +214,9 @@ exports.sync_assets = function sync_assets() {
 	};
 	var uploader = s3_client.uploadDir(s3_params);
 	uploader.on('end', function() {
-		console.log("done uploading");
+		console.log('done uploading'
+			.cyan
+			.bold);
 	});
 }
 
