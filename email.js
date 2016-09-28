@@ -85,11 +85,11 @@ exports.send_email = function send_email(email, options = { /* dry_run, test */ 
 		});
 	
 	function send_emails(users, template) {
-		async.mapLimit(users, 10, function (user, next) {
-			var item = Object.assign(constants, email, email_data, user);
+		async.mapLimit(users, 10, function(user, next) {
+			var item = Object.assign({}, constants, email, email_data, user);
 
 			if (dry_run) {
-				console.log(`** ${user.email} **`
+				console.log(`** ${item.email} **`
 					.yellow
 					.bold);
 				console.log(JSON.stringify(user, (k, v) => (k == 'email') ? undefined : v, 4)
@@ -123,7 +123,7 @@ exports.send_email = function send_email(email, options = { /* dry_run, test */ 
 				});
 
 				transport.sendMail({
-					from: 'Callym <newsletter@callym.com>',
+					from: `Callym <${email_auth.email}>`,
 					to: item.email,
 					subject: item.title,
 					html: html

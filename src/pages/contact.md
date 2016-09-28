@@ -379,6 +379,19 @@ $(document).ready(function() {
 	
 	$('#email-subscription-form #topics input[type=checkbox]').on('click', check_email_subscribe);
 
+	$('#email-subscription-form #email').on('input', function() {
+		var email = get_from_storage('email').email;
+
+		var text = "subscribe!";
+		if (email && email == $(this).val()) {
+			text = "change!";
+		}
+
+		$('#email-subscription-button')
+			.removeClass('error')
+			.text(text);
+	});
+
 	if (window.location.search.length > 0) {
 		// so the email bit is more central
 		$('body').css('height', '150vh');
