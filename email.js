@@ -25,7 +25,9 @@ exports.send_email = function send_email(email, options = { /* dry_run, test */ 
 
 	exports.sync_assets();
 
-	email_data = JSON.parse(fs.readFileSync('./email/emails/' + email));
+	var yaml = require('node-yaml');
+
+	email_data = yaml.readSync('./email/emails/' + email + '.yaml');
 	var data_path = path.parse(email);
 	var assets_path = `${data_path.dir}/${data_path.name}/`;
 

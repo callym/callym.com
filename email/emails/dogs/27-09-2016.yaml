@@ -1,0 +1,22 @@
+---
+template: dogs
+title: woof woof
+description: look at all these doggies being good boys
+dogs:
+    -   image: shiba-ball
+        alt: a dog doing a thing
+        caption: what a good boy
+    -   image: shiba-cage
+        alt: a dog doing a thing
+        caption: what a good boy!!!
+    -   image: shiba-bread-toy
+        alt: a dog doing a thing
+        caption: what a good boy
+    -   image: shiba-pumpkin
+        alt: a dog doing a thing
+        caption: what a good boy!!!
+    -   image: shiba-avocado
+        alt: a shiba with an avocado in its mouth
+        caption: >-
+            this shiba is all about the ~clean eating~
+            life

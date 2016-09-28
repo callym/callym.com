@@ -64,6 +64,7 @@
     "metalsmith-prism": "^3.0.0",
     "metalsmith-rootpath": "^1.0.4",
     "moment": "^2.14.1",
+    "node-yaml": "^3.0.2",
     "nodemailer": "^2.6.4",
     "nunjucks": "^2.4.2",
     "nunjucks-date-filter": "^0.1.1",
