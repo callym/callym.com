@@ -318,16 +318,20 @@ $(document).ready(function() {
 
 	if (window.location.search.length > 0) {
 		// so the email bit is more central
-		$('body').css('height', '150vh');
+		$('#container').css(
+			'margin-bottom',
+			`${$('#email-subscription-form').height() / 2}px`);
+		window.getComputedStyle($('#container')[0])['margin-bottom'];
 
 		var urlParams = new URLSearchParams(window.location.search);
-		window.location.hash = '#email';
 		$('#email-subscription-form #email').val(urlParams.get('email'));
 
 		var topics = urlParams.get('topics') || [];
 
 		set_topics('email', topics);
 		check_email_subscribe();
+
+		window.location.hash = '#email';
 	}
 });
 </script>
