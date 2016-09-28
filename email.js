@@ -4,9 +4,16 @@ var path = require('path');
 email_auth = JSON.parse(fs.readFileSync('./email/newsletter_auth.json'));
 s3_auth = JSON.parse(fs.readFileSync('./email/s3_auth.json'));
 
-exports.send_dry_email = function send_dry_email(email) { exports.send_email(email, true); };
+exports.send_dry_email = (email) => exports.send_email(email, { dry_run: true });
 
-exports.send_email = function send_email(email, dry_run = false) {
+exports.send_test_email = (email) => exports.send_email(email, { test: true });
+
+exports.send_email = function send_email(email, options = { /* dry_run, test */ }) {
+	var { 
+		dry_run = false,
+		test = false
+	} = options;
+
 	exports.sync_assets();
 
 	email_data = JSON.parse(fs.readFileSync('./email/emails/' + email));
@@ -38,7 +45,7 @@ exports.send_email = function send_email(email, dry_run = false) {
 		topic: email_data.template,
 	}
 
-	get_users(email.topic)
+	get_users(email.topic, test)
 		.then(function(users) {
 			var templatesDir = path.resolve(__dirname, './', 'email', 'templates');
 			var template = new EmailTemplate(path.join(templatesDir, email_data.template), {
@@ -96,8 +103,19 @@ exports.send_email = function send_email(email, dry_run = false) {
 	};
 };
 
-function get_users(email_topic) {
+function get_users(email_topic, test) {
 	return new Promise(function(resolve, reject) {
+		if (test) {
+			resolve([
+				{
+					email: 'hi@callym.com',
+					topics: [ 'updates', 'news', 'dogs' ],
+				    date: '2016-09-27T21:52:45.750Z',
+				    confirmed: true
+				}
+			]);
+		}
+
 		var users = [];
 
 		var aws = require('aws-sdk');
