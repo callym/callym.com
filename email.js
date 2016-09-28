@@ -26,59 +26,33 @@ exports.send_email = function send_email(email, dry_run = false) {
 	});
 
 	var s3_prefix = `https://s3-eu-west-1.amazonaws.com/${s3_auth.bucket}/assets/`;
+
 	var constants = {
 		s3_prefix: s3_prefix,
 		assets_path: s3_prefix + assets_path,
 		base_url: "https://beta.callym.com"
 	}
-	var users = [];
-
-	var aws = require('aws-sdk');
-	aws.config.update({
-		region: 'eu-west-1'
-	});
-	var doc_client = new aws.DynamoDB.DocumentClient();
-	var params = {
-		TableName: 'callym-com-email'
-	};
-	doc_client.scan(params, on_scan);
-	function on_scan(error, data) {
-		if (error) {
-			console.log("ERROR: ", JSON.stringify(error));
-		}
-		else {
-			data.Items.forEach(function(item, i, arr) {
-				if (item.confirmed) {
-					if (email.topic == 'all' || item.topics.indexOf(email.topic) > -1) {
-						users.push(item);
-					}
-				}
-			});
-
-			if (typeof data.LastEvaluatedKey != "undefined") {
-				params.ExclusiveStartKey = data.LastEvaluatedKey;
-				doc_client.scan(params, on_scan);
-			} else {
-				send_emails();
-			}
-		}
-	};
-
-	var templatesDir = path.resolve(__dirname, './', 'email', 'templates');
-	var template = new EmailTemplate(path.join(templatesDir, email_data.template), {
-		sassOptions: {
-			includePaths: ['./sass']
-		}
-	});
 
 	var email = {
 		preheader: email_data.description,
 		topic: email_data.template,
 	}
 
-	dry_run = dry_run || false;
+	get_users(email.topic)
+		.then(function(users) {
+			var templatesDir = path.resolve(__dirname, './', 'email', 'templates');
+			var template = new EmailTemplate(path.join(templatesDir, email_data.template), {
+				sassOptions: {
+					includePaths: ['./sass']
+				}
+			});
+
+			dry_run = dry_run || false;
+
+			send_emails(users, template, dry_run);
+		});
 	
-	function send_emails() {
+	function send_emails(users, template, dry_run) {
 		async.mapLimit(users, 10, function (item, next) {
 			var item = Object.assign(constants, email, email_data, item);
 
@@ -86,8 +60,11 @@ exports.send_email = function send_email(email, dry_run = false) {
 				console.log(item);
 			}
 
-			template.render(item, function (err, results) {
-				if (err) return next(err)
+			template.render(item, function (error, results) {
+				if (error) {
+					return next(error);
+				}
+
 				if (!dry_run) {
 					transport.sendMail({
 						from: 'Callym <newsletter@callym.com>',
@@ -98,17 +75,17 @@ exports.send_email = function send_email(email, dry_run = false) {
 						if (err) {
 							return next(err)
 						}
-						console.log('sent to: ' + item.email);
+						console.log(`sent to: ${item.email}`);
 						next(null, responseStatus.message)
 					});
 				} else {
-					console.log('would have sent to: ' + item.email);
+					console.log(`would have sent to: ${item.email}`);
 					next(null);
 				}
-			})
-		}, function (err) {
-			if (err) {
-				console.error(err)
+			});
+		}, function(error) {
+			if (error) {
+				console.error(error);
 			}
 			if (dry_run) {
 				console.log(`would have sent ${users.length} emails`);
@@ -118,6 +95,44 @@ exports.send_email = function send_email(email, dry_run = false) {
 		});
 	};
 };
+
+function get_users(email_topic) {
+	return new Promise(function(resolve, reject) {
+		var users = [];
+
+		var aws = require('aws-sdk');
+		aws.config.update({
+			region: 'eu-west-1'
+		});
+		var doc_client = new aws.DynamoDB.DocumentClient();
+		var params = {
+			TableName: 'callym-com-email'
+		};
+		doc_client.scan(params, on_scan);
+		function on_scan(error, data) {
+			if (error) {
+				console.log("ERROR: ", JSON.stringify(error));
+				return reject(error);
+			}
+			else {
+				data.Items.forEach(function(item, i, arr) {
+					if (item.confirmed) {
+						if (email_topic == 'all' || item.topics.indexOf(email_topic) > -1) {
+							users.push(item);
+						}
+					}
+				});
+
+				if (typeof data.LastEvaluatedKey != "undefined") {
+					params.ExclusiveStartKey = data.LastEvaluatedKey;
+					doc_client.scan(params, on_scan);
+				} else {
+					resolve(users);
+				}
+			}
+		};
+	});
+}
 
 exports.sync_assets = function sync_assets() {
 	var s3 = require('s3');
