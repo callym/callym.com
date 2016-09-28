@@ -56,10 +56,10 @@ exports.send_email = function send_email(email, options = { /* dry_run, test */ 
 
 			dry_run = dry_run || false;
 
-			send_emails(users, template, dry_run);
+			send_emails(users, template);
 		});
 	
-	function send_emails(users, template, dry_run) {
+	function send_emails(users, template) {
 		async.mapLimit(users, 10, function (item, next) {
 			var item = Object.assign(constants, email, email_data, item);
 
@@ -72,23 +72,27 @@ exports.send_email = function send_email(email, options = { /* dry_run, test */ 
 					return next(error);
 				}
 
-				if (!dry_run) {
-					transport.sendMail({
-						from: 'Callym <newsletter@callym.com>',
-						to: item.email,
-						subject: item.title,
-						html: results.html
-					}, function (err, responseStatus) {
-						if (err) {
-							return next(err)
-						}
-						console.log(`sent to: ${item.email}`);
-						next(null, responseStatus.message)
-					});
-				} else {
+				if (dry_run) {
 					console.log(`would have sent to: ${item.email}`);
-					next(null);
+					return next(null);
 				}
+
+				if (test) {
+					console.log('*** test ***');
+				}
+
+				transport.sendMail({
+					from: 'Callym <newsletter@callym.com>',
+					to: item.email,
+					subject: item.title,
+					html: results.html
+				}, function (error, responseStatus) {
+					if (error) {
+						return next(error);
+					}
+					console.log(`sent to: ${item.email}`);
+					next(null, responseStatus.message);
+				});
 			});
 		}, function(error) {
 			if (error) {
