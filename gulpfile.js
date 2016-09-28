@@ -65,14 +65,6 @@ var noop = through.obj(function(file, enc, cb) {
 var rev_pipe = lazypipe()
 	.pipe(gutil.noop);
 
-nunjucks.configure('', {
-	watch: true,
-	noCache: true,
-})
-.addFilter('date', njDate)
-.addFilter('md', njMD)
-.addGlobal('now', now);
-
 var babel_presets = ['latest'];
 
 var babel_options = {
@@ -139,6 +131,13 @@ var assign_contents = function(options) {
 
 gulp.task('default', function(cb) {
 	console.log("*** build: " + build + " ***");
+	nunjucks.configure('', {
+		watch: !build,
+		noCache: true,
+	})
+	.addFilter('date', njDate)
+	.addFilter('md', njMD)
+	.addGlobal('now', now);
 	return runSequence(
 		'clean',
 		['metalsmith', 'sass', 'images', 'assets', 'javascript'],
