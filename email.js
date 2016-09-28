@@ -49,7 +49,8 @@ exports.send_email = function send_email(email, options = { /* dry_run, test */ 
 	var constants = {
 		s3_prefix: s3_prefix,
 		assets_path: s3_prefix + assets_path,
-		base_url: "https://beta.callym.com"
+		base_url: "https://beta.callym.com",
+		aws: false
 	}
 	console.log('** constants **'
 		.magenta
@@ -154,6 +155,54 @@ exports.send_email = function send_email(email, options = { /* dry_run, test */ 
 	};
 };
 
+exports.template_for_aws = function(template_name) {
+	var EmailTemplate = require('email-templates').EmailTemplate;
+	var minify = require('html-minifier').minify;
+
+	var s3_prefix = `https://s3-eu-west-1.amazonaws.com/${s3_auth.bucket}/assets/`;
+
+	var constants = {
+		s3_prefix: s3_prefix,
+		// should only use base assets!
+		assets_path: s3_prefix,
+		base_url: "https://beta.callym.com",
+		aws: true
+	}
+
+	var email = {
+		preheader: '{{ preheader }}',
+		topic: '{{ topic }}',
+	}
+
+	var item = Object.assign(constants, email);
+
+	var templatesDir = path.resolve(__dirname, './', 'email', 'templates');
+	var template = new EmailTemplate(path.join(templatesDir, template_name), {
+		sassOptions: {
+			includePaths: ['./sass']
+		}
+	});
+
+	template.render(item, function (error, results) {
+		if (error) {
+			console.log(`ERROR: ${error}`
+				.red
+				.bold);
+		}
+
+		var html = minify(results.html, {
+			removeComments: true,
+			maxLineLength: 160,
+			collapseWhitespace: true,
+			conservativeCollapse: true
+		});
+
+		var file_name = `./email/build/${template_name}.nunjucks`;
+		ensureDirectoryExistence(file_name);
+		fs.writeFileSync(file_name, html);
+	});
+};
+
 function get_users(email_topic, test) {
 	return new Promise(function(resolve, reject) {
 		if (test) {
@@ -229,5 +278,23 @@ exports.sync_assets = function sync_assets() {
 			.bold);
 	});
 }
+
+function ensureDirectoryExistence(filePath) {
+	var dirname = path.dirname(filePath);
+	if (directoryExists(dirname)) {
+		return true;
+	}
+	ensureDirectoryExistence(dirname);
+	fs.mkdirSync(dirname);
+};
+
+function directoryExists(path) {
+	try {
+		return fs.statSync(path).isDirectory();
+	}
+	catch (error) {
+		return false;
+	}
+};
 
 require('make-runnable');

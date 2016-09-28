@@ -7,8 +7,17 @@
 	two_columns_end,
 	clear_spacer %}
 
-{% set url = base_url + "/contact/?email=" + (email | urlencode()) %}
-{% set topics = "&topics=" + ((topics | join(',')) | urlencode()) %}
+{% if aws %}
+	{% raw %}
+		{% set url = base_url + "/contact/?email=" + (email | urlencode()) %}
+		{% set topics = "&topics=" + ((topics | join(',')) | urlencode()) %}
+	{% endraw %}
+	{% set url = "{{ url }}" %}
+	{% set topics = "{{ topics }}" %}
+{% else %}
+	{% set url = base_url + "/contact/?email=" + (email | urlencode()) %}
+	{% set topics = "&topics=" + ((topics | join(',')) | urlencode()) %}
+{% endif %}
 
 {{ clear_spacer() }}
 

@@ -16,16 +16,48 @@
 {{ one_column_begin() }}
 	you've asked to subscribe to the following callym.com emails:
 	<ul>
-	{% for t in topics %}
-		<li>{{ t }}</li>
-	{% endfor %}
+	{% if aws %}
+		{% raw %}
+			{% for t in topics %}
+				<li>{{ t }}</li>
+			{% endfor %}
+		{% endraw %}
+	{% else %}
+		{% for t in topics %}
+			<li>{{ t }}</li>
+		{% endfor %}
+	{% endif %}
 	</ul>
+	click below to confirm your subscription!
 	<br>
-	
-	{% set url = base_url + "/subscribed/?email=" + (email | urlencode()) + "&date=" + (date | urlencode()) %}
+	or ignore this email if you don't actually want to subscribe
+{{ one_column_end() }}
 
+{{ one_column_begin() }}
+	{% if aws %}
+		{% raw %}
+			{% set url = base_url + "/subscribed/?email=" + (email | urlencode()) + "&date=" + (date | urlencode()) %}
+		{% endraw %}
+		{% set url = "{{ url }}" %}
+	{% else %}
+		{% set url = base_url + "/subscribed/?email=" + (email | urlencode()) + "&date=" + (date | urlencode()) %}
+	{% endif %}
+	
 	{{ button("confirm!", url, true) }}
 {{ one_column_end() }}
 {{ section_end() }}
 
-{% include "email/templates/partials/footer.nunjucks" %}
+{{ clear_spacer() }}
+
+			</table>
+			<!-- Email Body : END -->
+
+            <!--[if mso]>
+            </td>
+            </tr>
+            </table>
+            <![endif]-->
+        </div>
+    </center>
+</body>
+</html>
