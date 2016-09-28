@@ -347,9 +347,22 @@ $(document).ready(function() {
 				'Content-type' : 'application/json'
 			},
 			body: JSON.stringify(subscription)
-		}).then(function() {
-			callym.message("you have been sent a confirmation email");
+		}).then(function(response) {
 			save_topics('email', subscription);
+			return response.json();
+		}).then(function(response) {
+			console.log(response);
+			if (response.status == 'updated') {
+				callym.message("your subscription details have been updated")
+			} else if (response.status == 'subscribed') {
+				if (response.reason == 'not activated') {
+					callym.message("your subscription details have been updated, and you have been sent a new confirmation email");
+				} else {
+					callym.message("you have been sent a confirmation email");
+				}
+			} else {
+				callym.message("there might have been an error with your subscription, please try again", 'error');
+			}
 		});
 	});
 
