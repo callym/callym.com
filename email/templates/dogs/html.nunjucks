@@ -20,7 +20,7 @@
 	{{ thumbnail_item_begin('',
 		assets_path + dog.image + '_thumbnail.jpg',
 		image_alt = dog.alt,
-		link = assets_path + dog.image + 'jpg',
+		link = assets_path + dog.image + '.jpg',
 		left = ((loop.index0 % 2) == 0)) }}
 		{{ dog.caption }}
 	{{ thumbnail_item_end() }}
