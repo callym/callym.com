@@ -123,7 +123,7 @@ exports.send_email = function send_email(email, options = { /* dry_run, test */ 
 				});
 
 				transport.sendMail({
-					from: 'Callym <newsletter@callym.com>',
+					from: `Callym <${email_auth.email}>`,
 					to: item.email,
 					subject: item.title,
 					html: html
