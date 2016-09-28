@@ -32,6 +32,7 @@ exports.send_email = function send_email(email, options = { /* dry_run, test */ 
 	var assets_path = `${data_path.dir}/${data_path.name}/`;
 
 	var EmailTemplate = require('email-templates').EmailTemplate;
+	var minify = require('html-minifier').minify;
 	var nodemailer = require('nodemailer');
 	var async = require('async');
 
@@ -113,11 +114,18 @@ exports.send_email = function send_email(email, options = { /* dry_run, test */ 
 						.bold);
 				}
 
+				var html = minify(results.html, {
+					removeComments: true,
+					maxLineLength: 160,
+					collapseWhitespace: true,
+					conservativeCollapse: true
+				});
+
 				transport.sendMail({
 					from: 'Callym <newsletter@callym.com>',
 					to: item.email,
 					subject: item.title,
-					html: results.html
+					html: html
 				}, function (error, responseStatus) {
 					if (error) {
 						return next(error);
