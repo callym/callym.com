@@ -169,7 +169,10 @@ $(document).ready(function() {
 		$('.sublinks.filter').children().removeClass('current');
 		$item.addClass('current');
 
-		var href = '?' + filter;
+		var urlParams = new URLSearchParams();
+		urlParams.append('category', filter);
+		var href = `?${urlParams.toString()}`;
+		
 		var cb = function() {
 			filterList.filter(function(item) {
 				var cat = item.values().categories.split(" ");
@@ -196,9 +199,14 @@ $(document).ready(function() {
 
 	$('.sublinks').css('visibility', 'visible');
 
-	var url = window.location.search;
-	url = url.replace('?', '');
-	$('#listjs-' + url).trigger('click');
+	if (window.location.search.length > 0) {
+		var urlParams = new URLSearchParams(window.location.search);
+		var category = urlParams.get('category') || false;
+
+		if (category) {
+			$('#listjs-' + category).trigger('click');
+		}
+	}
 });
 </script>
 {% endblock %}
