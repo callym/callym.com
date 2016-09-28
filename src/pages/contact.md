@@ -180,11 +180,30 @@ $(document).ready(function() {
 
 	if (!navigator.serviceWorker || !('PushManager' in window))
 	{
-		$('#push_notifications_label').html(
-			`<p>your web browser doesn't support Service Workers or Push Notifications</p>
-			<p>for more information about what browsers do, check
-			<a href="http://caniuse.com/#feat=push-api">here</a></p>`
+		$('#push-subscription-form #topics').html(
+			`<p>this feature only works on browsers that support Service Workers and Push Notifications</p>`
 		);
+		$.ajax({
+			url: "//cdn.jsdelivr.net/caniuse-embed/1.0.1/caniuse-embed.min.js",
+			dataType: "script",
+			beforeSend: function() {
+				var features = ['serviceworkers', 'push-api'];
+				var periods = "future_1,current,past_1";
+
+				features.forEach(function(feature) {
+					console.log(feature);
+					$('#push_notifications_label').append(
+						`<p class="ciu_embed"
+							data-feature="${feature}"
+							data-periods="${periods}">
+							<a href="http://caniuse.com/#feat=${feature}">
+								Can I Use ${feature}?
+							</a>
+							Data on support for the ${feature} feature across the major browsers from caniuse.com.
+						</p>`);
+				});
+			}
+		});
 	}
 	else if (Notification.permission === 'denied') {
 		$('#push_notifications_label').html(
