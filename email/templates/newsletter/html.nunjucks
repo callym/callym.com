@@ -1,0 +1,46 @@
+{% include "email/templates/partials/header.nunjucks" %}
+{% from "email/templates/partials/components.nunjucks" import
+	hero,
+	button,
+	one_column_begin,
+	one_column_end,
+	section_start,
+	section_end,
+	two_columns_begin,
+	two_columns_middle,
+	two_columns_end,
+	thumbnail_item_begin,
+	thumbnail_item_end,
+	clear_spacer %}
+
+{{ hero("http://placehold.it/600x300") }}
+
+{{ one_column_begin() }}
+	Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent laoreet malesuada cursus. Maecenas scelerisque congue eros eu posuere. Praesent in felis ut velit pretium lobortis rhoncus ut&nbsp;erat.
+	<br>
+	<br>
+	{{ button("this button", "http://yahoo.com", true) }}
+	<br>
+	Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent laoreet malesuada cursus. Maecenas scelerisque congue eros eu posuere. Praesent in felis ut velit pretium lobortis rhoncus ut&nbsp;erat.
+{{ one_column_end() }}
+{{ section_end() }}
+
+{{ clear_spacer() }}
+
+{{ section_start() }}
+{{ thumbnail_item_begin("Class aptent taciti sociosqu", "http://placehold.it/200") }}
+	<br><br>
+	Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+	<br><br>
+	{{ button("a button", "http://google.com") }}
+{{ thumbnail_item_end() }}
+
+{{ thumbnail_item_begin("Class aptent taciti sociosqu", "http://placehold.it/200", left = false) }}
+	<br><br>
+	Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+	<br><br>
+	{{ button("a button", "http://google.com") }}
+{{ thumbnail_item_end() }}
+{{ section_end() }}
+
+{% include "email/templates/partials/footer.nunjucks" %}

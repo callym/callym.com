@@ -1,0 +1,55 @@
+{% include "email/templates/partials/header.nunjucks" %}
+{% from "email/templates/partials/components.nunjucks" import
+	hero,
+	button,
+	one_column_begin,
+	one_column_end,
+	section_start,
+	section_end,
+	two_columns_begin,
+	two_columns_middle,
+	two_columns_end,
+	thumbnail_item_begin,
+	thumbnail_item_end,
+	clear_spacer %}
+
+{{ one_column_begin() }}
+	you've been unsubscribed from callym.com
+	<br>
+	if this is an error, you can resubscribe here
+	<br>
+	if you really do want to unsubscribe,
+	you can just ignore this email
+{{ one_column_end() }}
+
+{{ one_column_begin() }}
+	{% if aws %}
+		{% raw %}
+			{% set url = base_url + "/contact/?email=" + (email | urlencode()) %}
+			{% set topics = "&topics=" + ((topics | join(',')) | urlencode()) %}
+		{% endraw %}
+		{% set url = "{{ url }}" %}
+		{% set topics = "{{ topics }}" %}
+	{% else %}
+		{% set url = base_url + "/contact/?email=" + (email | urlencode()) %}
+		{% set topics = "&topics=" + ((topics | join(',')) | urlencode()) %}
+	{% endif %}
+
+	{{ button("resubscribe!", url + topics, true) }}
+{{ one_column_end() }}
+{{ section_end() }}
+
+{{ clear_spacer() }}
+
+			</table>
+			<!-- Email Body : END -->
+
+            <!--[if mso]>
+            </td>
+            </tr>
+            </table>
+            <![endif]-->
+        </div>
+    </center>
+</body>
+</html>

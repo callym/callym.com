@@ -1,97 +1,17 @@
 ---
-title: contact
+title: subscribed
+hide: true
 ---
-<h1>links</h1>
-<div class="contact links center">
-[@callymcallym](http://twitter.com/callymcallym)
-
-[github.com/callym](http://github.com/callym)
-
-[hi@callym.com](mailto:hi@callym.com)
+<div id="subscribing" class="offline-text">
+	subscribing...
 </div>
-
-# push notifications
-get notifications sent straight to your browser!
-<div>
-<form class="center" id="push-subscription-form">
-	<div class="checkboxes" id="topics">
-		<div>
-			<input type="checkbox" id="push_portfolio" data-topic="portfolio" checked/>
-			<label for="push_portfolio">portfolio
-			<div class="form-description">
-				get a notification when I add new art to my site
-			</div>
-			</label>
-		</div>
-		<div>
-			<input type="checkbox" id="push_blog" data-topic="blog" checked/>
-			<label for="push_blog">blog
-			<div class="form-description">
-				get a notification when I write a new blog post
-			</div>
-			</label>
-		</div>
-	</div>
-	<div class="big-button">
-		<label for="push_notifications_action" id="push_notifications_label">
-			<noscript>
-				push notifications only work with javascript turned on
-			</noscript>
-		</label>
-		<button type="button" id="push_notifications_action" style="display: none">
-			subscribe!
-		</button>
-	</div>
-</form>
+<div class="offline-emoji">	
+	<svg xmlns="http://www.w3.org/2000/svg"
+		viewBox="0 0 64 64"
+		enable-background="new 0 0 64 64">
+		<path d="M62,32c0,16.6-13.4,30-30,30C15.4,62,2,48.6,2,32C2,15.4,15.4,2,32,2C48.6,2,62,15.4,62,32z" fill="#ffdd67"/><g fill="#f46767"><path d="m61.8 13.2c-.5-2.7-2-4.9-4.5-5.6-2.7-.7-5.1.3-7.4 2.7-1.3-3.6-3.3-6.3-6.5-7.7-3.2-1.4-6.4-.4-8.4 2.1-2.1 2.6-2.9 6.7-.7 12 2.1 5 11.4 15 11.7 15.3.4-.2 10.8-6.7 13.3-9.9 2.5-3.1 3-6.2 2.5-8.9"/><path d="m29 4.7c-2-2.5-5.2-3.5-8.4-2.1-3.2 1.4-5.2 4.1-6.5 7.7-2.4-2.3-4.8-3.4-7.5-2.6-2.4.7-4 2.9-4.5 5.6-.5 2.6.1 5.8 2.5 8.9 2.6 3.1 13 9.6 13.4 9.8.3-.3 9.6-10.3 11.7-15.3 2.2-5.3 1.4-9.3-.7-12"/></g><path d="m49 38.1c0-.8-.5-1.8-1.8-2.1-3.5-.7-8.6-1.3-15.2-1.3-6.6 0-11.7.7-15.2 1.3-1.4.3-1.8 1.3-1.8 2.1 0 7.3 5.6 14.6 17 14.6 11.4-.1 17-7.4 17-14.6" fill="#664e27"/><path d="m44.7 38.3c-2.2-.4-6.8-1-12.7-1-5.9 0-10.5.6-12.7 1-1.3.2-1.4.7-1.3 1.5.1.4.1 1 .3 1.6.1.6.3.9 1.3.8 1.9-.2 23-.2 24.9 0 1 .1 1.1-.2 1.3-.8.1-.6.2-1.1.3-1.6 0-.8-.1-1.3-1.4-1.5" fill="#fff"/>
+	</svg>
 </div>
-
-# email
-get email updates!
-<form class="center" id="email-subscription-form">
-	<div class="email">
-		<label for="email">email</label>
-		<span class="email-input">
-			<input 	type="email"
-					id="email"
-					name="email_address" 
-					placeholder="your@email.com"
-					required/>
-		</span>
-	</div>
-	<div class="checkboxes" id="topics">
-		<div>
-			<input type="checkbox" id="email_updates" data-topic="updates" checked/>
-			<label for="email_updates">updates
-			<div class="form-description">
-				get an email when I post new work on my site
-			</div>
-			</label>
-		</div>
-
-		<div>
-			<input type="checkbox" id="email_news" data-topic="news" checked/>
-			<label for="email_news">news
-			<div class="form-description">
-				get emails about things I've found that are interesting
-			</div>
-			</label>
-		</div>
-
-		<div>
-			<input type="checkbox" id="email_dogs" data-topic="dogs" checked/>
-			<label for="email_dogs">dogs
-			<div class="form-description">
-				get email summaries about cute dogs that I've found
-			</div>
-			</label>
-		</div>
-	</div>
-	<div class="big-button">
-		<button type="button" id="email-subscription-button">
-			subscribe!
-		</button>
-	</div>
-</form>
 
 <script>
 $(document).ready(function() {
@@ -331,11 +251,8 @@ $(document).ready(function() {
 				body: JSON.stringify(subscription)
 			})
 			.then(function() {
-				callym.message("you have been unsubscribed");
 				remove_topics('email');
 			});
-
-			return;
 		}
 
 		var topics = get_topics('email');
@@ -383,24 +300,32 @@ $(document).ready(function() {
 	$('#email-subscription-form #topics input[type=checkbox]').on('click', check_email_subscribe);
 
 	if (window.location.search.length > 0) {
-		// so the email bit is more central
-		$('body').css('height', '150vh');
-
 		var urlParams = new URLSearchParams(window.location.search);
-		window.location.hash = '#email';
-		$('#email-subscription-form #email').val(urlParams.get('email'));
+		var email = urlParams.get('email');
+		var date = urlParams.get('date');
 
-		var topics = urlParams.get('topics') || [];
+		var data = {
+			email: email,
+			date: date
+		};
 
-		set_topics('email', topics);
-		check_email_subscribe();
+		console.log(JSON.stringify(data));
+
+		fetch('https://z8jnhu3g0g.execute-api.eu-west-1.amazonaws.com/production/confirm', {
+			method: 'post',
+			headers: {
+				'Content-type' : 'application/json'
+			},
+			body: JSON.stringify(data)
+		}).then(function(response) {
+			if (!response.ok) {
+				$('#subscribing').text('there seems to be an error, try refreshing the page, or resubscribing');
+			} else {
+				$('#subscribing').text('you are now subscribed to callym.com!');
+			}
+		});
 	} else {
-		set_topics_from_storage('email');
-		var email = get_from_storage('email').email;
-
-		if (email) {
-			$('#email-subscription-form #email').val(email);
-		}
+		$('#subscribing').text('this link is invalid, please try resubscribing!');
 	}
 });
 </script>

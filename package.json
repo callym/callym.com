@@ -11,10 +11,18 @@
     "url": "https://github.com/callym/callym.com/issues"
   },
   "homepage": "https://github.com/callym/callym.com#readme",
+  "scripts": {
+    "push": "s3_website push",
+    "email": "node email.js"
+  },
   "devDependencies": {
+    "async": "^2.0.1",
+    "aws-sdk": "^2.6.4",
     "babel-core": "^6.14.0",
     "babel-preset-babili": "0.0.3",
     "babel-preset-latest": "^6.14.0",
+    "colors": "^1.1.2",
+    "email-templates": "^2.4.1",
     "event-stream": "^3.3.4",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.1",
@@ -39,8 +47,11 @@
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.3.9",
     "gulpsmith": "^0.5.5",
+    "html-minifier": "^3.1.0",
+    "indent-string": "^3.0.0",
     "lazypipe": "^1.0.1",
     "lodash": "^4.15.0",
+    "make-runnable": "^1.0.3",
     "metalsmith": "^2.2.0",
     "metalsmith-alias": "git+https://github.com/callym/metalsmith-alias.git",
     "metalsmith-branch": "0.0.4",
@@ -54,12 +65,15 @@
     "metalsmith-prism": "^3.0.0",
     "metalsmith-rootpath": "^1.0.4",
     "moment": "^2.14.1",
+    "node-yaml": "^3.0.2",
+    "nodemailer": "^2.6.4",
     "nunjucks": "^2.4.2",
     "nunjucks-date-filter": "^0.1.1",
     "nunjucks-markdown-filter": "^0.1.0",
     "path": "^0.12.7",
     "rev-del": "git+https://github.com/EduardoRFS/rev-del.git",
     "run-sequence": "^1.2.2",
+    "s3": "^4.4.0",
     "through2": "^2.0.1"
   }
 }

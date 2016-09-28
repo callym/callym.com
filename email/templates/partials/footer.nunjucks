@@ -1,0 +1,45 @@
+{% from "email/templates/partials/components.nunjucks" import
+	button,
+	section_start,
+	section_end,
+	two_columns_begin,
+	two_columns_middle,
+	two_columns_end,
+	clear_spacer %}
+
+{% if aws %}
+	{% raw %}
+		{% set url = base_url + "/contact/?email=" + (email | urlencode()) %}
+		{% set topics = "&topics=" + ((topics | join(',')) | urlencode()) %}
+	{% endraw %}
+	{% set url = "{{ url }}" %}
+	{% set topics = "{{ topics }}" %}
+{% else %}
+	{% set url = base_url + "/contact/?email=" + (email | urlencode()) %}
+	{% set topics = "&topics=" + ((topics | join(',')) | urlencode()) %}
+{% endif %}
+
+{{ clear_spacer() }}
+
+{{ section_start() }}
+{{ two_columns_begin() }}
+	{{ button("change!", (url + topics)) }}
+{{ two_columns_middle() }}
+	{{ button("unsubscribe!", url) }}
+{{ two_columns_end() }}
+{{ section_end() }}
+
+{{ clear_spacer() }}
+
+			</table>
+			<!-- Email Body : END -->
+
+            <!--[if mso]>
+            </td>
+            </tr>
+            </table>
+            <![endif]-->
+        </div>
+    </center>
+</body>
+</html>
