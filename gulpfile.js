@@ -66,7 +66,7 @@ var rev_pipe = lazypipe()
 	.pipe(gutil.noop);
 
 nunjucks.configure('', {
-	watch: false,
+	watch: true,
 	noCache: true,
 })
 .addFilter('date', njDate)
