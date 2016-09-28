@@ -205,8 +205,6 @@ self.addEventListener('push', function(event) {
 	payload.badge = payload.badge || "/notification-badge-128x128.png";
 	payload.tag = payload.tag || "default";
 	payload.url = payload.url || "/";
-
-	console.log(payload);
 	
 	event.waitUntil(
 		self.registration.showNotification(payload.title, {

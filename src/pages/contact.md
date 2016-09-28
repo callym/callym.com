@@ -152,7 +152,6 @@ $(document).ready(function() {
 		obj = obj || {};
 		var topics = get_topics(type);
 		obj.topics = obj.topics || topics;
-		console.log(JSON.stringify(obj));
 
 		localStorage[`${type}-notification`] = JSON.stringify(obj);
 	}
@@ -162,8 +161,6 @@ $(document).ready(function() {
 	}
 
 	var set_topics = function(type, topics) {
-		console.log(topics);
-
 		if (topics) {
 			$(`#${type}-subscription-form input[type=checkbox]`).each(function() {
 				var $this = $(this);

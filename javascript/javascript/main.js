@@ -59,7 +59,6 @@ function push_subscribe(topics) {
 				key: key,
 				auth_secret: auth_secret
 			};
-			console.log(JSON.stringify(data));
 
 			fetch('https://uccr0qq45g.execute-api.eu-west-1.amazonaws.com/production/register', {
 				method: 'post',
@@ -84,7 +83,6 @@ function push_unsubscribe() {
 			var data = {
 				endpoint: subscription.endpoint
 			};
-			console.log(JSON.stringify(data));
 
 			fetch('https://uccr0qq45g.execute-api.eu-west-1.amazonaws.com/production/unregister', {
 				method: 'post',
