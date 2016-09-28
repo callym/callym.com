@@ -1,5 +1,12 @@
 @import 'variables';
 
+$font-size: 24px;
+$line-height: 30px;
+$big-font-size: 50px;
+$big-line-height: 200px;
+
+$text-color: #000000;
+
 body {
 	background-color: $blue;
 }
@@ -12,10 +19,11 @@ center {
 .header-image {
 	color: $blue;
 	font-family: serif;
-	font-size: 50px;
+	font-size: $big-font-size;
 	font-weight: bold;
+	line-height: $big-line-height;
+
 	mso-height-rule: exactly;
-	line-height: 200px;
 }
 
 .hero-wrapper {
@@ -24,12 +32,13 @@ center {
 
 .hero-image {
 	font-family: $sans-serif; 
-	font-size: 16px; 
-	mso-height-rule: exactly; 
-	line-height: 20px; 
-	color: #000000;
+	font-size: $font-size; 
+	line-height: $line-height; 
+	color: $text-color;
 	border: 1px solid black;
 	border-radius: 15px;
+
+	mso-height-rule: exactly; 
 }
 
 .button-wrapper {
@@ -41,15 +50,16 @@ center {
 	background: darken($blue, 10);
 	color: #ffffff;
 	font-family: $serif;
-	line-height: 1.1; 
 	text-align: center;
 	text-decoration: none;
-	display: block;
 	font-weight: bold;
 	font-style: italic;
 
+	display: block;
+	line-height: $line-height;
+
 	&.small {
-		font-size: 25px;
+		font-size: $font-size;
 		border: 8px solid darken($blue, 10);
 		border-left-width: 16px;
 		border-right-width: 16px;
@@ -57,7 +67,7 @@ center {
 	}
 
 	&.big {
-		font-size: 50px;
+		font-size: $big-font-size;
 		border: 16px solid darken($blue, 10);
 		border-left-width: 32px;
 		border-right-width: 32px;
@@ -68,10 +78,11 @@ center {
 .one-column {
 	padding: 40px;
 	font-family: $sans-serif;
-	font-size: 16px;
+	font-size: $font-size;
+	line-height: $line-height;
+	color: $text-color;
+
 	mso-height-rule: exactly;
-	line-height: 20px;
-	color: #000000;
 }
 
 .thumbnail-item-wrapper {
@@ -83,12 +94,13 @@ center {
 	width: 100%;
 	max-width: 200px;
 	font-family: $sans-serif;
-	font-size: 16px;
-	mso-height-rule: exactly;
-	line-height: 20px;
-	color: #000000;
+	font-size: $line-height;
+	line-height: $line-height;
+	color: $text-color;
 	border: 1px solid black;
 	border-radius: 15px;
+
+	mso-height-rule: exactly;
 }
 
 .two-column {
@@ -114,8 +126,19 @@ center {
 	border-radius: 0 0 30px 30px;
 }
 
+.thumbnail-caption {
+	font-family: $sans-serif;
+	font-size: $font-size;
+	line-height: $line-height;
+	color: $text-color;
+	padding: 10px 10px 0;
+	text-align: left;
+
+	mso-height-rule: exactly;
+}
+
 /* What it does: Stops email clients resizing small text. */
-* {
+*:not(br) {
 	-ms-text-size-adjust: 100%;
 	-webkit-text-size-adjust: 100%;
 }
