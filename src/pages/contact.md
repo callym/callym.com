@@ -122,44 +122,6 @@ $(document).ready(function() {
 		return topics;
 	}
 
-	var get_from_storage = function(type) {
-		var data = localStorage[`${type}-notification`];
-
-		if (data == undefined) {
-			data = null;
-		} else {
-			data = JSON.parse(data);
-		}
-
-		return data;
-	}
-
-	var get_topics_from_storage = function(type) {
-		var topics = get_from_storage(type);
-		
-		if (topics) {
-			if (topics.topics == undefined) {
-				topics = null;
-			} else {
-				topics = topics.topics;
-			}
-		}
-
-		return topics;
-	}
-
-	var save_topics = function(type, obj) {
-		obj = obj || {};
-		var topics = get_topics(type);
-		obj.topics = obj.topics || topics;
-
-		localStorage[`${type}-notification`] = JSON.stringify(obj);
-	}
-
-	var remove_topics = function(type) {
-		localStorage.removeItem(`${type}-notification`);
-	}
-
 	var set_topics = function(type, topics) {
 		if (topics) {
 			$(`#${type}-subscription-form input[type=checkbox]`).each(function() {
@@ -173,47 +135,8 @@ $(document).ready(function() {
 		}
 	}
 
-	var set_topics_from_storage = function(type) {
-		set_topics(type, get_topics_from_storage(type));
-	}
-
-	var has_changed = function(type) {
-		var changed = false;
-
-		var new_topics = get_topics(type);
-		var old_topics = get_topics_from_storage(type);
-
-		if (old_topics == null) {
-			changed = true;
-		}
-
-		if (!changed) {
-			old_topics.forEach(function(topic) {
-				if (new_topics.indexOf(topic) === -1) {
-					changed = true;
-					return;
-				}
-			});
-		}
-
-		if (!changed) {
-			new_topics.forEach(function(topic) {
-				if (old_topics.indexOf(topic) === -1) {
-					changed = true;
-					return;
-				}
-			});
-		}
-
-		return changed;
-	}
-
 	var is_subscribed = false;
 	var $push_notification_button = $('#push_notifications_action');
-
-	var update_message = function() {
-		
-	};
 
 	var check_push_subscribe = function() {
 		check_subscribe('push',
@@ -226,15 +149,9 @@ $(document).ready(function() {
 				.text('unsubscribe!');
 		},
 		function() {
-			$push_notification_button.removeClass('error');
-
-			var changed = has_changed('push');
-
-			if (changed && is_subscribed) {
-				$push_notification_button.html("change!");
-			} else {
-				$push_notification_button.html("subscribe!");
-			}
+			$push_notification_button
+				.removeClass('error')
+				.text("subscribe!");
 		});
 	}
 
@@ -245,7 +162,6 @@ $(document).ready(function() {
 		if ($(this).hasClass('error')) {
 			push_unsubscribe()
 				.then(function() {
-					remove_topics('push');
 					is_subscribed = false;
 					check_push_subscribe();
 				});
@@ -253,7 +169,6 @@ $(document).ready(function() {
 		else {
 			push_subscribe(get_topics('push'))
 				.then(function() {
-					save_topics('push');
 					is_subscribed = true;
 					check_push_subscribe();
 				});
@@ -290,8 +205,7 @@ $(document).ready(function() {
 				if (subscription) {
 					is_subscribed = true;
 				}
-			})
-			.then(update_message);
+			});
 	}
 
 	$('#email-subscription-button').on('click', function() {
@@ -329,7 +243,6 @@ $(document).ready(function() {
 			})
 			.then(function() {
 				callym.message("you have been unsubscribed");
-				remove_topics('email');
 			});
 
 			return;
@@ -348,7 +261,6 @@ $(document).ready(function() {
 			},
 			body: JSON.stringify(subscription)
 		}).then(function(response) {
-			save_topics('email', subscription);
 			return response.json();
 		}).then(function(response) {
 			console.log(response);
@@ -377,33 +289,13 @@ $(document).ready(function() {
 				.text('unsubscribe!');
 		},
 		function() {
-			var changed = has_changed('email');
-
-			var text = "change!";
-			if (!changed) {
-				text = "subscribe!";
-			}
-
 			$('#email-subscription-button')
 				.removeClass('error')
-				.text(text);
+				.text("subscribe!");
 		});
 	}
 	
 	$('#email-subscription-form #topics input[type=checkbox]').on('click', check_email_subscribe);
-
-	$('#email-subscription-form #email').on('input', function() {
-		var email = get_from_storage('email').email;
-
-		var text = "subscribe!";
-		if (email && email == $(this).val()) {
-			text = "change!";
-		}
-
-		$('#email-subscription-button')
-			.removeClass('error')
-			.text(text);
-	});
 
 	if (window.location.search.length > 0) {
 		// so the email bit is more central
@@ -417,13 +309,6 @@ $(document).ready(function() {
 
 		set_topics('email', topics);
 		check_email_subscribe();
-	} else {
-		set_topics_from_storage('email');
-		var email = get_from_storage('email').email;
-
-		if (email) {
-			$('#email-subscription-form #email').val(email);
-		}
 	}
 });
 </script>
