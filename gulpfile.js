@@ -182,12 +182,6 @@ gulp.task('watch', ['connect', 'default'], function() {
 	watch('between/**/*.json', batch(function(events, done) {
 		gulp.start('cache-bust', done);
 	}));
-//	gulp.watch('src/**/*', ['metalsmith']);
-//	gulp.watch('layouts/**/*', ['metalsmith']);
-//	gulp.watch('sass/**/*', ['sass']);
-//	gulp.watch('assets/**/*', ['assets']);
-//	gulp.watch('javascript/**/*', ['javascript']);
-//	gulp.watch('between/**/*.json', ['cache-bust']);
 });
 
 gulp.task('connect', function() {
