@@ -9,6 +9,9 @@
 	{%- endset %}
 	<title>{{ formatted_title }}</title>
 	
+	{% if title == "404" or title == "offline" %}
+		{% set rootPath = "/" %}
+	{% endif %}
 	<link rel="stylesheet" href="{{ rootPath }}css/main.css"/>
 	<link rel="manifest" href="{{ rootPath }}manifest.json">
 	<script async src='https://www.google-analytics.com/analytics.js'></script>
