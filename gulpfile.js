@@ -235,7 +235,7 @@ gulp.task('do-metalsmith', function() {
 	}
 
 	return gulp.src("./src/**/*")
-		.pipe(gif(["**/*", "!**/*.{jpg,png}"], gulp_front_matter().on("data", function(file) {
+		.pipe(gif(["**/*", "!**/*.{jpg,png,pdf}"], gulp_front_matter().on("data", function(file) {
 			assign(file, file.frontMatter);
 			delete file.frontMatter;
 		}))).pipe(
