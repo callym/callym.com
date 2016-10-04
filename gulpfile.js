@@ -1,4 +1,5 @@
 var gulp = require('gulp'),
+	path = require('path'),
 	watch = require('gulp-watch'),
 	batch = require('gulp-batch'),
 	gulp_front_matter = require('gulp-front-matter'),
@@ -286,7 +287,7 @@ gulp.task('do-metalsmith', function() {
 				)
 				.use(copy({
 					pattern: 'standalone/**/*',
-					transform: (path) => path.replace('standalone\\', '')
+					transform: (file) => path.join('./', file.replace('standalone', ''))
 				}))
 				.use(ignore('standalone/**/*'))
 				.use(permalinks({
