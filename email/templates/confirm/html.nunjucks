@@ -1,16 +1,9 @@
 {% include "email/templates/partials/header.nunjucks" %}
 {% from "email/templates/partials/components.nunjucks" import
-	hero,
 	button,
 	one_column_begin,
 	one_column_end,
-	section_start,
-	section_end,
-	two_columns_begin,
-	two_columns_middle,
-	two_columns_end,
-	thumbnail_item_begin,
-	thumbnail_item_end,
+	section_end
 	clear_spacer %}
 
 {{ one_column_begin() }}

@@ -1,6 +1,6 @@
 {% from "email/templates/partials/components.nunjucks" import
 	hero,
-    section_start,
+    section_begin,
     section_end,
     clear_spacer %}
 
@@ -41,7 +41,7 @@
 			<!-- Email Body : BEGIN -->
 			<table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="95%" style="max-width: 680px;">
                 {{ clear_spacer() }}
-                {{ section_start() }}
+                {{ section_begin() }}
                 <tr class="background">
                     <td style="padding: 20px 0; text-align: center" align="center">
 						<a href="https://callym.com">

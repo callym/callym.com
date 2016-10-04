@@ -1,6 +1,6 @@
 {% from "email/templates/partials/components.nunjucks" import
 	button,
-	section_start,
+	section_begin,
 	section_end,
 	two_columns_begin,
 	two_columns_middle,
@@ -21,7 +21,7 @@
 
 {{ clear_spacer() }}
 
-{{ section_start() }}
+{{ section_begin() }}
 {{ two_columns_begin() }}
 	{{ button("change!", (url + topics)) }}
 {{ two_columns_middle() }}

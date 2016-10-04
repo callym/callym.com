@@ -4,7 +4,7 @@
 	button,
 	one_column_begin,
 	one_column_end,
-	section_start,
+	section_begin,
 	section_end,
 	two_columns_begin,
 	two_columns_middle,
@@ -27,7 +27,7 @@
 
 {{ clear_spacer() }}
 
-{{ section_start() }}
+{{ section_begin() }}
 {{ thumbnail_item_begin("Class aptent taciti sociosqu", "http://placehold.it/200") }}
 	<br><br>
 	Maecenas sed ante pellentesque, posuere leo id, eleifend dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.

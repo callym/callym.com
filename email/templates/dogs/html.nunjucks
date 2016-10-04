@@ -2,7 +2,7 @@
 {% from "email/templates/partials/components.nunjucks" import
 	one_column_begin,
 	one_column_end,
-	section_start,
+	section_begin,
 	section_end,
 	thumbnail_item_begin,
 	thumbnail_item_end,
@@ -15,7 +15,7 @@
 
 {{ clear_spacer() }}
 
-{{ section_start() }}
+{{ section_begin() }}
 {% for dog in dogs %}
 	{{ thumbnail_item_begin('',
 		assets_path + dog.image + '_thumbnail.jpg',

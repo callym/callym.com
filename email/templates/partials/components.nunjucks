@@ -189,7 +189,7 @@
 <!-- Clear Spacer : END -->
 {% endmacro %}
 
-{% macro section_start() %}
+{% macro section_begin() %}
 <tr>
 	<td height="30" style="font-size: 0; line-height: 0;" class="rounded-corners-top background">
 		&nbsp;
