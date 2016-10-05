@@ -6,6 +6,7 @@ String.prototype.__defineGetter__('indent', function() { return indent('' + this
 
 email_auth = JSON.parse(fs.readFileSync('./email/newsletter_auth.json'));
 s3_auth = JSON.parse(fs.readFileSync('./email/s3_auth.json'));
+dynamoDB_auth = JSON.parse(fs.readFileSync('./email/dynamoDB_auth.json'));
 
 exports.send_dry_email = (email) => exports.send_email(email, { dry_run: true });
 
@@ -220,7 +221,9 @@ function get_users(email_topic, test) {
 
 		var aws = require('aws-sdk');
 		aws.config.update({
-			region: 'eu-west-1'
+			region: dynamoDB_auth.region,
+			accessKeyId: dynamoDB_auth.id,
+			secretAccessKey: dynamoDB_auth.secret
 		});
 		var doc_client = new aws.DynamoDB.DocumentClient();
 		var params = {
