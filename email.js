@@ -50,7 +50,7 @@ exports.send_email = function send_email(email, options = { /* dry_run, test */ 
 	var constants = {
 		s3_prefix: s3_prefix,
 		assets_path: s3_prefix + assets_path,
-		base_url: "https://beta.callym.com",
+		base_url: "https://callym.com",
 		aws: false
 	}
 	console.log('** constants **'
@@ -166,7 +166,7 @@ exports.template_for_aws = function(template_name) {
 		s3_prefix: s3_prefix,
 		// should only use base assets!
 		assets_path: s3_prefix,
-		base_url: "https://beta.callym.com",
+		base_url: "https://callym.com",
 		aws: true
 	}
 

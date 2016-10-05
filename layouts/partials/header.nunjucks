@@ -28,7 +28,7 @@
 	<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
 	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#6bafff">
 
-	{% set base_path = "https://beta.callym.com/" %}
+	{% set base_path = "https://callym.com/" %}
 	{% if images or layout == "portfolio-index.nunjucks" %}
 		{% set p = { title: title, images: images } %}
 		{% if layout == "portfolio-index.nunjucks" %}
