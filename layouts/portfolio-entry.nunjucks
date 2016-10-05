@@ -1,5 +1,7 @@
 {% extends "layouts/page.nunjucks" %}
 
+{% from "layouts/partials/picture.nunjucks" import picture %}
+
 {% block contents %}
 
 <div class="grid popup-gallery">
@@ -14,28 +16,8 @@
 		class="mfp-iframe"
 	{% endif %}
 		title="{{ i.alt }}">
-		<picture class="portfolio-thumbnail">
-			<!--
-				the problem is that the max grid size on desktop
-				(at least my 1080p one)
-				is ~500px, whereas the max on mobile is ~800px
-				(because the grid collapses)
-				so responsive images don't really make sense
-				as you need a smaller one on desktop than mobile?
-				guess I could make a mobile one more lq
-				but should see whether it's an issue first!
-			-->
-			{% for format in ['webp', 'jpg'] %}
-			<source
-				type="image/{{ format }}"
-				srcset="{{ path }}{{ i.file }}-square-large.{{ format }} 600w,
-						{{ path }}{{ i.file }}-square-medium.{{ format }} 400w,
-						{{ path }}{{ i.file }}-square-small.{{ format }} 200w"
-				sizes="(min-width: 768px) 20vw,
-						100vw">
-			{% endfor %}
-			<img src="{{ path }}{{ i.file }}-square-small.jpg" alt="{{ img.alt }}">
-		</picture>
+
+		{{ picture(i, path) }}
 	</a>
 {% endfor %}
 </div>
