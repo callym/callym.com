@@ -1,5 +1,7 @@
 {% extends "layouts/page.nunjucks" %}
 
+{% from "layouts/partials/svg.nunjucks" import svg_split %}
+
 {% block contents %}
 
 {#
@@ -56,42 +58,7 @@
 				{% if b.descriptionStyle.background.color %}
 					--background-color: {{ b.descriptionStyle.background.color }}
 				{% endif %}">
-			{% set desc = b.markdown_contents | string | striptags() | truncate(120) %}
-			{% set max_chars = 45 %}
-			{% set lines = [] %}
-			{% set str = "" %}
-			{% for c in desc %}
-				{% set str = str + c %}
-
-				{% if (str | length) > max_chars %}
-					{% set trunc = str | truncate(max_chars, false, '') %}
-					{% set lines = (lines.push(trunc), lines) %}
-
-					{% set new_str = "" %}
-					{% for cc in str %}
-						{% if (loop.index0) > (trunc | length) %}
-							{% set new_str = new_str + cc %}
-						{% endif %}
-					{% endfor %}
-					{% set str = new_str %}
-				{% endif %}
-				{% if loop.last and (str | length) > 0 %}
-					{% set lines = (lines.push(str), lines) %}
-				{% endif %}
-			{% endfor %}
-			{% for l in lines %}
-			<text x="50%" y="50%"
-				{% set factor = (((lines | length) + 1) / 2) %}
-				{# add 0.15em to make it look more centered? #}
-				dy="{{ (loop.index - factor) * 1.5 + 0.15 }}em"
-				class="blog-index-extract"
-				style="
-					{% if p.descriptionStyle.text.color %}
-						--color: {{ p.descriptionStyle.text.color }}
-					{% endif %}">
-				{{ l }}
-			</text>
-			{% endfor %}
+			{{ svg_split(b.markdown_contents, 45, 120, "blog-index-extract", b.descriptionStyle) }}
 		</svg>
 			<div class="center blog-index-name">
 				<div>
