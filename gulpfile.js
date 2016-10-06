@@ -1,4 +1,5 @@
 var gulp = require('gulp'),
+	fs = require('fs'),
 	path = require('path'),
 	watch = require('gulp-watch'),
 	batch = require('gulp-batch'),
@@ -223,6 +224,23 @@ gulp.task('do-metalsmith', function() {
 		};
 	};
 
+	var generate_cachebust_ignore = function(options) {
+		return function (files, metalsmith, done) {
+			paths = [];
+
+			Object.keys(files).forEach(function(file) {
+				var data = files[file];
+
+				if (data.layout == "empty.nunjucks") {
+					paths.push(data.path);
+				}
+			});
+			fs.writeFileSync("./between/cachebust-ignore.json",
+				JSON.stringify(paths));
+			done();      
+		};
+	};
+
 	var log = function(file, props, i) {
 		console.log(file);
 		_.forOwn(props, function(value, key) {
@@ -298,6 +316,7 @@ gulp.task('do-metalsmith', function() {
 						}
 					],
 				}))
+				.use(generate_cachebust_ignore())
 				.use(root())
 				.use(layouts({
 					engine: 'nunjucks',
@@ -545,9 +564,22 @@ gulp.task('javascript', function() {
 
 gulp.task('cache-bust', function() {
 	manifest = gulp.src('./between/rev-*.json');
+	ignore_list = JSON.parse(fs.readFileSync("./between/cachebust-ignore.json"));
 	if (build)
 	{
 		gulp.src('./build/**/*.{html,css,js,json}', { base: './' })
+			.pipe(through.obj(function(file, enc, cb) {
+				var file_path = path.relative(
+					path.join(file.cwd, 'build'),
+					file.path);
+				var ignore = false;
+				ignore_list.forEach(function(item) {
+					if (file_path.indexOf(item) > -1) {
+						ignore = true;
+					}
+				});
+				ignore == true ? cb() : cb(null, file);
+			}))
 			.pipe(build ? revR({
 				manifest: manifest
 			}) : gutil.noop())
