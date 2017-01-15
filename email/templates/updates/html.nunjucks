@@ -1,0 +1,24 @@
+{% include "email/templates/partials/header.nunjucks" %}
+{% from "email/templates/partials/components.nunjucks" import
+	one_column_begin,
+	one_column_end,
+	section_begin,
+	section_end,
+	hero,
+	button,
+	clear_spacer %}
+{{ section_end() }}
+
+{{ clear_spacer() }}
+
+{{ section_begin() }}
+{{ hero(assets_path + image.file + '.jpg', image.alt) }}
+{{ one_column_begin() }}
+	{{ description }}
+{{ one_column_end() }}
+{{ one_column_begin() }}
+	{{ button("view!", link, true) }}
+{{ one_column_end() }}
+{{ section_end() }}
+
+{% include "email/templates/partials/footer.nunjucks" %}

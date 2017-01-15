@@ -1,0 +1,195 @@
+@import '../../variables';
+@import '../../include-media';
+
+html,
+body {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	background-color: lighten(black, 20);
+
+	font-size: large;
+	@include media(">tablet") {
+		font-size: x-large;
+	}
+	font-family: $sans-serif;
+}
+
+#callym-com {
+	position: fixed;
+	transform: rotate(-90deg);
+	transform-origin: right top 0;
+	z-index: 1;
+	right: 100%;
+	bottom: 80%;
+
+	& a {
+		color: $blue;
+		text-decoration: none;
+
+		border-bottom: 2px solid $blue;
+		transition: border-bottom-color 250ms ease-in-out;
+		&:hover {
+			border-bottom-color: $dark-pink;
+		}
+	}
+}
+
+#chat-window {
+	background-color: ghostwhite;
+	@include media(">tablet") {
+		width: 80vw;
+		border: 3px solid black;
+		border-top: 0;
+		border-bottom: 0;
+	}
+	margin: 0 auto;
+	height: 100%;
+	position: relative;
+}
+
+#message-wrapper {
+	position: absolute;
+	bottom: 12.5vh;
+	left: 0;
+	right: 0;
+}
+
+#message {
+	&:empty {
+		display: none;
+	}
+
+	background-color: $blue;
+
+	display: inline-block;
+	float: right;
+	clear: right;
+	
+	margin: 0.5em;
+	margin-right: 1em;
+	padding: 0.5em;
+
+	border: 3px solid black;
+	border-radius: 0.5em;
+
+	position: relative;
+
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	white-space: normal;
+
+	max-width: 50vw;
+
+	&:before,
+	&:after {
+		position: absolute;
+		content: "";
+		display: block;
+		width: 0;
+		border-style: solid;
+	}
+
+	$position: 1em;
+
+	$length: 20px;
+	$height: 10px;
+	$border: 3px;
+	$border: $border * 2;
+
+	&:before {
+		top: auto;
+		bottom: $position;
+		left: auto;
+		right: -$length;
+		border-width: $height 0 $height $length;
+		border-color: transparent black;
+	}
+
+	&:after {
+		top: auto;
+		bottom: $position;
+		left: auto;
+		right: -$length + $border;
+		border-width: $height 0 $height $length;
+		border-color: transparent $blue;
+	}
+}
+
+#bottom-bar-wrapper {
+	position: absolute;
+	bottom: 0;
+
+	left: 6.25vw;
+	right: 6.25vw;
+
+	@include media(">tablet") {
+		left: 12.5vw;
+		right: 12.5vw;
+	}
+}
+
+#bottom-bar {
+	$top-size: 0.5em;
+	$border: 3px solid black;
+
+	box-shadow: 0 0 1em 0 black;
+
+	width: 100%;
+
+	display: table;
+
+	border: $border;
+	border-bottom: 0;
+	border-top-left-radius: $top-size;
+	border-top-right-radius: $top-size;
+	overflow: hidden;
+
+	#input-wrapper,
+	#send {
+		display: table-cell;
+		padding: 0.5rem 0;
+	}
+
+	#input-wrapper {
+		width: 60vw;
+		max-width: 60vw;
+
+		@include media(">tablet") {
+			width: 40vw;
+			max-width: 40vw;
+		}
+
+		background-color: $yellow;
+	}
+
+	#input {
+		padding: 0 0.5rem;
+		word-wrap: break-word;
+		overflow-wrap: break-word;
+		white-space: normal;
+		
+		&:empty:before {
+			content: attr(data-text);
+			font-style: italic;
+			color: lighten(black, 40);
+		}
+	}
+
+	#send {
+		font-family: $serif;
+		text-decoration: none;
+		text-align: center;
+		font-weight: bold;
+		font-style: italic;
+		font-size: 2em;
+
+		border-left: 3px solid darken($dark-pink, 10);
+
+		vertical-align: middle;
+
+		background-color: $dark-pink;
+		color: white;
+	}
+}
