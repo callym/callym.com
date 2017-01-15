@@ -5,7 +5,7 @@ collection: about
 layout: exhibitions.nunjucks
 exhibitions:
     -   title: "RUSKIN.SHOW"
-        url: http://ruskin.show
+        url: http://www.rsa.ox.ac.uk/degreeshow/2016/
         location: "Ruskin School of Art, University of Oxford"
         date:
             begin: 2016-06-17
