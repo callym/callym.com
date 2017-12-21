@@ -1,3 +1,6 @@
+const { execSync } = require('child_process');
+const merge_stream = require('merge-stream');
+
 var gulp = require('gulp'),
 	fs = require('fs'),
 	path = require('path'),
@@ -28,7 +31,8 @@ var gulp = require('gulp'),
 	include = require('gulp-include'),
 	babel = require('gulp-babel'),
 	sitemap = require('gulp-sitemap'),
-	runSequence = require('run-sequence');
+	runSequence = require('run-sequence'),
+	intercept = require('gulp-intercept');
 
 var gulpsmith = require('gulpsmith'),
 	markdown = require('metalsmith-markdown'),
@@ -67,11 +71,10 @@ var noop = through.obj(function(file, enc, cb) {
 var rev_pipe = lazypipe()
 	.pipe(gutil.noop);
 
-var babel_presets = ['latest'];
+var babel_presets = ['env'];
 
 var babel_options = {
 	presets: babel_presets,
-	compact: false
 };
 
 var set_build = function() {
@@ -82,9 +85,7 @@ var set_build = function() {
 	// etc
 	build = true;
 	rev_pipe = rev_pipe.pipe(rev);
-	babel_presets.push('babili');
-	babel_options['comments'] = false;
-	babel_options['compact'] = true;
+	babel_presets.push('minify');
 };
 
 var assign_layout = function(options) {
@@ -144,6 +145,8 @@ gulp.task('default', function(cb) {
 		'clean',
 		['metalsmith', 'sass', 'images', 'assets', 'javascript'],
 		'cache-bust',
+		'do-external',
+		'sitemap',
 		cb);
 });
 
@@ -199,7 +202,36 @@ gulp.task('livereload', function() {
 });
 
 gulp.task('metalsmith', function() {
-	return runSequence('do-metalsmith', 'cache-bust', 'sitemap');
+	return runSequence('do-metalsmith', 'cache-bust');
+});
+
+gulp.task('do-external', cb => {
+	let external = [];
+	gulp.src('./src/**/external.json')
+		.pipe(intercept(file => {
+			let e = JSON.parse(file.contents.toString());
+			if (e.dest == null) {
+				e.dest = path.relative('', path.dirname(file.path));
+				e.dest = e.dest.replace('src', 'build');
+			} else {
+				e.dest = `build/${e.dest}`;
+			}
+			external.push(e);
+			return file;
+		}))
+		.on('end', () => {
+			external.forEach(e => execSync(e.command, {
+				cwd: path.resolve(e.path),
+				stdio: 'inherit',
+			}));
+
+			let externals = merge_stream(external.map(e => {
+				return gulp.src(`${e.out_dir}/**/*`)
+					.pipe(gulp.dest(e.dest));
+			}));
+			externals.resume();
+			externals.on('end', () => cb());
+		});
 });
 
 gulp.task('do-metalsmith', function() {
@@ -302,6 +334,7 @@ gulp.task('do-metalsmith', function() {
 					transform: (file) => path.join('./', file.replace('standalone', ''))
 				}))
 				.use(ignore('standalone/**/*'))
+				.use(ignore('**/external.json'))
 				.use(permalinks({
 					pattern: ':title',
 					relative: false,
@@ -409,8 +442,9 @@ gulp.task('resize-images', function() {
 	};
 	var quality = 60;
 	var high_quality = 90;
-	return gulp.src('./images/portfolio/**/*')
-		.pipe(responsive({
+
+	var image_pipe = lazypipe()
+		.pipe(responsive, {
 			'**/*': [
 				{
 					width: thumbnail_large,
@@ -508,8 +542,14 @@ gulp.task('resize-images', function() {
 			errorOnUnusedImage: false,
 			errorOnEnlargement: false,
 			withoutEnlargement: true
-		}))
+		});
+
+	gulp.src('./images/portfolio/**/*')
+		.pipe(image_pipe())
 		.pipe(gulp.dest('./between/generated-images/portfolio'));
+	return gulp.src('./images/blog/**/*')
+		.pipe(image_pipe())
+		.pipe(gulp.dest('./between/generated-images/blog'));
 });
 
 gulp.task('assets', function() {

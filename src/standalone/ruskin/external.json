@@ -1,0 +1,6 @@
+{
+	"path": "../ruskin.show.editor",
+	"command": "gulp",
+	"out_dir": "../ruskin.show.editor/build",
+	"dest": "ruskin"
+}

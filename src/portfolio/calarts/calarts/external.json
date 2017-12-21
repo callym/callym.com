@@ -1,0 +1,5 @@
+{
+	"path": "../calarts",
+	"command": "gulp build",
+	"out_dir": "../calarts/build"
+}
